@@ -4,9 +4,6 @@ require_once "server/staff.php";
 require_once "globalfunc.php";
 
 
-
-
-
 function addstaff()
 {
    if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -49,7 +46,7 @@ function stafffindByID()
 function staffdeleteByID()
 {
    if ($_GET['studentCode'] != null) {
-      $delstu = deleteStudentID($_GET['studentCode']);
+      $delstu = deletestaffID($_GET['studentCode']);
       echo json_encode($delstu);
    } else {
       echo json_encode(array("message" => "failed to find the id "));

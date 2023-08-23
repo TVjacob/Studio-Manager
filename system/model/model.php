@@ -104,29 +104,28 @@ class Staff
         return $this->phoneno;
     }
 }
-class Payment
+class Transaction
 {
     private $id;
-    public  $debitaccount_id;
     public  $details;
     public  $remarks;
     public  $staff_id;
-    public  $student_id;
+    public  $product_id;
     public  $transDate;
-    public  $term_id;
-    public  $amount;
+    public  float $amount=0;
     public $creditaccount_id;
+    public  $debitaccount_id;
 
 
-    public function __construct($details, $remarks, $transDate, $amount, $creditaccount, $debitaccount_id, $student_id, $staff_id, $term_id)
+
+    public function __construct($details, $remarks, $transDate, $amount, $creditaccount, $debitaccount_id, $product_id, $staff_id)
     {
         $this->details = $details;
         $this->remarks = $remarks;
         $this->creditaccount_id = $creditaccount;
         $this->debitaccount_id = $debitaccount_id;
-        $this->student_id = $student_id;
+        $this->product_id = $product_id;
         $this->staff_id = $staff_id;
-        $this->term_id = $term_id;
         $this->amount = $amount;
         $this->transDate = $transDate;
         $this->amount = $amount;
@@ -141,105 +140,17 @@ class Payment
         return $this->id;
     }
 }
-class Expense
-{
+class Product{
     private $id;
-    public  $debitaccount_id;
-    public  $creditaccount_id;
+    public $productname;
+    public int $rate=0;
+    public float $amount=0;
 
-    public  $details;
-    public  $remarks;
-    public  $staff_id;
-    public  $student_id;
-    public  $transDate;
-    public  $term_id;
-    public  $amount;
-
-
-    public function __construct($details, $remarks, $transDate, $amount, $debitaccount_id, $creditaccount_id, $student_id, $staff_id, $term_id)
-    {
-        $this->details = $details;
-        $this->remarks = $remarks;
-        $this->debitaccount_id = $debitaccount_id;
-        $this->creditaccount_id = $creditaccount_id;
-        $this->student_id = $student_id;
-        $this->staff_id = $staff_id;
-        $this->term_id = $term_id;
-        $this->amount = $amount;
-        $this->transDate = $transDate;
-        $this->amount = $amount;
-        // $this->id=$id;
-    }
-
-    public function setID($id)
-    {
-        return $this->id = $id;
-    }
-    public function getID()
-    {
-        return $this->id;
-    }
-}
-
-class Enroll
-{
-    private $id;
-    public  $student_id;
-    public $term_id;
-    public DateTime $term_end;
-    public DateTime $term_start;
-    public float $amount = 0;
-
-
-
-
-    public function __construct($term_end, $term_start, $amount, $student_id, $term_id)
-    {
-        $this->term_end = $term_end;
-        $this->term_start = $term_start;
-        $this->student_id = $student_id;
-        $this->term_id = $term_id;
+    public function __construct($productname,$rate,$amount) {
+        $this->productname = $productname;
+        $this->rate = $rate;
         $this->amount = $amount;
     }
-
-    public function setID($id)
-    {
-        return $this->id = $id;
-    }
-    public function getID()
-    {
-        return $this->id;
-    }
-}
-
-class GeneralTransaction
-{
-    private $id;
-    public  $student_id;
-    public  $staff_id;
-    public $term_id;
-    public float $amount = 0;
-    public $transtype;
-    public $details;
-    public $remarks;
-    public DateTime $transdate;
-    public $account_id;
-    public $reference_id;
-
-    public function __construct($account_id, $transdate, $remarks, $details, $transtype, $amount, $student_id, $term_id, $reference_id,$staff_id)
-    {
-        $this->staff_id=$staff_id;
-        $this->account_id = $account_id;
-        $this->transdate = $transdate;
-        $this->remarks = $remarks;
-        $this->details = $details;
-        $this->transtype = $transtype;
-        $this->student_id = $student_id;
-        $this->term_id = $term_id;
-        $this->amount = $amount;
-        $this->reference_id = $reference_id;
-    }
-
     public function setID($id)
     {
         return $this->id = $id;

@@ -1,5 +1,4 @@
 <?php
-$str= "C:/Users/USER/OneDrive/Desktop/bob/system/";
 require_once  "model/model.php";
 require_once "model/data_pro.php";
 
@@ -31,7 +30,6 @@ function saveStaff(Staff $newstaff)
     $stmt->close();
     $conn->close();
 }
-
 function staffs()
 {
     // Create connection
@@ -78,7 +76,6 @@ function findstaffName($staffname)
     }
     mysqli_close($conn);
 }
-
 function findstaffById($staffcode)
 {
     // Create connection
@@ -104,7 +101,6 @@ function findstaffById($staffcode)
 
     mysqli_close($conn);
 }
-
 function deletestaffID($staffcode)
 {
     // Create connection
@@ -125,7 +121,6 @@ function deletestaffID($staffcode)
     }
     mysqli_close($conn);
 }
-
 function updatestaff(Staff $newstaff)
 {
 

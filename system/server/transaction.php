@@ -1,11 +1,9 @@
 <?php
-$str= "C:/Users/USER/OneDrive/Desktop/bob/system/";
-require_once $str . "model/model.php";
-require_once $str . "model/data_pro.php";
+require_once  "model/model.php";
+require_once "model/data_pro.php";
 
 
-
-function savetransaction(GeneralTransaction $newtrans)
+function savetransaction(Transaction $transaction)
 {
     // Create connection
     $conn = new mysqli(SERVERNAME, USERNAME, PASSWORD, DB_NAME);
@@ -13,22 +11,27 @@ function savetransaction(GeneralTransaction $newtrans)
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-    $stmt = $conn->prepare("INSERT INTO GeneralTransaction (account_id, details, remarks,staff_id,student_id,transDate,term_id,amount,transtype,reference_id) VALUES (?, ?, ?,?,?,?,?,?,?)");
-    $stmt->bind_param("ssssssssss", $account_id, $details, $remarks, $staff_id,$student_id,$transDate,$term_id,$amount,$transtype,$reference_id);
-    $account_id = $newtrans->account_id;
-    $details = $newtrans->details;
-    $remarks = $newtrans->remarks;
-    $staff_id = $newtrans->staff_id;
-    $student_id = $newtrans->student_id;
-    $transDate = $newtrans->transdate;
-    $term_id = $newtrans->term_id;
-    $amount = $newtrans->amount;
-    $transtype= $newtrans->transtype;
-    $reference_id=$newtrans->reference_id;
-    $stmt->execute();
-    return array("message" => "saved");
-    $stmt->close();
+   
+    $debitaccount_id = $transaction->debitaccount_id;
+    $creditaccount = $transaction->creditaccount_id;
+    $details = $transaction->details;
+    $remarks = $transaction->remarks;
+    $staff_id = $transaction->staff_id;
+    $product_id = $transaction->product_id;
+    $transDate = $transaction->transDate;
+    $amount = $transaction->amount;
+
+
+    $sql = "INSERT INTO INSERT INTO transaction (creditaccount_id,debitaccount_id, details, remarks,staff_id,product_id,transDate,amount)
+    VALUES ('$creditaccount', '$debitaccount_id', '$details', '$remarks', '$staff_id','$product_id','$transDate','$amount')";
+
+    if ($conn->query($sql) === TRUE) {
+        return array("message" => "New product created successfully");
+    } else {
+        return array("message" => "Error: " . $sql . "<br>" . $conn->error);
+    }
     $conn->close();
+    
 }
 function transactions()
 {
@@ -38,7 +41,7 @@ function transactions()
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-    $sql = "SELECT * FROM GeneralTransaction";
+    $sql = "SELECT * FROM transaction";
     $result = mysqli_query($conn, $sql);
     $data = array();
     if (mysqli_num_rows($result) > 0) {
@@ -53,7 +56,7 @@ function transactions()
     }
     mysqli_close($conn);
 }
-function findtransactionById($transid)
+function findTransactionById($id)
 {
     // Create connection
     $conn = new mysqli(SERVERNAME, USERNAME, PASSWORD, DB_NAME);
@@ -62,7 +65,7 @@ function findtransactionById($transid)
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-    $sql = "SELECT * FROM `GeneralTransaction` WHERE id = $transid ";
+    $sql = "SELECT * FROM `transaction` WHERE id = '". $id . "' ";
     $result = mysqli_query($conn, $sql);
     $data = array();
     if (mysqli_num_rows($result) > 0) {
@@ -78,7 +81,7 @@ function findtransactionById($transid)
 
     mysqli_close($conn);
 }
-function findtransactionBystudnet_Id($transid)
+function findTransactionBydetails($details)
 {
     // Create connection
     $conn = new mysqli(SERVERNAME, USERNAME, PASSWORD, DB_NAME);
@@ -87,7 +90,7 @@ function findtransactionBystudnet_Id($transid)
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-    $sql = "SELECT * FROM `GeneralTransaction` WHERE student_id = $transid ";
+    $sql = "SELECT * FROM `transaction` WHERE details = '. $details  .'";
     $result = mysqli_query($conn, $sql);
     $data = array();
     if (mysqli_num_rows($result) > 0) {
@@ -103,7 +106,7 @@ function findtransactionBystudnet_Id($transid)
 
     mysqli_close($conn);
 }
-function findtransactionByRefernceNo($transid)
+function findTransactionBystaff($staff_id)
 {
     // Create connection
     $conn = new mysqli(SERVERNAME, USERNAME, PASSWORD, DB_NAME);
@@ -112,7 +115,7 @@ function findtransactionByRefernceNo($transid)
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-    $sql = "SELECT * FROM `GeneralTransaction` WHERE reference_id = $transid ";
+    $sql = "SELECT * FROM `transaction` WHERE staff_id ='$staff_id' ";
     $result = mysqli_query($conn, $sql);
     $data = array();
     if (mysqli_num_rows($result) > 0) {
@@ -128,26 +131,7 @@ function findtransactionByRefernceNo($transid)
 
     mysqli_close($conn);
 }
-function findTransactionBystaff($transid)
-{
-    $conn = new mysqli(SERVERNAME, USERNAME, PASSWORD, DB_NAME);
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-    $sql = "SELECT * FROM `GeneralTransaction` WHERE staff_id = $transid ";
-    $result = mysqli_query($conn, $sql);
-    $data = array();
-    if (mysqli_num_rows($result) > 0) {
-        while ($row = $result->fetch_assoc()) {
-            array_push($data, $row);
-        }
-        return $data;
-    } else {
-        return array("Message" => "not found");
-    }
-    mysqli_close($conn);
-}
-function deleteTransactionID($transid)
+function deleteTransactionID($id)
 {
     // Create connection
     $conn = new mysqli(SERVERNAME, USERNAME, PASSWORD, DB_NAME);
@@ -156,7 +140,9 @@ function deleteTransactionID($transid)
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-    $sql = "Delete  FROM GeneralTransaction WHERE id= $transid ";
+    $sql = "Delete  FROM transaction WHERE id= '". $id ."'";
+    // $result = mysqli_query($conn, $sql);
+
     if (mysqli_query($conn, $sql)) {
 
         return array("message" => "deleted successful");
@@ -165,25 +151,7 @@ function deleteTransactionID($transid)
     }
     mysqli_close($conn);
 }
-function deleteTransactionreferno($transid)
-{
-    // Create connection
-    $conn = new mysqli(SERVERNAME, USERNAME, PASSWORD, DB_NAME);
-
-    // Check connection
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-    $sql = "Delete  FROM GeneralTransaction WHERE reference_id= $transid ";
-    if (mysqli_query($conn, $sql)) {
-
-        return array("message" => "deleted successful");
-    } else {
-        return array("message" => "failed to delete");
-    }
-    mysqli_close($conn);
-}
-function updateTransaction(GeneralTransaction $updatetrans)
+function updateTransaction(Transaction $transaction)
 {
 
     // Create connection
@@ -192,20 +160,19 @@ function updateTransaction(GeneralTransaction $updatetrans)
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-    $account_id = $updatetrans->account_id;
-    $details = $updatetrans->details;
-    $remarks = $updatetrans->remarks;
-    $staff_id = $updatetrans->staff_id;
-    $student_id = $updatetrans->student_id;
-    $transDate = $updatetrans->transdate;
-    $term_id = $updatetrans->term_id;
-    $amount = $updatetrans->amount;
-    $transtype= $updatetrans->transtype;
-    $editId=$updatetrans->getID();
-    // $reference_id=$updatetrans->reference_id;
+    $debitaccount_id = $transaction->debitaccount_id;
+    $creditaccount = $transaction->creditaccount_id;
+    $details = $transaction->details;
+    $remarks = $transaction->remarks;
+    $staff_id = $transaction->staff_id;
+    $product_id = $transaction->product_id;
+    $transDate = $transaction->transDate;
+    $amount = $transaction->amount;
+
+    $editId=$transaction->getID();
 
     // $stmt = $conn->prepare("INSERT INTO user (username, password, email,islogged,id) VALUES (?, ?, ?,?,?)");
-    $sql = "UPDATE GeneralTransaction SET transtype='" . $transtype ."', transtype='" . $transtype ."', account_id='" . $account_id ."', details='" . $details . "', remarks='" . $remarks ."', staff_id='" . $staff_id . "', student_id='" . $student_id . "',transDate='" . $transDate . "',term_id='" . $term_id .  "',amount='" . $amount . "' WHERE id='" . $editId . "'";
+    $sql = "UPDATE transaction SET debitaccount_id='" . $debitaccount_id ."', creditaccount_id='" . $creditaccount ."', details='" . $details . "', remarks='" . $remarks ."', staff_id='" . $staff_id . "', product_id='" . $product_id . "',transDate='" . $transDate . "',amount='" . $amount . "' WHERE id='" . $editId . "'";
 
     if (mysqli_query($conn, $sql)) {
         return array("message" => "Record updated successfully");

@@ -80,8 +80,6 @@ function generateaccountCode($id)
     }
     mysqli_close($conn);
 }
-
-
 function accounts()
 {
     // Create connection
@@ -127,7 +125,6 @@ function findAccountBycode($acountCode)
     }
     mysqli_close($conn);
 }
-
 function findAccountById($accountcode)
 {
     $conn = new mysqli(SERVERNAME, USERNAME, PASSWORD, DB_NAME);
@@ -148,7 +145,6 @@ function findAccountById($accountcode)
     }
     mysqli_close($conn);
 }
-
 function deleteAccountID($accountcode)
 {
     // Create connection
@@ -165,7 +161,6 @@ function deleteAccountID($accountcode)
     }
     mysqli_close($conn);
 }
-
 function updateAccount(Account $updateAccount)
 {
     $conn = new mysqli(SERVERNAME, USERNAME, PASSWORD, DB_NAME);

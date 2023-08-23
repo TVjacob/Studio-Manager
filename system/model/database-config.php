@@ -10,7 +10,7 @@ if ($conn->connect_error) {
 }
 
 // Create database
-$sql = "CREATE DATABASE IF NOT EXISTS myDB";
+$sql = "CREATE DATABASE IF NOT EXISTS kayeDB";
 if ($conn->query($sql) === TRUE) {
     // echo "Database created successfully";
 } else {
@@ -66,14 +66,11 @@ if ($conn->query($sql) === TRUE) {
 
 // $conn->close();
 // sql to create table
-$sql = "CREATE TABLE IF NOT EXISTS`student` (
-  `studentCode`varchar(11) NOT NULL  PRIMARY KEY,
-  `sclass` varchar(6)  NULL,
-  `dob` DATE NOT NULL,
-   address varchar(30)  NULL,
-  `parents` varchar(30)  NULL,
-  phoneno varchar(24) NULL,
-  `name` varchar(24) NOT NULL
+$sql = "CREATE TABLE IF NOT EXISTS`product` (
+  `id`INT(11) NOT NULL AUTO_INCREMENT  PRIMARY KEY,
+  `productname` varchar(6)  NULL,
+  `rate` INT(12) ,
+  amount DOUBLE
 );
 ";
 
@@ -107,14 +104,14 @@ if ($conn->query($sql) === TRUE) {
 //   $conn->close();
 
 
-$sql = "CREATE TABLE IF NOT EXISTS`payment` (
+$sql = "CREATE TABLE IF NOT EXISTS`transaction` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `debitaccount_id` varchar(6) NOT NULL,
     `creditaccount_id` varchar(6) NOT NULL,
     `details` varchar(30)  NULL,
     `remarks` varchar(30)  NULL,
     `staff_id` varchar(30)  NULL,
-    `student_id` varchar(30)  NULL,
+    `product_id` varchar(30)  NULL,
     `term_id` varchar(30) NOT  NULL,
     `transDate` DATE NOT NULL,
      amount DOUBLE
@@ -131,84 +128,84 @@ if ($conn->query($sql) === TRUE) {
 
 
 
-$sql = "CREATE TABLE IF NOT EXISTS`expense` (
-    `id` INT(11) NOT NULL AUTO_INCREMENT  PRIMARY KEY,
-    `debitaccount_id` varchar(6) NOT NULL,
-    `creditaccount_id` varchar(6) NOT NULL,
-    `details` varchar(30)  NULL,
-    `remarks` varchar(30)  NULL,
-    `staff_id` varchar(30)  NULL,
-    `student_id` varchar(30)  NULL,
-    `term_id` varchar(30) NOT NULL,
-    `transDate` DATE NOT NULL,
-     amount DOUBLE 
-  );
-  ";
+// $sql = "CREATE TABLE IF NOT EXISTS`expense` (
+//     `id` INT(11) NOT NULL AUTO_INCREMENT  PRIMARY KEY,
+//     `debitaccount_id` varchar(6) NOT NULL,
+//     `creditaccount_id` varchar(6) NOT NULL,
+//     `details` varchar(30)  NULL,
+//     `remarks` varchar(30)  NULL,
+//     `staff_id` varchar(30)  NULL,
+//     `student_id` varchar(30)  NULL,
+//     `term_id` varchar(30) NOT NULL,
+//     `transDate` DATE NOT NULL,
+//      amount DOUBLE 
+//   );
+//   ";
 
-if ($conn->query($sql) === TRUE) {
-    // echo "Table User created successfully";
-} else {
-    // echo "Error creating table: " . $conn->error;
-}
+// if ($conn->query($sql) === TRUE) {
+//     // echo "Table User created successfully";
+// } else {
+//     // echo "Error creating table: " . $conn->error;
+// }
 
-//   $conn->close();
-
-
+// //   $conn->close();
 
 
-$sql = "CREATE TABLE IF NOT EXISTS`generalTransaction` (
-    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `account_id` varchar(6) NOT NULL,
-    `details` varchar(30)  NULL,
-    `remarks` varchar(30)  NULL,
-    `staff_id` varchar(30)  NULL,
-    `student_id` varchar(30)  NULL,
-    `term_id` varchar(30) NOT NULL,
-    `transDate` DATE NOT NULL,
-     amount DOUBLE, 
-     reference_id varchar(30) NULL,
-     transtype varchar(5) NOT NULL
 
-  );
-  ";
 
-if ($conn->query($sql) === TRUE) {
-    // echo "Table User created successfully";
-} else {
-    // echo "Error creating table: " . $conn->error;
-}
+// $sql = "CREATE TABLE IF NOT EXISTS`generalTransaction` (
+//     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+//     `account_id` varchar(6) NOT NULL,
+//     `details` varchar(30)  NULL,
+//     `remarks` varchar(30)  NULL,
+//     `staff_id` varchar(30)  NULL,
+//     `student_id` varchar(30)  NULL,
+//     `term_id` varchar(30) NOT NULL,
+//     `transDate` DATE NOT NULL,
+//      amount DOUBLE, 
+//      reference_id varchar(30) NULL,
+//      transtype varchar(5) NOT NULL
 
-//   $conn->close();
+//   );
+//   ";
 
-$sql = "CREATE TABLE IF NOT EXISTS`enroll` (
-    `id` INT(11) NOT NULL AUTO_INCREMENT  PRIMARY KEY,
-    `student_id` varchar(30)  NULL,
-    `term_id` varchar(30) NOT NULL,
-    `term_end` DATE NOT NULL,
-     amount DOUBLE, 
-     `term_start` DATE NOT NULL
-  );
-  ";
+// if ($conn->query($sql) === TRUE) {
+//     // echo "Table User created successfully";
+// } else {
+//     // echo "Error creating table: " . $conn->error;
+// }
 
-if ($conn->query($sql) === TRUE) {
-    // echo "Table User created successfully";
-} else {
-    // echo "Error creating table: " . $conn->error;
-}
+// //   $conn->close();
 
-$sql = "CREATE TABLE IF NOT EXISTS`school_term` (
-    `id` INT(11) NOT NULL AUTO_INCREMENT  PRIMARY KEY,
-    `term_status` varchar(30)  NULL,
-    `term_end` DATE NOT NULL, 
-     `term_start` DATE NOT NULL
-  );
-  ";
+// $sql = "CREATE TABLE IF NOT EXISTS`enroll` (
+//     `id` INT(11) NOT NULL AUTO_INCREMENT  PRIMARY KEY,
+//     `student_id` varchar(30)  NULL,
+//     `term_id` varchar(30) NOT NULL,
+//     `term_end` DATE NOT NULL,
+//      amount DOUBLE, 
+//      `term_start` DATE NOT NULL
+//   );
+//   ";
 
-if ($conn->query($sql) === TRUE) {
-    // echo "Table User created successfully";
-} else {
-    // echo "Error creating table: " . $conn->error;
-}
+// if ($conn->query($sql) === TRUE) {
+//     // echo "Table User created successfully";
+// } else {
+//     // echo "Error creating table: " . $conn->error;
+// }
+
+// $sql = "CREATE TABLE IF NOT EXISTS`school_term` (
+//     `id` INT(11) NOT NULL AUTO_INCREMENT  PRIMARY KEY,
+//     `term_status` varchar(30)  NULL,
+//     `term_end` DATE NOT NULL, 
+//      `term_start` DATE NOT NULL
+//   );
+//   ";
+
+// if ($conn->query($sql) === TRUE) {
+//     // echo "Table User created successfully";
+// } else {
+//     // echo "Error creating table: " . $conn->error;
+// }
 
 //   $conn->close();
 

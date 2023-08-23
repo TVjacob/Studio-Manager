@@ -60,7 +60,6 @@ function userdeleteByID()
       echo json_encode(array("message" => "failed to find the id "));
    }
 }
-
 function authicateUSer()
 {
    if ($_SERVER["REQUEST_METHOD"] == "POST") {

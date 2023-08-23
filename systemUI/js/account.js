@@ -41,7 +41,7 @@ function onloadAccountypes() {
         }
       }
     };
-    xhttp.open("GET", "http://localhost:3000/accounttypes", true);
+    xhttp.open("GET", "http://localhost:3000/system/accounttypes", true);
     xhttp.send();
     // console.log(accounttypeInfor.length);
   }
@@ -79,7 +79,7 @@ function onloadAccountypes() {
     console.log(formdata);
   
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost:3000/new/account");
+    xhr.open("POST", "http://localhost:3000/system/new/account");
   
   
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -114,7 +114,7 @@ function onloadAccountypes() {
     var table = document.getElementById("table");
     onclearTable(table);
     var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://localhost:3000/accounts", true);
+    xhttp.open("GET", "http://localhost:3000/system/accounts", true);
     xhttp.send();
     xhttp.onreadystatechange = function () {
       if (this.readyState == 4 && this.status == 200) {
@@ -242,7 +242,7 @@ function onloadAccountypes() {
   
     var query = 'accountCode=' + text + '';
     var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://localhost:3000/accountcode?" + query);
+    xhttp.open("GET", "http://localhost:3000/system/accountcode?" + query);
     xhttp.onreadystatechange = function () {
   
       if (this.readyState == 4 && this.status == 200) {
@@ -276,7 +276,7 @@ function onloadAccountypes() {
     var formdata = 'acountCode=' + acctcode + '& id=' + id + '& isincome=' + isincome + '&accountName=' + acctname + '&account_type=' + accttype + '';
     console.log(formdata);
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost:3000/edit/account");
+    xhr.open("POST", "http://localhost:3000/system/edit/account");
     btn.innerHTML = "Loading";
     btn.disabled = true;
   
