@@ -1,4 +1,4 @@
-var staffs = [];
+var customers = [];
 var index = new Number(0);
 var total = 0;
 var size = new Number(3);
@@ -12,18 +12,17 @@ var messagetitle = document.getElementById("msgtitle");
 var message = document.getElementById("msg");
 var id = "";
 
-
-async function onloadStaffs() {
+async function onloadCustomers() {
     var table = document.getElementById("table");
     onclearTable(table);
     var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://localhost:3000/staffs", true);
+    xhttp.open("GET", "http://localhost:3000/customers", true);
     xhttp.send();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             var data = JSON.parse(this.responseText);
-            staffs = data;
-            onPageniation(staffs, table);
+            customers = data;
+            onPageniation(customers, table);
         }
     };
 }
@@ -36,17 +35,17 @@ function onPageniation(data, table) {
     for (var i = 0; i < data.length; i++) {
         var row = table.insertRow(table.length);
         var id = row.insertCell(0)
-        var stucode = row.insertCell(1);
-        var stuname = row.insertCell(2);
-        var role = row.insertCell(3);
-        var stuDob = row.insertCell(4);
+        var custname = row.insertCell(1);
+        var address = row.insertCell(2);
+        var emailaddress = row.insertCell(3);
+        var phoneno = row.insertCell(4);
         var action = row.insertCell(5);
         id.innerHTML = i + 1;
-        stucode.innerHTML = staffs[i]["staffCode"];
-        stuname.innerHTML = staffs[i]["name"].toUpperCase();
-        stuDob.innerHTML = staffs[i]["dob"].toUpperCase();
-        role.innerHTML = staffs[i]["role"];
-        action.innerHTML = '<button class="w3-bar-item w3-button  w3-black" onclick="onEditStudent(this)">Edit</button><button class="w3-bar-item w3-button w3-red">Delete</button>';
+        custname.innerHTML = customers[i]["customername"];
+        address.innerHTML = customers[i]["address"];
+        emailaddress.innerHTML = customers[i]["emailaddress"].toLowerCase();
+        phoneno.innerHTML = customers[i]["phoneno"];
+        action.innerHTML = '<button class="w3-bar-item w3-button  w3-black" onclick="onEditCustomer(this)">Edit</button><button class="w3-bar-item w3-button w3-red">Delete</button>';
     }
     onDisplayTable(index);
 
@@ -57,6 +56,7 @@ async function onDisplayTable(index) {
     totalpages = Math.ceil(total / size);
     count = 1;
     tr = table.getElementsByTagName("tr");
+
     for (var i = 1; i < tr.length; i++) {
         tr[i].style.display = "none"
         if (i == index + 1) {
@@ -78,7 +78,7 @@ function onclearTable(table) {
 }
 async function onNextPage() {
     var table = document.getElementById("table");
-    total = staffs.length;
+    total = customers.length;
     totalpages = Math.ceil(total / size);
     pageno = pageno < totalpages ? pageno + 1 : pageno;
     var index = new Number(0);
@@ -87,7 +87,7 @@ async function onNextPage() {
 }
 async function onPreviousPage() {
     var table = document.getElementById("table");
-    total = staffs.length;
+    total = customers.length;
     totalpages = Math.ceil(total / size);
     pageno = (pageno - 1) < 1 ? pageno : pageno - 1;
     var index = new Number(0);
@@ -114,34 +114,31 @@ function onfiltervalue() {
         }
     }
 }
-onloadStaffs();
-///////on Add Staff///////
-function onSaveStaff() {
-    console.log("saving ....")
+////////onsave Customer///////
+function onSaveCustomer() {
+    console.log("saving ....");
+    var emailaddress = document.getElementById("emailaddress").value;
     var address = document.getElementById("address").value;
-    var salary = document.getElementById("salary").value;
-    var role = document.getElementById("role").value;
-    var dob = document.getElementById("dob").value;
-    var name = document.getElementById("staffname").value;
+    var name = document.getElementById("name").value;
     var phoneno = document.getElementById("phoneno").value;
-    var staffCode = document.getElementById("staffCode").innerText;
     var btn = document.getElementById('btn');
     btn.innerHTML = "Loading";
     btn.disabled = true;
-    var formdata = 'name=' + name + '& staffCode=' + staffCode + '&role=' + role + '&dob=' + dob + '&phoneno=' + phoneno + '&salary=' + salary + '&address=' + address + '';
+    var formdata = 'emailaddress=' + emailaddress + '& address=' + address +
+     '&customername=' + name + '&phoneno=' + phoneno + '';
     console.log(formdata);
 
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost:3000/new/staff");
+    xhr.open("POST", "http://localhost:3000/new/customer");
 
 
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
             feedback = JSON.parse(xhr.responseText);
-            btn.innerHTML = "Save Staff";
+            btn.innerHTML = "New Customer";
             btn.disabled = false;
-            document.getElementById('staffform').style.display = 'none';
+            document.getElementById('customerform').style.display = 'none';
             messageBox.style.display = 'block';
             messagepanel.className = "w3-panel w3-green";
             messagetitle.innerHTML = "Success";
@@ -149,7 +146,7 @@ function onSaveStaff() {
 
 
         } else {
-            btn.innerHTML = "Save Staff";
+            btn.innerHTML = "New Customer";
             btn.disabled = false;
             messageBox.style.display = 'block';
             messagepanel.className = "w3-panel w3-red";
@@ -158,16 +155,10 @@ function onSaveStaff() {
         }
     };
     xhr.send(formdata);
-    onloadStaffs();
+    onloadCustomers();
 }
-//ongenerate student number
-function ongeneratestudentCode() {
-    var table = document.getElementById("table");
-    var number = table.rows.length;
-    document.getElementById("staffCode").innerHTML = "staff" + number;
-}
-
-async function onEditStudent(row) {
+//////onDit button clicked
+async function onEditCustomer(row) {
     var i = row.parentNode.parentNode.rowIndex;
     var table = document.getElementById("table");
     tr = table.getElementsByTagName("tr");
@@ -178,7 +169,7 @@ async function onEditStudent(row) {
     }
 }
 async function onloadData(text) {
-    document.getElementById('staffform').style.display = 'block';
+    document.getElementById('customerform').style.display = 'block';
     console.warn(text);
     var btn = document.getElementById('btn');
     var edit = document.getElementById('btn2');
@@ -186,53 +177,44 @@ async function onloadData(text) {
 
     edit.style.display = 'block';
 
-    var query = '?staffCode=' + text + '';
+    var query = '?id=' + text + '';
     var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://localhost:3000/staff" + query);
+    xhttp.open("GET", "http://localhost:3000/customer" + query);
     xhttp.onreadystatechange = function () {
 
         if (this.readyState == 4 && this.status == 200) {
             console.log(this.responseText);
             var data = JSON.parse(this.responseText);
             var obj = data[0];
-            id = obj.staffCode;
+            id = obj.id;
+            document.getElementById("name").value = obj.customername;
             document.getElementById("address").value = obj.address;
-            document.getElementById("salary").value = obj.salary;
+            document.getElementById("emailaddress").value = obj.emailaddress;
             document.getElementById("phoneno").value = obj.phoneno;
-            document.getElementById("dob").value = obj.dob;
-            document.getElementById("staffname").value = obj.name;
-            document.getElementById("role").value = obj.role;
-            document.getElementById("staffCode").innerText = text;
             if (edit.addEventListener) {     // For all major browsers, except IE 8 and earlier
-                edit.addEventListener("click", onUpdateStudent);
+                edit.addEventListener("click", onUpdateCustomer);
             } else if (x.attachEvent) {   // For IE 8 and earlier versions
-                edit.attachEvent("onclick", onUpdateStudent);
+                edit.attachEvent("onclick", onUpdateCustomer);
             }
-            // edit.onclick= onUpdateStudent();
+            // edit.onclick= onUpdateCustomer();
 
         }
     };
     xhttp.send(query);
 }
-function onUpdateStudent() {
+function onUpdateCustomer() {
     console.log("clicked" + id);
     var btn = document.getElementById('btn2');
 
-    var address = document.getElementById("address").value;
-    var salary = document.getElementById("salary").value;
-    var role = document.getElementById("role").value;
-    var dob = document.getElementById("dob").value;
-    var name = document.getElementById("staffname").value;
     var phoneno = document.getElementById("phoneno").value;
-    var staffCode = document.getElementById("staffCode").innerText;
-    btn.innerHTML = "Loading";
-    btn.disabled = true;
-    var formdata = 'name=' + name + '& staffCode=' + staffCode + '&role=' + role + '&dob=' + dob + '&phoneno=' + phoneno + '&salary=' + salary + '&address=' + address + '';
+    var address = document.getElementById("address").value;
+    var emailaddress = document.getElementById("emailaddress").value;
+    var customername = document.getElementById("name").value;
+    var formdata = 'customername=' + customername + '& emailaddress=' + emailaddress + '&address=' + address 
+    + '&phoneno=' + phoneno + '&id=' + id  + '';
     console.log(formdata);
-
-
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost:3000/edit/staff");
+    xhr.open("POST", "http://localhost:3000/edit/customer");
     btn.innerHTML = "Loading";
     btn.disabled = true;
 
@@ -240,7 +222,7 @@ function onUpdateStudent() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
             feedback = JSON.parse(xhr.responseText);
-            document.getElementById('staffform').style.display = 'none';
+            document.getElementById('customerform').style.display = 'none';
 
             messageBox.style.display = 'block';
             messagepanel.className = "w3-panel w3-green";
@@ -257,21 +239,34 @@ function onUpdateStudent() {
         }
     };
     xhr.send(formdata);
-    onloadStaffs();
+    onloadCustomers();
 }
 
 function onclearForm() {
-    document.getElementById("address").value = "";
-    document.getElementById("salary").value = "";
+    document.getElementById("emailaddress").value = "";
     document.getElementById("phoneno").value = "";
-    document.getElementById("dob").value = "";
-    document.getElementById("staffname").value = "";
-    document.getElementById("role").value = "";
-    document.getElementById("staffCode").innerText = "";;
+    document.getElementById("address").value = "";
+    document.getElementById("name").value = "";
     document.getElementById('btn2').style.display="none";
 
     var btn = document.getElementById('btn');
     btn.style.display="block";
-    btn.innerHTML = " Save Student ";
+    btn.innerHTML = " New Customer ";
     btn.disabled = false;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+onloadCustomers();

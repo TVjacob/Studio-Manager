@@ -3,7 +3,7 @@ require_once  "model/model.php";
 require_once  "model/data_pro.php";
 
 
-function saveProduct(Product $newproduct)
+function saveCustomer(Customer $newcustomer)
 {
     // Create connection
     $conn = new mysqli(SERVERNAME, USERNAME, PASSWORD, DB_NAME);
@@ -11,23 +11,23 @@ function saveProduct(Product $newproduct)
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-    $prodctname = $newproduct->productname;
-    $rate = $newproduct->rate;
-    $amount = $newproduct->amount;
-    $units= $newproduct->units;
+    $customername = $newcustomer->customername;
+    $address = $newcustomer->address;
+    $emailaddress = $newcustomer->emailaddress;
+    $phoneno= $newcustomer->phoneno;
 
 
-    $sql = "INSERT INTO product (productname, rate,amount ,units)
-    VALUES ('$prodctname', '$rate', '$amount','$units')";
+    $sql = "INSERT INTO customer (customername, address,emailaddress ,phoneno)
+    VALUES ('$customername', '$address', '$emailaddress','$phoneno')";
 
     if ($conn->query($sql) === TRUE) {
-        return array("message" => "New product created successfully");
+        return array("message" => "New customer created successfully");
     } else {
         return array("message" => "Error: " . $sql . "<br>" . $conn->error);
     }
     $conn->close();
 }
-function getproducts()
+function getcustomers()
 {
     // Create connection
     $conn = new mysqli(SERVERNAME, USERNAME, PASSWORD, DB_NAME);
@@ -35,7 +35,7 @@ function getproducts()
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-    $sql = "SELECT * FROM product";
+    $sql = "SELECT * FROM customer";
     $result = mysqli_query($conn, $sql);
     $data = array();
     if (mysqli_num_rows($result) > 0) {
@@ -48,7 +48,7 @@ function getproducts()
     }
     mysqli_close($conn);
 }
-function findProductByName($productname)
+function findCustomerByName($customername)
 {
     // Create connection
     $conn = new mysqli(SERVERNAME, USERNAME, PASSWORD, DB_NAME);
@@ -56,7 +56,7 @@ function findProductByName($productname)
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-    $sql = "SELECT  * from product where productname like ='%".$productname. "%'";
+    $sql = "SELECT  * from customer where customername like ='%".$customername. "%'";
     $result = mysqli_query($conn, $sql);
     $data = array();
     if (mysqli_num_rows($result) > 0) {
@@ -70,13 +70,13 @@ function findProductByName($productname)
     }
     mysqli_close($conn);
 }
-function findProductById($id)
+function findCustomerById($id)
 {
     $conn = new mysqli(SERVERNAME, USERNAME, PASSWORD, DB_NAME);
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-    $sql = "SELECT *  FROM product WHERE id ='". $id ."' ";
+    $sql = "SELECT *  FROM customer WHERE id ='". $id ."' ";
     $result = mysqli_query($conn, $sql);
     $data = array();
     if (mysqli_num_rows($result) > 0) {
@@ -90,7 +90,7 @@ function findProductById($id)
     }
     mysqli_close($conn);
 }
-function deleteProductID($id)
+function deleteCustomerID($id)
 {
     // Create connection
     $conn = new mysqli(SERVERNAME, USERNAME, PASSWORD, DB_NAME);
@@ -98,7 +98,7 @@ function deleteProductID($id)
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-    $sql = "Delete  FROM product WHERE id= '$id' ";
+    $sql = "Delete  FROM customer WHERE id= '$id' ";
     if (mysqli_query($conn, $sql)) {
         return array("message" => "deleted successful");
     } else {
@@ -106,18 +106,18 @@ function deleteProductID($id)
     }
     mysqli_close($conn);
 }
-function updateProduct(Product $updateProduct)
+function updateCustomer(Customer $updateCustomer)
 {
     $conn = new mysqli(SERVERNAME, USERNAME, PASSWORD, DB_NAME);
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-    $productname = $updateProduct->productname;
-    $rate = $updateProduct->rate;
-    $amount = $updateProduct->amount;
-    $units= $updateProduct->units;
+    $customername = $updateCustomer->customername;
+    $address = $updateCustomer->address;
+    $emailaddress = $updateCustomer->emailaddress;
+    $phoneno= $updateCustomer->phoneno;
 
-    $sql = "UPDATE product SET units='" . $units . "', productname='" . $productname . "', rate='" . $rate . "', amount='" . $amount . "' WHERE acountCode='" . $updateProduct->getID() . "'";
+    $sql = "UPDATE customer SET address='" . $address . "', customername='" . $customername . "', phoneno='" . $phoneno . "', emailaddress='" . $emailaddress . "' WHERE id='" . $updateCustomer->getID() . "'";
     if (mysqli_query($conn, $sql)) {
         return array("message" => "Record updated successfully");
     } else {

@@ -112,7 +112,7 @@ class Transaction
     public  $staff_id;
     public  $product_id;
     public  $transDate;
-    public  float $amount=0;
+    public  float $amount = 0;
     public $creditaccount_id;
     public  $debitaccount_id;
 
@@ -140,16 +140,20 @@ class Transaction
         return $this->id;
     }
 }
-class Product{
+class Product
+{
     private $id;
     public $productname;
-    public int $rate=0;
-    public float $amount=0;
+    public int $rate = 0;
+    public float $amount = 0;
+    public $units;
 
-    public function __construct($productname,$rate,$amount) {
+    public function __construct($productname, $rate, $amount, $units)
+    {
         $this->productname = $productname;
         $this->rate = $rate;
         $this->amount = $amount;
+        $this->units = $units;
     }
     public function setID($id)
     {
@@ -180,6 +184,31 @@ class Account
     }
 
 
+    public function setID($id)
+    {
+        return $this->id = $id;
+    }
+    public function getID()
+    {
+        return $this->id;
+    }
+}
+
+class Customer
+{
+    private $id;
+    public $customername;
+    public $address;
+    public $phoneno;
+    public $emailaddress;
+
+    public function __construct($customername, $address, $phoneno, $emailaddress)
+    {
+        $this->customername = $customername;
+        $this->address = $address;
+        $this->phoneno = $phoneno;
+        $this->emailaddress = $emailaddress;
+    }
     public function setID($id)
     {
         return $this->id = $id;

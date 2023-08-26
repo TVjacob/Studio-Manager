@@ -45,6 +45,22 @@ if ($conn->query($sql) === TRUE) {
     // echo "Error creating table: " . $conn->error;
 }
 
+
+// sql to create table
+$sql = "CREATE  TABLE IF NOT EXISTS `customer` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `customername` varchar(30) NOT NULL,
+    `address` varchar(30) DEFAULT NULL,
+    `phoneno` varchar(50) DEFAULT NULL,
+    `emailaddress` varchar(50) DEFAULT NULL
+  );
+  ";
+if ($conn->query($sql) === TRUE) {
+    // echo "Table User created successfully";
+} else {
+    // echo "Error creating table: " . $conn->error;
+}
+
 //////////////////////////
 
 $sql = "CREATE  TABLE IF NOT EXISTS `accounttype` (
@@ -68,7 +84,8 @@ if ($conn->query($sql) === TRUE) {
 // sql to create table
 $sql = "CREATE TABLE IF NOT EXISTS`product` (
   `id`INT(11) NOT NULL AUTO_INCREMENT  PRIMARY KEY,
-  `productname` varchar(6)  NULL,
+  `productname` varchar(10)  NULL,
+  `units` varchar(8)  NULL,
   `rate` INT(12) ,
   amount DOUBLE
 );
@@ -251,6 +268,21 @@ if (mysqli_num_rows($result) <= 0) {
 //////////////////
 
 
+function makecustomerNameUnquie($conn)
+{
+    // $sql = "ALTER TABLE `account` ADD UNIQUE(`acountCode`);";
+    $sql = "ALTER TABLE `customer` ADD UNIQUE (`customername`);";
+    if ($conn->query($sql) === TRUE) {
+        // echo "Table User created successfully";
+    }
+}
+$sql = "select * from customer";
+$result = mysqli_query($conn, $sql);
+$data = array();
+if (mysqli_num_rows($result) <= 0) {
+    makecustomerNameUnquie($conn);
+} else {
+}
 /////////////////
 
 

@@ -1,4 +1,4 @@
-var staffs = [];
+var products = [];
 var index = new Number(0);
 var total = 0;
 var size = new Number(3);
@@ -12,18 +12,17 @@ var messagetitle = document.getElementById("msgtitle");
 var message = document.getElementById("msg");
 var id = "";
 
-
-async function onloadStaffs() {
+async function onloadProducts() {
     var table = document.getElementById("table");
     onclearTable(table);
     var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://localhost:3000/staffs", true);
+    xhttp.open("GET", "http://localhost:3000/products", true);
     xhttp.send();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             var data = JSON.parse(this.responseText);
-            staffs = data;
-            onPageniation(staffs, table);
+            products = data;
+            onPageniation(products, table);
         }
     };
 }
@@ -36,17 +35,17 @@ function onPageniation(data, table) {
     for (var i = 0; i < data.length; i++) {
         var row = table.insertRow(table.length);
         var id = row.insertCell(0)
-        var stucode = row.insertCell(1);
-        var stuname = row.insertCell(2);
-        var role = row.insertCell(3);
-        var stuDob = row.insertCell(4);
+        var name = row.insertCell(1);
+        var rate = row.insertCell(2);
+        var amount = row.insertCell(3);
+        var units = row.insertCell(4);
         var action = row.insertCell(5);
         id.innerHTML = i + 1;
-        stucode.innerHTML = staffs[i]["staffCode"];
-        stuname.innerHTML = staffs[i]["name"].toUpperCase();
-        stuDob.innerHTML = staffs[i]["dob"].toUpperCase();
-        role.innerHTML = staffs[i]["role"];
-        action.innerHTML = '<button class="w3-bar-item w3-button  w3-black" onclick="onEditStudent(this)">Edit</button><button class="w3-bar-item w3-button w3-red">Delete</button>';
+        name.innerHTML = products[i]["productname"];
+        rate.innerHTML = products[i]["rate"].toUpperCase();
+        amount.innerHTML = products[i]["amount"].toUpperCase();
+        units.innerHTML = products[i]["units"];
+        action.innerHTML = '<button class="w3-bar-item w3-button  w3-black" onclick="onEditProduct(this)">Edit</button><button class="w3-bar-item w3-button w3-red">Delete</button>';
     }
     onDisplayTable(index);
 
@@ -57,6 +56,7 @@ async function onDisplayTable(index) {
     totalpages = Math.ceil(total / size);
     count = 1;
     tr = table.getElementsByTagName("tr");
+
     for (var i = 1; i < tr.length; i++) {
         tr[i].style.display = "none"
         if (i == index + 1) {
@@ -78,7 +78,7 @@ function onclearTable(table) {
 }
 async function onNextPage() {
     var table = document.getElementById("table");
-    total = staffs.length;
+    total = products.length;
     totalpages = Math.ceil(total / size);
     pageno = pageno < totalpages ? pageno + 1 : pageno;
     var index = new Number(0);
@@ -87,7 +87,7 @@ async function onNextPage() {
 }
 async function onPreviousPage() {
     var table = document.getElementById("table");
-    total = staffs.length;
+    total = products.length;
     totalpages = Math.ceil(total / size);
     pageno = (pageno - 1) < 1 ? pageno : pageno - 1;
     var index = new Number(0);
@@ -114,34 +114,30 @@ function onfiltervalue() {
         }
     }
 }
-onloadStaffs();
-///////on Add Staff///////
-function onSaveStaff() {
-    console.log("saving ....")
-    var address = document.getElementById("address").value;
-    var salary = document.getElementById("salary").value;
-    var role = document.getElementById("role").value;
-    var dob = document.getElementById("dob").value;
-    var name = document.getElementById("staffname").value;
-    var phoneno = document.getElementById("phoneno").value;
-    var staffCode = document.getElementById("staffCode").innerText;
+////////onsave Product///////
+function onSaveProduct() {
+    console.log("saving ....");
+    var rate = document.getElementById("rate").value;
+    var amount = document.getElementById("amount").value;
+    var name = document.getElementById("name").value;
+    var units = document.getElementById("units").value;
     var btn = document.getElementById('btn');
     btn.innerHTML = "Loading";
     btn.disabled = true;
-    var formdata = 'name=' + name + '& staffCode=' + staffCode + '&role=' + role + '&dob=' + dob + '&phoneno=' + phoneno + '&salary=' + salary + '&address=' + address + '';
+    var formdata = 'productname=' + name + '& units=' + units + '&amount=' + amount + '&rate=' + rate + '';
     console.log(formdata);
 
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost:3000/new/staff");
+    xhr.open("POST", "http://localhost:3000/new/product");
 
 
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
             feedback = JSON.parse(xhr.responseText);
-            btn.innerHTML = "Save Staff";
+            btn.innerHTML = "New Product";
             btn.disabled = false;
-            document.getElementById('staffform').style.display = 'none';
+            document.getElementById('productform').style.display = 'none';
             messageBox.style.display = 'block';
             messagepanel.className = "w3-panel w3-green";
             messagetitle.innerHTML = "Success";
@@ -149,7 +145,7 @@ function onSaveStaff() {
 
 
         } else {
-            btn.innerHTML = "Save Staff";
+            btn.innerHTML = "New Product";
             btn.disabled = false;
             messageBox.style.display = 'block';
             messagepanel.className = "w3-panel w3-red";
@@ -158,16 +154,10 @@ function onSaveStaff() {
         }
     };
     xhr.send(formdata);
-    onloadStaffs();
+    onloadProducts();
 }
-//ongenerate student number
-function ongeneratestudentCode() {
-    var table = document.getElementById("table");
-    var number = table.rows.length;
-    document.getElementById("staffCode").innerHTML = "staff" + number;
-}
-
-async function onEditStudent(row) {
+//////onDit button clicked
+async function onEditProduct(row) {
     var i = row.parentNode.parentNode.rowIndex;
     var table = document.getElementById("table");
     tr = table.getElementsByTagName("tr");
@@ -178,7 +168,7 @@ async function onEditStudent(row) {
     }
 }
 async function onloadData(text) {
-    document.getElementById('staffform').style.display = 'block';
+    document.getElementById('productform').style.display = 'block';
     console.warn(text);
     var btn = document.getElementById('btn');
     var edit = document.getElementById('btn2');
@@ -186,53 +176,44 @@ async function onloadData(text) {
 
     edit.style.display = 'block';
 
-    var query = '?staffCode=' + text + '';
+    var query = '?id=' + text + '';
     var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://localhost:3000/staff" + query);
+    xhttp.open("GET", "http://localhost:3000/product" + query);
     xhttp.onreadystatechange = function () {
 
         if (this.readyState == 4 && this.status == 200) {
             console.log(this.responseText);
             var data = JSON.parse(this.responseText);
             var obj = data[0];
-            id = obj.staffCode;
-            document.getElementById("address").value = obj.address;
-            document.getElementById("salary").value = obj.salary;
-            document.getElementById("phoneno").value = obj.phoneno;
-            document.getElementById("dob").value = obj.dob;
-            document.getElementById("staffname").value = obj.name;
-            document.getElementById("role").value = obj.role;
-            document.getElementById("staffCode").innerText = text;
+            id = obj.id;
+            document.getElementById("units").value = obj.units;
+            document.getElementById("amount").value = obj.amount;
+            document.getElementById("name").value = obj.name;
+            document.getElementById("rate").value = obj.rate;
             if (edit.addEventListener) {     // For all major browsers, except IE 8 and earlier
-                edit.addEventListener("click", onUpdateStudent);
+                edit.addEventListener("click", onUpdateProduct);
             } else if (x.attachEvent) {   // For IE 8 and earlier versions
-                edit.attachEvent("onclick", onUpdateStudent);
+                edit.attachEvent("onclick", onUpdateProduct);
             }
-            // edit.onclick= onUpdateStudent();
+            // edit.onclick= onUpdateProduct();
 
         }
     };
     xhttp.send(query);
 }
-function onUpdateStudent() {
+function onUpdateProduct() {
     console.log("clicked" + id);
     var btn = document.getElementById('btn2');
 
-    var address = document.getElementById("address").value;
-    var salary = document.getElementById("salary").value;
-    var role = document.getElementById("role").value;
-    var dob = document.getElementById("dob").value;
-    var name = document.getElementById("staffname").value;
-    var phoneno = document.getElementById("phoneno").value;
-    var staffCode = document.getElementById("staffCode").innerText;
-    btn.innerHTML = "Loading";
-    btn.disabled = true;
-    var formdata = 'name=' + name + '& staffCode=' + staffCode + '&role=' + role + '&dob=' + dob + '&phoneno=' + phoneno + '&salary=' + salary + '&address=' + address + '';
+    var rate = document.getElementById("rate").value;
+    var amount = document.getElementById("amount").value;
+    var name = document.getElementById("name").value;
+    var units = document.getElementById("units").value;
+    var formdata = 'name=' + name + '& rate=' + rate + '&amount=' + amount 
+    + '&units=' + units + '&id=' + id  + '';
     console.log(formdata);
-
-
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost:3000/edit/staff");
+    xhr.open("POST", "http://localhost:3000/edit/product");
     btn.innerHTML = "Loading";
     btn.disabled = true;
 
@@ -240,7 +221,7 @@ function onUpdateStudent() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
             feedback = JSON.parse(xhr.responseText);
-            document.getElementById('staffform').style.display = 'none';
+            document.getElementById('productform').style.display = 'none';
 
             messageBox.style.display = 'block';
             messagepanel.className = "w3-panel w3-green";
@@ -257,21 +238,34 @@ function onUpdateStudent() {
         }
     };
     xhr.send(formdata);
-    onloadStaffs();
+    onloadProducts();
 }
 
 function onclearForm() {
-    document.getElementById("address").value = "";
-    document.getElementById("salary").value = "";
-    document.getElementById("phoneno").value = "";
-    document.getElementById("dob").value = "";
-    document.getElementById("staffname").value = "";
-    document.getElementById("role").value = "";
-    document.getElementById("staffCode").innerText = "";;
+    document.getElementById("units").value = "hourly";
+    document.getElementById("amount").value = 0;
+    document.getElementById("rate").value = 0;
+    document.getElementById("name").value = "";
     document.getElementById('btn2').style.display="none";
 
     var btn = document.getElementById('btn');
     btn.style.display="block";
-    btn.innerHTML = " Save Student ";
+    btn.innerHTML = " New Product ";
     btn.disabled = false;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+onloadProducts();

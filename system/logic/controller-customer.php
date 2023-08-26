@@ -1,25 +1,25 @@
 <?php
 
-require_once "server/product.php";
+require_once "server/customer.php";
 require_once "globalfunc.php";
 
-function addproduct()
+function addcustomer()
 {
    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-      $newproduct = new Product(test_input($_POST['productname']), test_input($_POST['rate']), test_input($_POST['amount']), test_input($_POST['units']));
-      echo json_encode(saveProduct($newproduct));
+      $newcustomer = new Customer(test_input($_POST['customername']), test_input($_POST['address']), test_input($_POST['phoneno']), test_input($_POST['emailaddress']));
+      echo json_encode(saveCustomer($newcustomer));
    } else {
       echo json_encode(array("message" => "Not Post"));
    }
 }
-function productupdateByID()
+function customerupdateByID()
 {
    if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $editid  = $_POST['id'];
       if ($editid != null) {
-         $newproduct = new Product(test_input($_POST['productname']), test_input($_POST['rate']), test_input($_POST['amount']), test_input($_POST['units']));
-         $newproduct->setID($editid);
-         $feedback = updateProduct($newproduct);
+         $newcustomer =new Customer(test_input($_POST['customername']), test_input($_POST['address']), test_input($_POST['phoneno']), test_input($_POST['emailaddress']));
+         $newcustomer->setID($editid);
+         $feedback = updateCustomer($newcustomer);
          echo json_encode($feedback);
       } else {
          echo json_encode(array("message" => "failed to find the id "));
@@ -28,33 +28,33 @@ function productupdateByID()
       echo json_encode(array("message" => "Cannotupdate this type of post "));
    }
 }
-function findproducts()
+function findcustomers()
 {
-   $studs = getproducts();
+   $studs = getcustomers();
    echo json_encode($studs);
 }
-function productfindByID()
+function customerfindByID()
 {
    if ($_GET['id'] != null) {
-      $studu = findproductById($_GET['id']);
+      $studu = findcustomerById($_GET['id']);
       echo json_encode($studu);
    } else {
       echo json_encode(array("message" => "failed to find the id "));
    }
 }
-function productdeleteByID()
+function customerdeleteByID()
 {
    if ($_GET['id'] != null) {
-      $delstu = deleteProductID($_GET['id']);
+      $delstu = deleteCustomerID($_GET['id']);
       echo json_encode($delstu);
    } else {
       echo json_encode(array("message" => "failed to find the id "));
    }
 }
-function findProductsName()
+function findCustomersName()
 {
-   if ($_GET['productname'] != null) {
-      $studu = findProductByName($_GET['productname']);
+   if ($_GET['customername'] != null) {
+      $studu = findCustomerByName($_GET['customername']);
       echo json_encode($studu);
    } else {
       echo json_encode(array("message" => "failed to find the id "));

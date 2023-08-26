@@ -6,6 +6,7 @@ require  "logic/controller-user.php";
 require  "logic/controller-account.php";
 require  "logic/controller-staff.php";
 require  "logic/controller-product.php";
+require  "logic/controller-customer.php";
 require  "logic/controller-transaction.php";
 require_once "model/database-config.php";
 
@@ -103,6 +104,22 @@ switch (rewriteurl($request)) {
     case '/details/payment':
         getTransactionBydetails();
         break;
+
+    case '/new/customer':
+        addcustomer();
+        break;
+    case '/edit/customer':
+        customerupdateByID();
+        break;
+    case '/customers':
+        findcustomers();
+        break;
+    case '/customer':
+        customerfindByID();
+        break;
+    case '/customer/name':
+        findCustomersName();
+        break;
     default:
         echo json_encode(array("message" => "file not found ... "));
 }
@@ -110,10 +127,10 @@ switch (rewriteurl($request)) {
 
 function rewriteurl($str)
 {
-    $str=str_replace("/system","",$str);
+    $str = str_replace("/system", "", $str);
     if (strpos($str, "?")) {
         $var = strpos($str, "?");
-        $len = strlen($str);//length
+        $len = strlen($str); //length
         $url = substr($str, 0, $var);
         return $url;
     } else {
