@@ -7,7 +7,7 @@ require  "logic/controller-account.php";
 require  "logic/controller-staff.php";
 require  "logic/controller-product.php";
 require  "logic/controller-customer.php";
-require  "logic/controller-transaction.php";
+// require  "logic/controller-transaction.php";
 require_once "model/database-config.php";
 
 
@@ -86,25 +86,6 @@ switch (rewriteurl($request)) {
     case '/staff':
         stafffindByID();
         break;
-    case '/new/payment':
-        addTransaction();
-        break;
-    case '/edit/transaction':
-        transactions();
-        break;
-    case '/transactions':
-        findTransactions();
-        break;
-    case '/transaction':
-        findTransactionsByID();
-        break;
-    case '/staff/transaction':
-        findTransactionsBystaffID();
-        break;
-    case '/details/payment':
-        getTransactionBydetails();
-        break;
-
     case '/new/customer':
         addcustomer();
         break;
@@ -119,6 +100,42 @@ switch (rewriteurl($request)) {
         break;
     case '/customer/name':
         findCustomersName();
+        break;
+    case '/new/bill':
+        saveBill();
+        break;
+    case '/bill/payment':
+        saveRecipt();
+        break;
+    case '/salary/payment':
+        saveSalary();
+        break;
+    case '/payment':
+        saveDoubleEntry();
+        break;
+    case '/find/bills':
+        billings();
+        break;
+    case '/find/balances':
+        balances();
+        break;
+    case '/find/payments':
+        payments();
+        break;
+    case '/find/salary/payments':
+        salarypayments();
+        break;
+    case '/find/payment/id':
+        findTransactionsByID();
+        break;
+    case '/find/payment/referid':
+        findTransactionsByreferID();
+        break;
+    case '/delete/payment/id':
+        deleteTransactionByID();
+        break;
+    case '/delete/allpayment/id':
+        deleteTransactionByreferID();
         break;
     default:
         echo json_encode(array("message" => "file not found ... "));

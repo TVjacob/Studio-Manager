@@ -40,9 +40,9 @@ $sql = "CREATE  TABLE IF NOT EXISTS `user` (
   );
   ";
 if ($conn->query($sql) === TRUE) {
-    // echo "Table User created successfully";
+    
 } else {
-    // echo "Error creating table: " . $conn->error;
+    
 }
 
 
@@ -56,9 +56,9 @@ $sql = "CREATE  TABLE IF NOT EXISTS `customer` (
   );
   ";
 if ($conn->query($sql) === TRUE) {
-    // echo "Table User created successfully";
+    
 } else {
-    // echo "Error creating table: " . $conn->error;
+    
 }
 
 //////////////////////////
@@ -72,19 +72,19 @@ $sql = "CREATE  TABLE IF NOT EXISTS `accounttype` (
   );
   ";
 if ($conn->query($sql) === TRUE) {
-    // echo "Table User created successfully";
+    
 } else {
-    // echo "Error creating table: " . $conn->error;
+    
 }
 
 
 
 
-// $conn->close();
+
 // sql to create table
 $sql = "CREATE TABLE IF NOT EXISTS`product` (
   `id`INT(11) NOT NULL AUTO_INCREMENT  PRIMARY KEY,
-  `productname` varchar(10)  NULL,
+  `productname` varchar(10) NOT  NULL,
   `units` varchar(8)  NULL,
   `rate` INT(12) ,
   amount DOUBLE
@@ -92,12 +92,12 @@ $sql = "CREATE TABLE IF NOT EXISTS`product` (
 ";
 
 if ($conn->query($sql) === TRUE) {
-    // echo "Table User created successfully";
+    
 } else {
-    // echo "Error creating table: " . $conn->error;
+    
 }
 
-// $conn->close();
+
 
 
 $sql = "CREATE TABLE IF NOT EXISTS`Staff` (
@@ -113,118 +113,45 @@ $sql = "CREATE TABLE IF NOT EXISTS`Staff` (
   ";
 
 if ($conn->query($sql) === TRUE) {
-    // echo "Table User created successfully";
+    
 } else {
-    // echo "Error creating table: " . $conn->error;
+    
 }
 
-//   $conn->close();
 
 
-$sql = "CREATE TABLE IF NOT EXISTS`transaction` (
+
+$sql = "CREATE TABLE IF NOT EXISTS`gl_transaction` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `debitaccount_id` varchar(6) NOT NULL,
-    `creditaccount_id` varchar(6) NOT NULL,
-    `details` varchar(30)  NULL,
+    `debitaccount_id` varchar(10)  NULL,
+    `creditaccount_id` varchar(10)  NULL,
+    `screen_details` varchar(30)  NULL,
     `remarks` varchar(30)  NULL,
     `staff_id` varchar(30)  NULL,
+    `customer_id` varchar(30)  NULL,
+    `reference_id` varchar(30)  NULL,
     `product_id` varchar(30)  NULL,
-    `term_id` varchar(30) NOT  NULL,
     `transDate` DATE NOT NULL,
      amount DOUBLE
   );
   ";
 
 if ($conn->query($sql) === TRUE) {
-    // echo "Table User created successfully";
+    
 } else {
-    // echo "Error creating table: " . $conn->error;
+    
 }
 
-//   $conn->close();
 
+$sql = "CREATE TABLE IF NOT EXISTS`transactionaltracker` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `screen_details` varchar(30)  NULL
+  );
+  ";
 
-
-// $sql = "CREATE TABLE IF NOT EXISTS`expense` (
-//     `id` INT(11) NOT NULL AUTO_INCREMENT  PRIMARY KEY,
-//     `debitaccount_id` varchar(6) NOT NULL,
-//     `creditaccount_id` varchar(6) NOT NULL,
-//     `details` varchar(30)  NULL,
-//     `remarks` varchar(30)  NULL,
-//     `staff_id` varchar(30)  NULL,
-//     `student_id` varchar(30)  NULL,
-//     `term_id` varchar(30) NOT NULL,
-//     `transDate` DATE NOT NULL,
-//      amount DOUBLE 
-//   );
-//   ";
-
-// if ($conn->query($sql) === TRUE) {
-//     // echo "Table User created successfully";
-// } else {
-//     // echo "Error creating table: " . $conn->error;
-// }
-
-// //   $conn->close();
-
-
-
-
-// $sql = "CREATE TABLE IF NOT EXISTS`generalTransaction` (
-//     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-//     `account_id` varchar(6) NOT NULL,
-//     `details` varchar(30)  NULL,
-//     `remarks` varchar(30)  NULL,
-//     `staff_id` varchar(30)  NULL,
-//     `student_id` varchar(30)  NULL,
-//     `term_id` varchar(30) NOT NULL,
-//     `transDate` DATE NOT NULL,
-//      amount DOUBLE, 
-//      reference_id varchar(30) NULL,
-//      transtype varchar(5) NOT NULL
-
-//   );
-//   ";
-
-// if ($conn->query($sql) === TRUE) {
-//     // echo "Table User created successfully";
-// } else {
-//     // echo "Error creating table: " . $conn->error;
-// }
-
-// //   $conn->close();
-
-// $sql = "CREATE TABLE IF NOT EXISTS`enroll` (
-//     `id` INT(11) NOT NULL AUTO_INCREMENT  PRIMARY KEY,
-//     `student_id` varchar(30)  NULL,
-//     `term_id` varchar(30) NOT NULL,
-//     `term_end` DATE NOT NULL,
-//      amount DOUBLE, 
-//      `term_start` DATE NOT NULL
-//   );
-//   ";
-
-// if ($conn->query($sql) === TRUE) {
-//     // echo "Table User created successfully";
-// } else {
-//     // echo "Error creating table: " . $conn->error;
-// }
-
-// $sql = "CREATE TABLE IF NOT EXISTS`school_term` (
-//     `id` INT(11) NOT NULL AUTO_INCREMENT  PRIMARY KEY,
-//     `term_status` varchar(30)  NULL,
-//     `term_end` DATE NOT NULL, 
-//      `term_start` DATE NOT NULL
-//   );
-//   ";
-
-// if ($conn->query($sql) === TRUE) {
-//     // echo "Table User created successfully";
-// } else {
-//     // echo "Error creating table: " . $conn->error;
-// }
-
-//   $conn->close();
+if ($conn->query($sql) === TRUE) {
+} else {
+}
 
 $sql = "CREATE TABLE IF NOT EXISTS`account` (
     `id` INT(11) NOT NULL AUTO_INCREMENT  PRIMARY KEY,
@@ -237,9 +164,9 @@ $sql = "CREATE TABLE IF NOT EXISTS`account` (
   ";
 
 if ($conn->query($sql) === TRUE) {
-    // echo "Table User created successfully";
+    
 } else {
-    // echo "Error creating table: " . $conn->error;
+    
 }
 
 
@@ -248,7 +175,7 @@ function configUser($conn)
     // $sql = "ALTER TABLE `account` ADD UNIQUE(`acountCode`);";
     $sql = "ALTER TABLE `account` ADD UNIQUE (`acountCode`);";
     if ($conn->query($sql) === TRUE) {
-        // echo "Table User created successfully";
+        
     }
 }
 $sql = "select * from user";
@@ -259,11 +186,11 @@ if (mysqli_num_rows($result) <= 0) {
     $sql = "INSERT INTO `user` (`id`, `username`, `password`, `email`, `tdate`, `islogged`) VALUES (NULL, 'Admin', '1234', 'jacobvictortendo@gmail.com', current_timestamp(), NULL);";
 
     if ($conn->query($sql) === TRUE) {
-        // echo "Table User created successfully";
+        
     }
 } else {
 
-    // echo "Error creating table: " . $conn->error;
+    
 }
 //////////////////
 
@@ -273,7 +200,7 @@ function makecustomerNameUnquie($conn)
     // $sql = "ALTER TABLE `account` ADD UNIQUE(`acountCode`);";
     $sql = "ALTER TABLE `customer` ADD UNIQUE (`customername`);";
     if ($conn->query($sql) === TRUE) {
-        // echo "Table User created successfully";
+        
     }
 }
 $sql = "select * from customer";
@@ -293,19 +220,51 @@ $data = array();
 if (mysqli_num_rows($result) <= 0) {
 
     $sql = "INSERT INTO `accounttype` (`id`, `name`, `isincome`, `balanceSheet`, `accountcode`) VALUES 
-('ACA', 'ASSET CURRENT	(CASH/BANK)', null, true, '1000'),
+('ACA', 'ASSET CURRENT	(CASH/BANK)', null, true, '1003'),
 ('ACU', 'ASSETS/CURRENT(OTHER)', null, true, '1200'),
-('AFI', 'ASSETS FIXED', false, null, '1400'),
+('AFI', 'ASSETS FIXED', false, null, '1407'),
 ('CPT', 'CAPITAL/WORKING FUND', null, true, '2000'),
 ('LIC', 'LIABILITY(CURRENT)', null, true, '4000'),
 ('LIO', 'LIABILITY(OTHER)', null, true, '4200'),
-('NML', 'NORMINAL', true, null, '6000')
+('NML', 'NORMINAL', true, null, '6005')
 ;";
 
     if ($conn->query($sql) === TRUE) {
-        // echo "Table User created successfully";
+        
     }
 }
+
+
+$sql = "select * from account";
+$result = mysqli_query($conn, $sql);
+$data = array();
+if (mysqli_num_rows($result) <= 0) {
+
+    $sql = "INSERT INTO `account` ( `acountCode`, `accountName`, `isincome`, `account_type`) VALUES
+    ( 1400, 'Camera', 'NULL', 'AFI'),
+    ( 1401, 'Lights', 'NULL', 'AFI'),
+    ( 1402, 'Computer', 'NULL', 'AFI'),
+    ( 1403, 'Printer', 'NULL', 'AFI'),
+    ( 1404, 'Background', 'NULL', 'AFI'),
+    ( 1405, 'Furniture', 'NULL', 'AFI'),
+    ( 1406, 'Income Receivable', 'NULL', 'ACA'),
+    ( 1000, 'Cash', 'NULL', 'ACA'),
+    ( 1001, 'MobileMoney', 'NULL', 'ACA'),
+    ( 6000, 'Income', 'Income', 'NML'),
+    ( 6001, 'Rent', 'Expense', 'NML'),
+    ( 6002, 'Salaries', 'Expense', 'NML'),
+    ( 6003, 'Food Expense', 'Expense', 'NML'),
+    ( 6004, 'transports', 'Expense', 'NML');";
+
+    if ($conn->query($sql) === TRUE) {
+        
+    }
+}
+
+
+
+
+
 
 
 

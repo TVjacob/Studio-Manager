@@ -18,7 +18,7 @@ function staffupdateByID()
    if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $editid  = $_POST['staffCode'];
       if ($editid != null) {
-         $editstu = new Staff(test_input($_POST['name']), test_input($_POST['staffCode']), test_input($_POST['dob']), test_input($_POST['address']), test_input($_POST['salary']), test_input($_POST['phoneno']), test_input($_POST['role']));
+         $editstu = new Staff(test_input($_POST['name']), test_input($_POST['staffCode']), test_input($_POST['role']),test_input($_POST['dob']),test_input($_POST['address']), test_input($_POST['salary']), test_input($_POST['phoneno']));
          $editstu->set_staffCode($editid);
          $feedback = updatestaff($editstu);
          echo json_encode($feedback);

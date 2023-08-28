@@ -104,10 +104,23 @@ class Staff
         return $this->phoneno;
     }
 }
-class Transaction
+class transactionaltracker{
+    public $id;
+    public $screen_details;
+    public function __construct($id,$screen_details)
+    {
+        $this->id=$id;
+        $this->screen_details=$screen_details;
+        
+    }
+
+
+}
+class GL_Transaction
 {
     private $id;
-    public  $details;
+    public $customer_id;
+    public $screen_details;
     public  $remarks;
     public  $staff_id;
     public  $product_id;
@@ -115,12 +128,15 @@ class Transaction
     public  float $amount = 0;
     public $creditaccount_id;
     public  $debitaccount_id;
+    public $reference_id;
 
 
 
-    public function __construct($details, $remarks, $transDate, $amount, $creditaccount, $debitaccount_id, $product_id, $staff_id)
+    public function __construct($reference_id, $customer_id, $screen_details, $remarks, $transDate, $amount, $creditaccount, $debitaccount_id, $product_id, $staff_id)
     {
-        $this->details = $details;
+        $this->reference_id = $reference_id;
+        $this->customer_id = $screen_details;
+        $this->customer_id = $customer_id;
         $this->remarks = $remarks;
         $this->creditaccount_id = $creditaccount;
         $this->debitaccount_id = $debitaccount_id;
@@ -164,7 +180,6 @@ class Product
         return $this->id;
     }
 }
-
 class Account
 {
     private $id;
@@ -193,7 +208,6 @@ class Account
         return $this->id;
     }
 }
-
 class Customer
 {
     private $id;
