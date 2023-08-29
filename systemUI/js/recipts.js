@@ -1,5 +1,5 @@
 var recipts = [];
-var customers = [];
+var customersBalances = [];
 
 
 var index = new Number(0);
@@ -13,7 +13,7 @@ var messageBox = document.getElementById("message");
 var messagepanel = document.getElementById("msgpanel");
 var messagetitle = document.getElementById("msgtitle");
 var message = document.getElementById("msg");
-var service = document.getElementById("service").value;
+var payaccount = document.getElementById("payaccount").value;
 var tdate = document.getElementById("tdate").value;
 var remrks = document.getElementById("remarks").value;
 var amt = document.getElementById("amount").value;
@@ -27,36 +27,43 @@ var id = "";
 ////////Bills file.
 ///////
 // //////////////////////////////
-function onLoadCustomers() {
+function onLoadCustomersBalances() {
   var datalist = document.getElementById("samples");
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       var data = JSON.parse(this.responseText);
-      customers = data;
-      for (customers of data) {
+      customersBalances = data;
+      var cnt =0;
+      for (balance of data) {
         var option = document.createElement("option");
-        option.value = customers.id;
-        option.text = customers.customername;
+        option.value = cnt;
+        var balanceamt = balance.totalbill-balance.totalpayments;
+        option.text = balance.customername +" "+formatUsing(balanceamt) ;
         datalist.appendChild(option);
+        cnt++;
       }
     }
   };
-  xhttp.open("GET", "http://localhost:3000/customers", true);
+  xhttp.open("GET", "http://localhost:3000/find/balances", true);
   xhttp.send();
 }
-function onclearbillForm() {
+function onclearReciptForm() {
   document.getElementById("customer").value = "";
   document.getElementById("tdate").value = "";
-  document.getElementById("service").value = "";
+  document.getElementById("payaccount").value = "";
   document.getElementById("amount").innerText = 0;
-  document.getElementById("remarks").innerText = "";
+  document.getElementById("totalbill").innerText = 0;
+  document.getElementById("balance").innerText = 0;
+  document.getElementById("totalpayment").innerText = 0;
+  document.getElementById("service").innerHTML="Service :";
 
+  document.getElementById("remarks").innerText = "";
   var btn = document.getElementById('btn');
   btn.innerHTML = "New Recipt";
   btn.disabled = false;
 }
-function onCreateBill() {
+function onCreateRecipt() {
   // var accttype = document.getElementById("account_type").value;
   // var acctname = document.getElementById("accountName").value;
   // var isincome = document.getElementById("isincome").value == "" ? "NULL" : document.getElementById("isincome").value;
@@ -64,11 +71,13 @@ function onCreateBill() {
   var btn = document.getElementById('btn');
   btn.innerHTML = "Loading";
   btn.disabled = true;
-  var formdata = 'customer=' + customer + '& remarks=' + remarks + '&amount=' + amount + '&tdate=' + tdate +  '&service=' + service +'';
+  var customer_id = customersBalances[customer]['customername']
+  var referID = customersBalances[customer]['reference_id']
+  var formdata = 'customer=' + customer_id + '& remarks=' + remarks + '&amount=' + amount + '&tdate=' + tdate +  '&reference_id=' + referID +'&debit=' + payaccount +'';
   console.log(formdata);
 
   let xhr = new XMLHttpRequest();
-  xhr.open("POST", "http://localhost:3000/new/bill");
+  xhr.open("POST", "http://localhost:3000/bill/payment");
 
 
   xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -94,7 +103,7 @@ function onCreateBill() {
   };
   xhr.send(formdata);
 }
-async function onloadBills() {
+async function onLoadRecipts() {
   var table = document.getElementById("table");
   onclearTable(table);
   var xhttp = new XMLHttpRequest();
@@ -220,8 +229,17 @@ function onfiltervalue() {
     }
   }
 }
+async function  ondisplayFormData(person){
+ var index =person.value;
+ if(index!=null||index!=""){
+  var totalbalance = customersBalances[index]['totalbill']-customersBalances[index]['totalpayments'];
+  document.getElementById("totalbill").value=formatUsing(customersBalances[index]['totalbill']);
+  document.getElementById("balance").value=formatUsing(totalbalance);
+  document.getElementById("totalpayment").value=formatUsing(customersBalances[index]['totalpayments']);
+ } 
+}
 
-onloadBills();
-onLoadCustomers();
+onLoadRecipts();
+onLoadCustomersBalances();
 
 

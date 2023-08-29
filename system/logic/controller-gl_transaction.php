@@ -11,23 +11,16 @@ function saveRecipt()
         $customer = $_POST['customer'];
         $remarks = $_POST['remarks'];
         $amount = (float)$_POST['amount'];
-        $balance = (float)$_POST['balance'];
         $transdate = $_POST['tdate'];
         $product = $_POST["product"];
-        $screen_details = "RECIPT";
+        $screen_details = "recipt";
         $reference_id = $_POST["reference_id"];;
         $debit = new GL_Transaction($reference_id, $customer, $screen_details, $remarks, $transdate, $amount, null, $debitaccount, $product, null);
         $credit = new GL_Transaction($reference_id, $customer, $screen_details, $remarks, $transdate, $amount, $creditincome, null, $product, null);
         $feedback = savetransaction($debit);
         $feedback1 = savetransaction($credit);
         if ($feedback['response'] && $feedback1['response']) {
-            if ($balance > 0) {
-                ////credit balance
-                $creditAccount = "";
-                $creditbalance = new GL_Transaction($reference_id, $customer, $screen_details, $remarks, $transdate, $balance, $creditAccount, null, $product, null);
-                savetransaction($creditbalance);
-                echo json_encode(array("message" => "Saved successfully "));
-            }
+                echo json_encode($feedback);
         } else {
             echo json_encode(array("message" => "Failed to save successfully "));
         }

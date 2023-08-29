@@ -157,6 +157,7 @@ onloadBalances();
 function formatUsing(number){
   var comma=3;
   var currency= "";
+  if(number.length>3){
   for(var i=number.length-1;i >=0;i--){
       
       if(i===comma){
@@ -168,5 +169,7 @@ function formatUsing(number){
       }
   }
   return currency;
-
+}else{
+  return number;
+}
 }
