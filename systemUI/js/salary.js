@@ -1,5 +1,5 @@
-var recipts = [];
-var customers = [];
+var salarys = [];
+var staffs = [];
 
 
 var index = new Number(0);
@@ -13,50 +13,50 @@ var messageBox = document.getElementById("message");
 var messagepanel = document.getElementById("msgpanel");
 var messagetitle = document.getElementById("msgtitle");
 var message = document.getElementById("msg");
-var service = document.getElementById("service").value;
+var staff = document.getElementById("staff").value;
 var tdate = document.getElementById("tdate").value;
 var remrks = document.getElementById("remarks").value;
 var amt = document.getElementById("amount").value;
-var customer = document.getElementById("customer").value;
+var payaccount = document.getElementById("payaccount").value;
 
 var id = "";
 
 
 
 ////////////////////////////
-////////Bills file.
+////////Salarys file.
 ///////
 // //////////////////////////////
-function onLoadCustomers() {
+function onLoadStaffs() {
   var datalist = document.getElementById("samples");
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       var data = JSON.parse(this.responseText);
-      customers = data;
-      for (customers of data) {
+      staffs = data;
+      for (staffs of data) {
         var option = document.createElement("option");
-        option.value = customers.id;
-        option.text = customers.customername;
+        option.value = staffs.id;
+        option.text = staffs.customername;
         datalist.appendChild(option);
       }
     }
   };
-  xhttp.open("GET", "http://localhost:3000/customers", true);
+  xhttp.open("GET", "http://localhost:3000/staffs", true);
   xhttp.send();
 }
 function onclearbillForm() {
-  document.getElementById("customer").value = "";
+  document.getElementById("staff").value = "";
   document.getElementById("tdate").value = "";
-  document.getElementById("service").value = "";
+  document.getElementById("payaccount").value = "";
   document.getElementById("amount").innerText = 0;
   document.getElementById("remarks").innerText = "";
 
   var btn = document.getElementById('btn');
-  btn.innerHTML = "New Recipt";
+  btn.innerHTML = "Pay Salary";
   btn.disabled = false;
 }
-function onCreateBill() {
+function onCreateSalary() {
   // var accttype = document.getElementById("account_type").value;
   // var acctname = document.getElementById("accountName").value;
   // var isincome = document.getElementById("isincome").value == "" ? "NULL" : document.getElementById("isincome").value;
@@ -64,27 +64,27 @@ function onCreateBill() {
   var btn = document.getElementById('btn');
   btn.innerHTML = "Loading";
   btn.disabled = true;
-  var formdata = 'customer=' + customer + '& remarks=' + remarks + '&amount=' + amount + '&tdate=' + tdate +  '&service=' + service +'';
+  var formdata = 'staff=' + staff + '& remarks=' + remarks + '&amount=' + amount + '&tdate=' + tdate +  '&credit=' + payaccount +'';
   console.log(formdata);
 
   let xhr = new XMLHttpRequest();
-  xhr.open("POST", "http://localhost:3000/new/bill");
+  xhr.open("POST", "http://localhost:3000/new/salary/payment");
 
 
   xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   xhr.onreadystatechange = function () {
     if (xhr.readyState == 4 && xhr.status == 200) {
       feedback = JSON.parse(xhr.responseText);
-      btn.innerHTML = "New Recipt";
+      btn.innerHTML = "Pay Salary";
       btn.disabled = false;
-      document.getElementById('reciptsform').style.display = 'none';
+      document.getElementById('billform').style.display = 'none';
       messageBox.style.display = 'block';
       messagepanel.className = "w3-panel w3-green";
       messagetitle.innerHTML = "Success";
       message.innerHTML = feedback.message;
 
     } else {
-      btn.innerHTML = "New Recipt";
+      btn.innerHTML = "Pay Salary";
       btn.disabled = false;
       messageBox.style.display = 'block';
       messagepanel.className = "w3-panel w3-red";
@@ -94,17 +94,17 @@ function onCreateBill() {
   };
   xhr.send(formdata);
 }
-async function onloadBills() {
+async function onloadSalarys() {
   var table = document.getElementById("table");
   onclearTable(table);
   var xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost:3000/find/recipts", true);
+  xhttp.open("GET", "http://localhost:3000/find/salary/payments", true);
   xhttp.send();
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       var data = JSON.parse(this.responseText);
-      recipts = data;
-      onPageniation(recipts, table);
+      salarys = data;
+      onPageniation(salarys, table);
     }
   };
 }
@@ -117,20 +117,18 @@ function onPageniation(data, table) {
   for (var i = 0; i < data.length; i++) {
     var row = table.insertRow(table.length);
     var id = row.insertCell(0)
-    var service = row.insertCell(1);
+    var staffname = row.insertCell(1);
     var account = row.insertCell(2);
-    var customer = row.insertCell(3);
-    var amount = row.insertCell(4);
-    var date = row.insertCell(5);
-    var remarks = row.insertCell(6);
-    var action = row.insertCell(7);
-    id.innerHTML = recipts[i]["reference_id"];;
-    service.innerHTML = recipts[i]["productname"];
-    account.innerHTML = recipts[i]["accountName"];
-    customer.innerHTML = recipts[i]["customername"];
-    amount.innerHTML = recipts[i]["amount"];
-    date.innerHTML = recipts[i]["transDate"];
-    remarks.innerHTML = recipts[i]["remarks"];
+    var amount = row.insertCell(3);
+    var date = row.insertCell(4);
+    var remarks = row.insertCell(5);
+    var action = row.insertCell(6);
+    id.innerHTML = salarys[i]["reference_id"];;
+    account.innerHTML = salarys[i]["accountName"];
+    staffname.innerHTML = salarys[i]["staffname"];
+    amount.innerHTML = formatUsing(salarys[i]["amount"]);
+    date.innerHTML = salarys[i]["transDate"];
+    remarks.innerHTML = salarys[i]["remarks"];
     action.innerHTML = '<button class="w3-bar-item w3-button w3-red">Delete</button>';
   }
   onDisplayTable(index);
@@ -156,7 +154,6 @@ async function onDisplayTable(index) {
 }
 function onclearTable(table) {
   tr = table.getElementsByTagName("tr");
-  console.log("here with the clicked ")
   console.log(table.rows.length + " " + tr.length);
   console.log(table.rows.length + " " + tr.length);
   while (table.rows.length != 1) {
@@ -197,22 +194,19 @@ function onfiltervalue() {
     td3 = tr[i].getElementsByTagName("td")[3];
     td4 = tr[i].getElementsByTagName("td")[4];
     td5 = tr[i].getElementsByTagName("td")[5];
-    td6 = tr[i].getElementsByTagName("td")[6];
-    if (td1 || td2 || td3 || td4 || td5 || td6) {
+    if (td1 || td2 || td3 || td4 || td5) {
       txtValue1 = td1.textContent || td1.innerText;
       txtValue2 = td2.textContent || td2.innerText;
       txtValue3 = td3.textContent || td3.innerText;
       txtValue4 = td4.textContent || td4.innerText;
       txtValue5 = td5.textContent || td5.innerText;
-      txtValue6 = td6.textContent || td6.innerText;
 
 
       if (txtValue1.toUpperCase().indexOf(filter) > -1 ||
         txtValue2.toUpperCase().indexOf(filter) > -1 ||
         txtValue3.toUpperCase().indexOf(filter) > -1 ||
         txtValue4.toUpperCase().indexOf(filter) > -1 ||
-        txtValue5.toUpperCase().indexOf(filter) > -1 ||
-        txtValue6.toUpperCase().indexOf(filter) > -1 ) {
+        txtValue5.toUpperCase().indexOf(filter) > -1) {
         tr[i].style.display = "";
       } else {
         tr[i].style.display = "none";
@@ -221,7 +215,23 @@ function onfiltervalue() {
   }
 }
 
-onloadBills();
-onLoadCustomers();
+onloadSalarys();
+onLoadStaffs();
 
 
+function formatUsing(number){
+  var comma=3;
+  var currency= "";
+  for(var i=number.length-1;i >=0;i--){
+      
+      if(i===comma){
+          currency+=",";
+          comma+=3;
+          currency+=number[i];
+      }else{
+          currency+=number[i];
+      }
+  }
+  return currency;
+
+}

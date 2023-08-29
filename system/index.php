@@ -107,10 +107,10 @@ switch (rewriteurl($request)) {
     case '/bill/payment':
         saveRecipt();
         break;
-    case '/salary/payment':
+    case '/new/salary/payment':
         saveSalary();
         break;
-    case '/payment':
+    case '/new/payment':
         saveDoubleEntry();
         break;
     case '/find/bills':
@@ -121,6 +121,9 @@ switch (rewriteurl($request)) {
         break;
     case '/find/payments':
         payments();
+        break;
+    case '/find/transactions':
+        findTransactions();
         break;
     case '/find/salary/payments':
         salarypayments();

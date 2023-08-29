@@ -1,5 +1,4 @@
-var recipts = [];
-var customers = [];
+var balances = [];
 
 
 var index = new Number(0);
@@ -13,11 +12,6 @@ var messageBox = document.getElementById("message");
 var messagepanel = document.getElementById("msgpanel");
 var messagetitle = document.getElementById("msgtitle");
 var message = document.getElementById("msg");
-var service = document.getElementById("service").value;
-var tdate = document.getElementById("tdate").value;
-var remrks = document.getElementById("remarks").value;
-var amt = document.getElementById("amount").value;
-var customer = document.getElementById("customer").value;
 
 var id = "";
 
@@ -27,84 +21,17 @@ var id = "";
 ////////Bills file.
 ///////
 // //////////////////////////////
-function onLoadCustomers() {
-  var datalist = document.getElementById("samples");
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == 200) {
-      var data = JSON.parse(this.responseText);
-      customers = data;
-      for (customers of data) {
-        var option = document.createElement("option");
-        option.value = customers.id;
-        option.text = customers.customername;
-        datalist.appendChild(option);
-      }
-    }
-  };
-  xhttp.open("GET", "http://localhost:3000/customers", true);
-  xhttp.send();
-}
-function onclearbillForm() {
-  document.getElementById("customer").value = "";
-  document.getElementById("tdate").value = "";
-  document.getElementById("service").value = "";
-  document.getElementById("amount").innerText = 0;
-  document.getElementById("remarks").innerText = "";
-
-  var btn = document.getElementById('btn');
-  btn.innerHTML = "New Recipt";
-  btn.disabled = false;
-}
-function onCreateBill() {
-  // var accttype = document.getElementById("account_type").value;
-  // var acctname = document.getElementById("accountName").value;
-  // var isincome = document.getElementById("isincome").value == "" ? "NULL" : document.getElementById("isincome").value;
-  // var acctcode = document.getElementById("code").innerText;
-  var btn = document.getElementById('btn');
-  btn.innerHTML = "Loading";
-  btn.disabled = true;
-  var formdata = 'customer=' + customer + '& remarks=' + remarks + '&amount=' + amount + '&tdate=' + tdate +  '&service=' + service +'';
-  console.log(formdata);
-
-  let xhr = new XMLHttpRequest();
-  xhr.open("POST", "http://localhost:3000/new/bill");
-
-
-  xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState == 4 && xhr.status == 200) {
-      feedback = JSON.parse(xhr.responseText);
-      btn.innerHTML = "New Recipt";
-      btn.disabled = false;
-      document.getElementById('reciptsform').style.display = 'none';
-      messageBox.style.display = 'block';
-      messagepanel.className = "w3-panel w3-green";
-      messagetitle.innerHTML = "Success";
-      message.innerHTML = feedback.message;
-
-    } else {
-      btn.innerHTML = "New Recipt";
-      btn.disabled = false;
-      messageBox.style.display = 'block';
-      messagepanel.className = "w3-panel w3-red";
-      messagetitle.innerHTML = "Failed !";
-      message.innerHTML = xhr.responseText;
-    }
-  };
-  xhr.send(formdata);
-}
-async function onloadBills() {
+async function onloadBalances() {
   var table = document.getElementById("table");
   onclearTable(table);
   var xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost:3000/find/recipts", true);
+  xhttp.open("GET", "http://localhost:3000/find/balances", true);
   xhttp.send();
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       var data = JSON.parse(this.responseText);
-      recipts = data;
-      onPageniation(recipts, table);
+      balances = data;
+      onPageniation(balances, table);
     }
   };
 }
@@ -120,17 +47,21 @@ function onPageniation(data, table) {
     var service = row.insertCell(1);
     var account = row.insertCell(2);
     var customer = row.insertCell(3);
-    var amount = row.insertCell(4);
-    var date = row.insertCell(5);
-    var remarks = row.insertCell(6);
-    var action = row.insertCell(7);
-    id.innerHTML = recipts[i]["reference_id"];;
-    service.innerHTML = recipts[i]["productname"];
-    account.innerHTML = recipts[i]["accountName"];
-    customer.innerHTML = recipts[i]["customername"];
-    amount.innerHTML = recipts[i]["amount"];
-    date.innerHTML = recipts[i]["transDate"];
-    remarks.innerHTML = recipts[i]["remarks"];
+    var bill = row.insertCell(4);
+    var pay = row.insertCell(5);
+    var balances = row.insertCell(6);
+    var date = row.insertCell(7);
+    var remarks = row.insertCell(8);
+    var action = row.insertCell(9);
+    id.innerHTML = bills[i]["reference_id"];;
+    service.innerHTML = bills[i]["productname"];
+    account.innerHTML = bills[i]["accountName"];
+    customer.innerHTML = bills[i]["customername"];
+    bill.innerHTML = formatUsing(bills[i]["totalbill"]);
+    pay.innerHTML = formatUsing(bills[i]["totalpayments"]);
+    balances.innerHTML =formatUsing(bills[i]["totalbill"]- bills[i]["totalpayments"]);
+    date.innerHTML = bills[i]["transDate"];
+    remarks.innerHTML = bills[i]["remarks"];
     action.innerHTML = '<button class="w3-bar-item w3-button w3-red">Delete</button>';
   }
   onDisplayTable(index);
@@ -220,8 +151,22 @@ function onfiltervalue() {
     }
   }
 }
-
-onloadBills();
-onLoadCustomers();
+onloadBalances();
 
 
+function formatUsing(number){
+  var comma=3;
+  var currency= "";
+  for(var i=number.length-1;i >=0;i--){
+      
+      if(i===comma){
+          currency+=",";
+          comma+=3;
+          currency+=number[i];
+      }else{
+          currency+=number[i];
+      }
+  }
+  return currency;
+
+}

@@ -242,9 +242,9 @@ function getBalances(){
  customer.customername,customer.phoneno,
  product.productname,
  account.accountName,
-  (sum(if(debitaccount_id <> "1406",debitaccount_id,0))) as acc, 
-  (sum(if(debitaccount_id ="1406",gl_transaction.amount,0))) as amt,  
-  (sum(if(creditaccount_id ="1406",gl_transaction.amount,0)))as payment
+  (sum(if(debitaccount_id <> "1003",debitaccount_id,0))) as payaccount, 
+  (sum(if(debitaccount_id ="1003",gl_transaction.amount,0))) as totalbill,  
+  (sum(if(creditaccount_id ="1003",gl_transaction.amount,0)))as totalpayments
   from gl_transaction
   left JOIN customer on gl_transaction.customer_id= customer.id LEFT JOIN product on  gl_transaction.product_id = product.id
   left JOIN account on gl_transaction.creditaccount_id = account.id
@@ -279,6 +279,37 @@ function getPayments(){
      left JOIN customer on gl_transaction.customer_id= customer.id LEFT JOIN product on  gl_transaction.product_id = product.id
      left JOIN account on gl_transaction.creditaccount_id = account.id
      WHERE gl_transaction.screen_details="recipt" and gl_transaction.creditaccount_id is  null
+     ORDER by gl_transaction.id DESC;';
+    $result = mysqli_query($conn, $sql);
+    $data = array();
+    if (mysqli_num_rows($result) > 0) {
+        // output data of each row
+        while ($row = $result->fetch_assoc()) {
+            array_push($data, $row);
+        }
+        return $data;
+    } else {
+        // echo "0 results";
+        return array("Message" => "not found");
+    }
+    mysqli_close($conn);
+}
+
+function gettransactions(){
+    // Create connection
+    $conn = new mysqli(SERVERNAME, USERNAME, PASSWORD, DB_NAME);
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    $sql = 'SELECT   reference_id, gl_transaction.id,debitaccount_id,creditaccount_id,screen_details,remarks,product_id,customer_id,transDate,
+    customer.customername,customer.phoneno,
+    product.productname,
+    account.accountName,gl_transaction.amount
+     from gl_transaction
+     left JOIN customer on gl_transaction.customer_id= customer.id LEFT JOIN product on  gl_transaction.product_id = product.id
+     left JOIN account on gl_transaction.creditaccount_id = account.id
+     WHERE gl_transaction.screen_details="DoubleEntry" 
      ORDER by gl_transaction.id DESC;';
     $result = mysqli_query($conn, $sql);
     $data = array();

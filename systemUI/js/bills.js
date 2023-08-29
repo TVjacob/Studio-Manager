@@ -1,4 +1,4 @@
-var recipts = [];
+var bills = [];
 var customers = [];
 
 
@@ -53,7 +53,7 @@ function onclearbillForm() {
   document.getElementById("remarks").innerText = "";
 
   var btn = document.getElementById('btn');
-  btn.innerHTML = "New Recipt";
+  btn.innerHTML = "New  Bill";
   btn.disabled = false;
 }
 function onCreateBill() {
@@ -75,16 +75,16 @@ function onCreateBill() {
   xhr.onreadystatechange = function () {
     if (xhr.readyState == 4 && xhr.status == 200) {
       feedback = JSON.parse(xhr.responseText);
-      btn.innerHTML = "New Recipt";
+      btn.innerHTML = "New Bill";
       btn.disabled = false;
-      document.getElementById('reciptsform').style.display = 'none';
+      document.getElementById('billform').style.display = 'none';
       messageBox.style.display = 'block';
       messagepanel.className = "w3-panel w3-green";
       messagetitle.innerHTML = "Success";
       message.innerHTML = feedback.message;
 
     } else {
-      btn.innerHTML = "New Recipt";
+      btn.innerHTML = "New Bill";
       btn.disabled = false;
       messageBox.style.display = 'block';
       messagepanel.className = "w3-panel w3-red";
@@ -98,13 +98,13 @@ async function onloadBills() {
   var table = document.getElementById("table");
   onclearTable(table);
   var xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost:3000/find/recipts", true);
+  xhttp.open("GET", "http://localhost:3000/find/bills", true);
   xhttp.send();
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       var data = JSON.parse(this.responseText);
-      recipts = data;
-      onPageniation(recipts, table);
+      bills = data;
+      onPageniation(bills, table);
     }
   };
 }
@@ -124,13 +124,13 @@ function onPageniation(data, table) {
     var date = row.insertCell(5);
     var remarks = row.insertCell(6);
     var action = row.insertCell(7);
-    id.innerHTML = recipts[i]["reference_id"];;
-    service.innerHTML = recipts[i]["productname"];
-    account.innerHTML = recipts[i]["accountName"];
-    customer.innerHTML = recipts[i]["customername"];
-    amount.innerHTML = recipts[i]["amount"];
-    date.innerHTML = recipts[i]["transDate"];
-    remarks.innerHTML = recipts[i]["remarks"];
+    id.innerHTML = bills[i]["reference_id"];;
+    service.innerHTML = bills[i]["productname"];
+    account.innerHTML = bills[i]["accountName"];
+    customer.innerHTML = bills[i]["customername"];
+    amount.innerHTML = formatUsing(bills[i]["amount"]);
+    date.innerHTML = bills[i]["transDate"];
+    remarks.innerHTML = bills[i]["remarks"];
     action.innerHTML = '<button class="w3-bar-item w3-button w3-red">Delete</button>';
   }
   onDisplayTable(index);
@@ -225,3 +225,18 @@ onloadBills();
 onLoadCustomers();
 
 
+function formatUsing(number){
+  var comma=3;
+  var currency= "";
+  for(var i=number.length-1;i >=0;i--){
+      
+      if(i===comma){
+          currency+=",";
+          comma+=3;
+          currency+=number[i];
+      }else{
+          currency+=number[i];
+      }
+  }
+  return currency;
+}

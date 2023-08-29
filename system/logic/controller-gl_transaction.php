@@ -42,7 +42,7 @@ function saveBill()
         $remarks = $_POST['remarks'];
         $amount = (float)$_POST['amount'];
         $transdate = $_POST['tdate'];
-        $product = $_POST["product"];
+        $product = $_POST["service"];
         $screen_details = "BILLING";
         $reference_id = savetrack($screen_details)["refer"];
         $debit = new GL_Transaction($reference_id, $customer, $screen_details, $remarks, $transdate, $amount, null, $debitaccount, $product, null);
@@ -62,11 +62,10 @@ function saveDoubleEntry()
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $creditincome = $_POST['credit']; //credit
         $debitaccount = $_POST['debit']; //debit 
-        // $customer = $_POST['customer']; //optional
         $remarks = $_POST['remarks'];
         $amount = (float)$_POST['amount'];
         $transdate = $_POST['tdate'];
-        $product = $_POST["product"];
+        $product  =  null;//$_POST["product"];
 
         $screen_details = "DoubleEntry";
 
@@ -91,7 +90,7 @@ function saveSalary()
         $remarks = $_POST['remarks'];
         $amount = (float)$_POST['amount'];
         $transdate = $_POST['tdate'];
-        $product = $_POST["product"];
+        $product = null;//$_POST["product"];
         $screen_details = "Salary";
         $reference_id = savetrack($screen_details)["refer"];
         $debit = new GL_Transaction($reference_id, null, $screen_details, $remarks, $transdate, $amount, null, $debitaccount, $product, $staffid);
@@ -113,6 +112,11 @@ function balances()
 function payments()
 {
         $payments = getPayments();
+        echo json_encode($payments);
+}
+function findTransactions()
+{
+        $payments = gettransactions();
         echo json_encode($payments);
 }
 function billings()

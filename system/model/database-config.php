@@ -220,7 +220,7 @@ $data = array();
 if (mysqli_num_rows($result) <= 0) {
 
     $sql = "INSERT INTO `accounttype` (`id`, `name`, `isincome`, `balanceSheet`, `accountcode`) VALUES 
-('ACA', 'ASSET CURRENT	(CASH/BANK)', null, true, '1003'),
+('ACA', 'ASSET CURRENT	(CASH/BANK)', null, true, '1004'),
 ('ACU', 'ASSETS/CURRENT(OTHER)', null, true, '1200'),
 ('AFI', 'ASSETS FIXED', false, null, '1407'),
 ('CPT', 'CAPITAL/WORKING FUND', null, true, '2000'),
@@ -247,7 +247,7 @@ if (mysqli_num_rows($result) <= 0) {
     ( 1403, 'Printer', 'NULL', 'AFI'),
     ( 1404, 'Background', 'NULL', 'AFI'),
     ( 1405, 'Furniture', 'NULL', 'AFI'),
-    ( 1406, 'Income Receivable', 'NULL', 'ACA'),
+    ( 1003, 'Income Receivable', 'NULL', 'ACA'),
     ( 1000, 'Cash', 'NULL', 'ACA'),
     ( 1001, 'MobileMoney', 'NULL', 'ACA'),
     ( 6000, 'Income', 'Income', 'NML'),
