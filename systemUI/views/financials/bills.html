@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Studio Manager</title>
+  <link rel="stylesheet" href="/css/4/w3.css">
+  <!-- <script src="/js/form_Data.js"></script> -->
+  <script src="/js/general.js"></script>
+  <style>
+    html,
+    body,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+      font-family: "Raleway", sans-serif
+    }
+  </style>
+</head>
+
+<body class="w3-light-grey">
+
+  <!-- Top container -->
+  <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
+    <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button>
+    <span class="w3-bar-item w3-right">Logo</span>
+    <span class="w3-bar-item w3-center"> Welcome To Kaye studio </span>
+  </div>
+
+  <!-- Sidebar/menu -->
+  <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
+    <div class="w3-container w3-row">
+      <div class="w3-col s4">
+        <img src="/images/img_avatar2.png" class="w3-circle w3-margin-right" style="width:46px">
+      </div>
+      <div class="w3-col s8 w3-bar">
+        <span id="user">Welcome, <strong>Mike</strong></span><br>
+        <a href="#" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i></a>
+        <a href="#" class="w3-bar-item w3-button"><i class="fa fa-user"></i></a>
+        <a href="#" class="w3-bar-item w3-button"><i class="fa fa-cog"></i></a>
+      </div>
+    </div>
+    <hr>
+    <div class="w3-container">
+      <h5>Dashboard</h5>
+    </div>
+    <div class="w3-bar-block">
+      <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black" onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
+      <a href="/views/Dashboard/dashboard.html" class="w3-bar-item w3-button w3-padding w3-blue"><i class="fa fa-users fa-fw"></i>  Overview</a>
+      <a href="/views/Dashboard/customers.html" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bullseye fa-fw"></i>Customers</a>
+      <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-diamond fa-fw"></i>Balances </a>
+      <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bell fa-fw"></i> Payments</a>
+      <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bank fa-fw"></i>  Expenses</a>
+      <a href="/views/Dashboard/product.html" class="w3-bar-item w3-button w3-padding"><i class="fa fa-history fa-fw"></i> Products Menu</a>
+      <a href="/views/Dashboard/staff.html" class="w3-bar-item w3-button w3-padding"><i class="fa fa-history fa-fw"></i>  Staff Menu</a>
+      <a href="/views/Dashboard/account.html" class="w3-bar-item w3-button w3-padding"><i class="fa fa-history fa-fw"></i>  Accounts</a>
+      <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i>  Reports</a><br><br>
+   </div>
+  </nav>
+  <!-- Overlay effect when opening sidebar on small screens -->
+  <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer"
+    title="close side menu" id="myOverlay"></div>
+
+  <!-- !PAGE CONTENT! -->
+  <div class="w3-main" style="margin-left:300px;margin-top:43px;">
+
+    <!-- Header -->
+    <!-- <header class="w3-container" style="padding-top:22px">
+        <h5><b><i class="fa fa-dashboard"></i> Customers</b></h5>
+      </header> -->
+
+    <div class="w3-panel">
+      <div class="w3-row-padding" style="margin:0 -16px">
+        <div class="w3-third">
+          <!-- <h5>Regions</h5>
+            <img src="../w3images/region.jpg" style="width:100%" alt="Google Regional Map"> -->
+        </div>
+        <div class="w3-twothird">
+          <h5>Customer Information</h5>
+          <input class="w3-input w3-border w3-padding" type="text" placeholder="Search for names.." id="myInput"
+            onkeyup="onfiltervalue()">
+          <table id="table" class="w3-table w3-striped w3-white">
+            <tr>
+              <th><i class="fa fa-user w3-text-blue w3-large">No</i></th>
+              <th><i>Service</i></th>
+              <th><i>Account</i></th>
+              <th>Customer</th>
+              <th><i>Amount</i></th>
+              <th><i>Date</i></th>
+              <th><i>Remarks</i></th>
+              <th><i>Action</i></th>
+            </tr>
+           
+          </table>
+          <div class="w3-bar w3-border w3-round">
+            <a href="#" class="w3-button" onclick="onPreviousPage()">&#10094; Previous</a>
+            <a class="w3-button w3-right" onclick="onNextPage()">Next &#10095;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="w3-container w3-center w3-margin-right">
+      <div class="w3-bar">
+        <button class="w3-button w3-border w3-border-blue"
+          onclick="document.getElementById('billform').style.display='block';onclearForm();">New Customer </button>
+        <button class="w3-button w3-border w3-border-blue" onclick="onloadCustomers()">Refresh</button>
+        <button class="w3-button w3-border w3-border-blue">Print</button>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!--Add Customer -->
+  <div id="billform" class="w3-modal">
+    <div class="w3-modal-content w3-card-4 w3-animate-zoom" style="max-width:600px">
+
+      <div class="w3-center"><br>
+        <span onclick="document.getElementById('billform').style.display='none'"
+          class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+        <!-- <img src="/images/img_avatar4.png" alt="Avatar" style="width:30%" class="w3-circle w3-margin-top"> -->
+        <h2>New Bill</h2>
+      </div>
+
+      <form class="w3-container" onclick="event.preventDefault()">
+        <div class="w3-section">
+         
+          <label><b>Customer Name</b></label>
+          <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Select Customer Name" id="customer"
+           list="samples" required>
+           <datalist id="samples">
+            <option value="Hourly">
+          </datalist>
+          <label><b>Service</b></label>
+          <select class="w3-select w3-border w3-margin-bottom" name="service" id="service">
+            <option value="" disabled selected>Choose your option</option>
+          </select> 
+          <label><b>Bill Amount</b></label>
+          <input class="w3-input w3-border w3-margin-bottom" type="number" placeholder="Enter Bill Amount"
+            id="amount" required>
+          <label><b>Transaction Date</b></label>
+          <input class="w3-input w3-border w3-margin-bottom" type="text" placeholder="Enter Transaction Date"
+            id="tdate">
+          <label><b>Remarks</b></label>
+          <input class="w3-input w3-border w3-margin-bottom" type="email" placeholder="Enter Remarks" id="remarks"
+            required>
+          <button id="btn"class="w3-button w3-block w3-green w3-section w3-padding" onclick="onSaveCustomer()">New  Bill</button>
+        </div>
+      </form>
+
+      <div class="w3-container w3-border-top w3-padding-16 w3-light-grey">
+        <button onclick="document.getElementById('billform').style.display='none'" type="button"
+          class="w3-button w3-red">Cancel</button>
+        <!-- <span class="w3-right w3-padding w3-hide-small">Forgot <a href="#">password?</a></span> -->
+      </div>
+    </div>
+  </div>
+
+ <!-- messageModal -->
+ <div id="message" class="w3-modal ">
+  <div class="w3-modal-content w3-animate-top w3-card-4">
+    <div class="w3-modal-content">
+      <!-- <div class="w3-container"> -->
+      <span onclick="document.getElementById('message').style.display='none'"
+        class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+
+      <div id="msgpanel">
+        <h3 id="msgtitle">Success!</h3>
+        <p id="msg">Green often indicates something successful or positive.</p>
+      </div>
+
+      <!-- </div> -->
+    </div>
+  </div>
+</div>
+<script src="/js/customer.js"></script>
+  <script src="/js/general.js"></script>
+</body>
+
+</html>
