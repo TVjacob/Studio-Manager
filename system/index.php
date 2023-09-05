@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
 
@@ -7,7 +9,7 @@ require  "logic/controller-account.php";
 require  "logic/controller-staff.php";
 require  "logic/controller-product.php";
 require  "logic/controller-customer.php";
-// require  "logic/controller-transaction.php";
+require  "logic/controller-gl_transaction.php";
 require_once "model/database-config.php";
 
 
@@ -119,7 +121,7 @@ switch (rewriteurl($request)) {
     case '/find/balances':
         balances();
         break;
-    case '/find/payments':
+    case '/find/recipts':
         payments();
         break;
     case '/find/transactions':
@@ -140,6 +142,10 @@ switch (rewriteurl($request)) {
     case '/delete/allpayment/id':
         deleteTransactionByreferID();
         break;
+        case '/report/customer':
+            header('Location: /report/customers-report.php'); 
+            exit();
+            break;
     default:
         echo json_encode(array("message" => "file not found ... "));
 }

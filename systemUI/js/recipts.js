@@ -13,11 +13,11 @@ var messageBox = document.getElementById("message");
 var messagepanel = document.getElementById("msgpanel");
 var messagetitle = document.getElementById("msgtitle");
 var message = document.getElementById("msg");
-var payaccount = document.getElementById("payaccount").value;
-var tdate = document.getElementById("tdate").value;
-var remrks = document.getElementById("remarks").value;
-var amt = document.getElementById("amount").value;
-var customer = document.getElementById("customer").value;
+var payaccount = document.getElementById("payaccount");
+var tdate = document.getElementById("tdate");
+var remrks = document.getElementById("remarks");
+var amt = document.getElementById("amount");
+var customer = document.getElementById("customer");
 
 var id = "";
 
@@ -28,7 +28,14 @@ var id = "";
 ///////
 // //////////////////////////////
 function onLoadCustomersBalances() {
-  var datalist = document.getElementById("samples");
+  var datalist = document.getElementById("customer");
+  if (datalist.length > 1) {
+    while (datalist.length > 1) {
+      for (var i = 1; i < datalist.length; i++) {
+        datalist.remove(i);
+      }
+    }
+  }
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
@@ -39,7 +46,7 @@ function onLoadCustomersBalances() {
         var option = document.createElement("option");
         option.value = cnt;
         var balanceamt = balance.totalbill-balance.totalpayments;
-        option.text = balance.customername +" "+formatUsing(balanceamt) ;
+        option.text = balance.customername +" "+format(balanceamt) ;
         datalist.appendChild(option);
         cnt++;
       }
@@ -62,6 +69,8 @@ function onclearReciptForm() {
   var btn = document.getElementById('btn');
   btn.innerHTML = "New Recipt";
   btn.disabled = false;
+
+  onLoadCustomersBalances();
 }
 function onCreateRecipt() {
   // var accttype = document.getElementById("account_type").value;
@@ -71,9 +80,10 @@ function onCreateRecipt() {
   var btn = document.getElementById('btn');
   btn.innerHTML = "Loading";
   btn.disabled = true;
-  var customer_id = customersBalances[customer]['customername']
-  var referID = customersBalances[customer]['reference_id']
-  var formdata = 'customer=' + customer_id + '& remarks=' + remarks + '&amount=' + amount + '&tdate=' + tdate +  '&reference_id=' + referID +'&debit=' + payaccount +'';
+  var product=customersBalances[customer.value]['product_id'];
+  var customer_id = customersBalances[customer.value]['customer_id']
+  var referID = customersBalances[customer.value]['reference_id']
+  var formdata = 'customer=' + customer_id + '& remarks=' + remarks.value + '&amount=' + unFormat(amount.value) + '&tdate=' + tdate.value +  '&reference_id=' + referID +'&debit=' + payaccount.value +'&product='+product;
   console.log(formdata);
 
   let xhr = new XMLHttpRequest();
@@ -102,6 +112,8 @@ function onCreateRecipt() {
     }
   };
   xhr.send(formdata);
+  onLoadCustomersBalances();
+  
 }
 async function onLoadRecipts() {
   var table = document.getElementById("table");
@@ -137,7 +149,7 @@ function onPageniation(data, table) {
     service.innerHTML = recipts[i]["productname"];
     account.innerHTML = recipts[i]["accountName"];
     customer.innerHTML = recipts[i]["customername"];
-    amount.innerHTML = recipts[i]["amount"];
+    amount.innerHTML = format(recipts[i]["amount"]);
     date.innerHTML = recipts[i]["transDate"];
     remarks.innerHTML = recipts[i]["remarks"];
     action.innerHTML = '<button class="w3-bar-item w3-button w3-red">Delete</button>';
@@ -233,9 +245,9 @@ async function  ondisplayFormData(person){
  var index =person.value;
  if(index!=null||index!=""){
   var totalbalance = customersBalances[index]['totalbill']-customersBalances[index]['totalpayments'];
-  document.getElementById("totalbill").value=formatUsing(customersBalances[index]['totalbill']);
-  document.getElementById("balance").value=formatUsing(totalbalance);
-  document.getElementById("totalpayment").value=formatUsing(customersBalances[index]['totalpayments']);
+  document.getElementById("totalbill").value=format(customersBalances[index]['totalbill']);
+  document.getElementById("balance").value=format(totalbalance);
+  document.getElementById("totalpayment").value=format(customersBalances[index]['totalpayments']);
  } 
 }
 
@@ -243,3 +255,35 @@ onLoadRecipts();
 onLoadCustomersBalances();
 
 
+
+function format( amt  ) {
+  var patt1 = /[0-9.]/g;
+  var value = amt.toString();
+  var total = "";
+  var numbers = value.match(patt1);
+  var count = 0;
+  for (var i = numbers.length - 1; i >= 0; i--) {
+    if (count === 3) {
+      numbers[i] = numbers[i] + ",";
+      count = 0;
+    }
+    count++;
+  }
+  numbers.forEach(myFunction);
+
+ function myFunction(item) {
+    total += item;
+   amt= total;
+  }
+
+  return amt;
+  
+}
+function unFormat(amt){
+  var str =amt;
+  while(str.indexOf(",")>0){
+  	var str1=str.replace(",","");
+  	str=str1;
+  }
+ return str;
+}

@@ -123,8 +123,8 @@ if ($conn->query($sql) === TRUE) {
 
 $sql = "CREATE TABLE IF NOT EXISTS`gl_transaction` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `debitaccount_id` varchar(10)  NULL,
-    `creditaccount_id` varchar(10)  NULL,
+    `debitaccount_id` varchar(10) Default NULL,
+    `creditaccount_id` varchar(10) Default NULL,
     `screen_details` varchar(30)  NULL,
     `remarks` varchar(30)  NULL,
     `staff_id` varchar(30)  NULL,

@@ -128,7 +128,7 @@ function onSaveStaff() {
     var btn = document.getElementById('btn');
     btn.innerHTML = "Loading";
     btn.disabled = true;
-    var formdata = 'name=' + name + '& staffCode=' + staffCode + '&role=' + role + '&dob=' + dob + '&phoneno=' + phoneno + '&salary=' + salary + '&address=' + address + '';
+    var formdata = 'name=' + name + '& staffCode=' + staffCode + '&role=' + role + '&dob=' + dob + '&phoneno=' + phoneno + '&salary=' + unFormat(salary) + '&address=' + address + '';
     console.log(formdata);
 
     let xhr = new XMLHttpRequest();
@@ -275,3 +275,34 @@ function onclearForm() {
     btn.innerHTML = " Save Student ";
     btn.disabled = false;
 }
+function format(amt) {
+    var patt1 = /[0-9.]/g;
+    var value = amt.toString();
+    var total = "";
+    var numbers = value.match(patt1);
+    var count = 0;
+    for (var i = numbers.length - 1; i >= 0; i--) {
+      if (count === 3) {
+        numbers[i] = numbers[i] + ",";
+        count = 0;
+      }
+      count++;
+    }
+    numbers.forEach(myFunction);
+  
+    function myFunction(item) {
+      total += item;
+      amt = total;
+    }
+  
+    return amt;
+  
+  }
+  function unFormat(amt) {
+    var str = amt;
+    while (str.indexOf(",") > 0) {
+      var str1 = str.replace(",", "");
+      str = str1;
+    }
+    return str;
+  }

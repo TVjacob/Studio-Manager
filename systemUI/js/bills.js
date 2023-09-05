@@ -1,5 +1,7 @@
 var bills = [];
 var customers = [];
+var services = [];
+
 
 
 var index = new Number(0);
@@ -13,13 +15,14 @@ var messageBox = document.getElementById("message");
 var messagepanel = document.getElementById("msgpanel");
 var messagetitle = document.getElementById("msgtitle");
 var message = document.getElementById("msg");
-var service = document.getElementById("service").value;
-var tdate = document.getElementById("tdate").value;
-var remrks = document.getElementById("remarks").value;
-var amt = document.getElementById("amount").value;
-var customer = document.getElementById("customer").value;
+var productservice = document.getElementById("service");
+var tdate = document.getElementById("tdate");
+var remrks = document.getElementById("remarks");
+var amt = document.getElementById("amount");
+var customer = document.getElementById("customer");
 
 var id = "";
+var customerID = 0;
 
 
 
@@ -34,15 +37,35 @@ function onLoadCustomers() {
     if (this.readyState == 4 && this.status == 200) {
       var data = JSON.parse(this.responseText);
       customers = data;
-      for (customers of data) {
+      cnt = 0;
+      for (customer of data) {
         var option = document.createElement("option");
-        option.value = customers.id;
-        option.text = customers.customername;
+        option.value = cnt;
+        option.text = customer.customername;
         datalist.appendChild(option);
+        cnt++;
       }
     }
   };
   xhttp.open("GET", "http://localhost:3000/customers", true);
+  xhttp.send();
+}
+function onLoadServices() {
+  var datalist = productservice;
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      var data = JSON.parse(this.responseText);
+      services = data;
+      for (service of data) {
+        var option = document.createElement("option");
+        option.value = service.id;
+        option.text = service.productname;
+        datalist.appendChild(option);
+      }
+    }
+  };
+  xhttp.open("GET", "http://localhost:3000/products", true);
   xhttp.send();
 }
 function onclearbillForm() {
@@ -56,7 +79,7 @@ function onclearbillForm() {
   btn.innerHTML = "New  Bill";
   btn.disabled = false;
 }
-function onCreateBill() {
+async function onCreateBill() {
   // var accttype = document.getElementById("account_type").value;
   // var acctname = document.getElementById("accountName").value;
   // var isincome = document.getElementById("isincome").value == "" ? "NULL" : document.getElementById("isincome").value;
@@ -64,7 +87,8 @@ function onCreateBill() {
   var btn = document.getElementById('btn');
   btn.innerHTML = "Loading";
   btn.disabled = true;
-  var formdata = 'customer=' + customer + '& remarks=' + remarks + '&amount=' + amount + '&tdate=' + tdate +  '&service=' + service +'';
+
+  var formdata = 'customer=' + customers[customerID].id + '& remarks=' + remarks.value + '&amount=' + unFormat(amount.value) + '&tdate=' + tdate.value +  '&service=' + productservice.value +'';
   console.log(formdata);
 
   let xhr = new XMLHttpRequest();
@@ -102,9 +126,11 @@ async function onloadBills() {
   xhttp.send();
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
-      var data = JSON.parse(this.responseText);
-      bills = data;
-      onPageniation(bills, table);
+      if (this.responseText !== null || this.responseText !== "") {
+        var data = JSON.parse(this.responseText);
+        bills = data;
+        onPageniation(bills, table);
+      }
     }
   };
 }
@@ -128,7 +154,7 @@ function onPageniation(data, table) {
     service.innerHTML = bills[i]["productname"];
     account.innerHTML = bills[i]["accountName"];
     customer.innerHTML = bills[i]["customername"];
-    amount.innerHTML = formatUsing(bills[i]["amount"]);
+    amount.innerHTML = format(bills[i]["amount"]);
     date.innerHTML = bills[i]["transDate"];
     remarks.innerHTML = bills[i]["remarks"];
     action.innerHTML = '<button class="w3-bar-item w3-button w3-red">Delete</button>';
@@ -156,15 +182,11 @@ async function onDisplayTable(index) {
 }
 function onclearTable(table) {
   tr = table.getElementsByTagName("tr");
-  console.log("here with the clicked ")
-  console.log(table.rows.length + " " + tr.length);
-  console.log(table.rows.length + " " + tr.length);
   while (table.rows.length != 1) {
     for (var i = 1; i < table.rows.length; i++) {
       table.deleteRow(i);
     }
   }
-  console.log(table.rows.length + " " + tr.length);
   // }
 }
 async function onNextPage() {
@@ -212,7 +234,7 @@ function onfiltervalue() {
         txtValue3.toUpperCase().indexOf(filter) > -1 ||
         txtValue4.toUpperCase().indexOf(filter) > -1 ||
         txtValue5.toUpperCase().indexOf(filter) > -1 ||
-        txtValue6.toUpperCase().indexOf(filter) > -1 ) {
+        txtValue6.toUpperCase().indexOf(filter) > -1) {
         tr[i].style.display = "";
       } else {
         tr[i].style.display = "none";
@@ -220,27 +242,54 @@ function onfiltervalue() {
     }
   }
 }
+function onLookupto(input) {
+  var result = input.value;
+  if (result != null || result != "") {
+    var i = parseInt(result);
+    if (!isNaN(i)&&i<accounts.length) {
+      customerID = i;
+      input.value = customers[i].customername;
+    } else {
+      input.value = "";
+    }
+  }
+}
+
+
 
 onloadBills();
 onLoadCustomers();
+onLoadServices();
 
 
-function formatUsing(number){
-  var comma=3;
-  var currency= "";
-  if(number.length>3){
-  for(var i=number.length-1;i >=0;i--){
-      
-      if(i===comma){
-          currency+=",";
-          comma+=3;
-          currency+=number[i];
-      }else{
-          currency+=number[i];
-      }
+function format( amt  ) {
+  var patt1 = /[0-9.]/g;
+  var value = amt.toString();
+  var total = "";
+  var numbers = value.match(patt1);
+  var count = 0;
+  for (var i = numbers.length - 1; i >= 0; i--) {
+    if (count === 3) {
+      numbers[i] = numbers[i] + ",";
+      count = 0;
+    }
+    count++;
   }
-  return currency;
-}else{
-  return number;
+  numbers.forEach(myFunction);
+
+ function myFunction(item) {
+    total += item;
+   amt= total;
+  }
+
+  return amt;
+  
 }
+function unFormat(amt){
+  var str =amt;
+  while(str.indexOf(",")>0){
+  	var str1=str.replace(",","");
+  	str=str1;
+  }
+ return str;
 }

@@ -13,13 +13,14 @@ var messageBox = document.getElementById("message");
 var messagepanel = document.getElementById("msgpanel");
 var messagetitle = document.getElementById("msgtitle");
 var message = document.getElementById("msg");
-var staff = document.getElementById("staff").value;
-var tdate = document.getElementById("tdate").value;
-var remrks = document.getElementById("remarks").value;
-var amt = document.getElementById("amount").value;
-var payaccount = document.getElementById("payaccount").value;
+var staff = document.getElementById("staff");
+var tdate = document.getElementById("tdate");
+var remrks = document.getElementById("remarks");
+var amt = document.getElementById("amount");
+var payaccount = document.getElementById("payaccount");
 
 var id = "";
+var staffpos = "";
 
 
 
@@ -34,18 +35,20 @@ function onLoadStaffs() {
     if (this.readyState == 4 && this.status == 200) {
       var data = JSON.parse(this.responseText);
       staffs = data;
-      for (staffs of data) {
+      var cnt = 0;
+      for (staff of data) {
         var option = document.createElement("option");
-        option.value = staffs.id;
-        option.text = staffs.customername;
+        option.value = cnt;
+        option.text = staff.name;
         datalist.appendChild(option);
+        cnt++;
       }
     }
   };
   xhttp.open("GET", "http://localhost:3000/staffs", true);
   xhttp.send();
 }
-function onclearbillForm() {
+function onclearSalaryForm() {
   document.getElementById("staff").value = "";
   document.getElementById("tdate").value = "";
   document.getElementById("payaccount").value = "";
@@ -56,15 +59,14 @@ function onclearbillForm() {
   btn.innerHTML = "Pay Salary";
   btn.disabled = false;
 }
-function onCreateSalary() {
-  // var accttype = document.getElementById("account_type").value;
-  // var acctname = document.getElementById("accountName").value;
-  // var isincome = document.getElementById("isincome").value == "" ? "NULL" : document.getElementById("isincome").value;
-  // var acctcode = document.getElementById("code").innerText;
+function onPaySalary() {
   var btn = document.getElementById('btn');
   btn.innerHTML = "Loading";
   btn.disabled = true;
-  var formdata = 'staff=' + staff + '& remarks=' + remarks + '&amount=' + amount + '&tdate=' + tdate +  '&credit=' + payaccount +'';
+  // console.log(staffs[staffpos]);
+  // console.log(staffpos);
+
+  var formdata = 'staff=' + staffs[staffpos]['staffCode'] + '& remarks=' + remarks.value + '&amount=' + unFormat(amount.value) + '&tdate=' + tdate.value + '&credit=' + payaccount.value + '';
   console.log(formdata);
 
   let xhr = new XMLHttpRequest();
@@ -77,7 +79,7 @@ function onCreateSalary() {
       feedback = JSON.parse(xhr.responseText);
       btn.innerHTML = "Pay Salary";
       btn.disabled = false;
-      document.getElementById('billform').style.display = 'none';
+      document.getElementById('salaryform').style.display = 'none';
       messageBox.style.display = 'block';
       messagepanel.className = "w3-panel w3-green";
       messagetitle.innerHTML = "Success";
@@ -125,8 +127,8 @@ function onPageniation(data, table) {
     var action = row.insertCell(6);
     id.innerHTML = salarys[i]["reference_id"];;
     account.innerHTML = salarys[i]["accountName"];
-    staffname.innerHTML = salarys[i]["staffname"];
-    amount.innerHTML = formatUsing(salarys[i]["amount"]);
+    staffname.innerHTML = salarys[i]["name"];
+    amount.innerHTML = format(salarys[i]["amount"]);
     date.innerHTML = salarys[i]["transDate"];
     remarks.innerHTML = salarys[i]["remarks"];
     action.innerHTML = '<button class="w3-bar-item w3-button w3-red">Delete</button>';
@@ -154,14 +156,11 @@ async function onDisplayTable(index) {
 }
 function onclearTable(table) {
   tr = table.getElementsByTagName("tr");
-  console.log(table.rows.length + " " + tr.length);
-  console.log(table.rows.length + " " + tr.length);
   while (table.rows.length != 1) {
     for (var i = 1; i < table.rows.length; i++) {
       table.deleteRow(i);
     }
   }
-  console.log(table.rows.length + " " + tr.length);
   // }
 }
 async function onNextPage() {
@@ -214,27 +213,49 @@ function onfiltervalue() {
     }
   }
 }
+function onSearchValue(input) {
+  var result = input.value;
+  if (result != null || result != "") {
+    var i = parseInt(result);
+    if (!isNaN(i) && i < staffs.length) {
+      input.value = staffs[i].name;
+      staffpos = i;
+    } else {
+      input.value = "";
+    }
+  }
 
+}
 onloadSalarys();
 onLoadStaffs();
-
-
-function formatUsing(number){
-  var comma=3;
-  var currency= "";
-  if(number.length>3){
-  for(var i=number.length-1;i >=0;i--){
-      
-      if(i===comma){
-          currency+=",";
-          comma+=3;
-          currency+=number[i];
-      }else{
-          currency+=number[i];
-      }
+function format(amt) {
+  var patt1 = /[0-9.]/g;
+  var value = amt.toString();
+  var total = "";
+  var numbers = value.match(patt1);
+  var count = 0;
+  for (var i = numbers.length - 1; i >= 0; i--) {
+    if (count === 3) {
+      numbers[i] = numbers[i] + ",";
+      count = 0;
+    }
+    count++;
   }
-  return currency;
-}else{
-  return number;
+  numbers.forEach(myFunction);
+
+  function myFunction(item) {
+    total += item;
+    amt = total;
+  }
+
+  return amt;
+
 }
+function unFormat(amt) {
+  var str = amt;
+  while (str.indexOf(",") > 0) {
+    var str1 = str.replace(",", "");
+    str = str1;
+  }
+  return str;
 }

@@ -1,12 +1,12 @@
 
 <?php
-require "server/gl_transaction.php";
+require_once "server/gl_transaction.php";
 require_once "globalfunc.php";
 
 function saveRecipt()
 {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $creditincome = "1406"; // income Reciable income reciable*
+        $creditincome = "1003"; // income Reciable income reciable*
         $debitaccount = $_POST['debit'];
         $customer = $_POST['customer'];
         $remarks = $_POST['remarks'];
@@ -30,21 +30,22 @@ function saveBill()
 {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $creditincome = "6000";//$_POST['credit']; //income
-        $debitaccount = "1406";//$_POST['debit']; //debit income reciva*
+        $debitaccount = "1003";//$_POST['debit']; //debit income reciva*
         $customer = $_POST['customer'];
         $remarks = $_POST['remarks'];
         $amount = (float)$_POST['amount'];
         $transdate = $_POST['tdate'];
         $product = $_POST["service"];
         $screen_details = "BILLING";
-        $reference_id = savetrack($screen_details)["refer"];
+       $transobj= savetrack($screen_details);
+        $reference_id = $transobj['refer_id'];
         $debit = new GL_Transaction($reference_id, $customer, $screen_details, $remarks, $transdate, $amount, null, $debitaccount, $product, null);
         $credit = new GL_Transaction($reference_id, $customer, $screen_details, $remarks, $transdate, $amount, $creditincome, null, $product, null);
 
         $feedback = savetransaction($debit);
         $feedback1 = savetransaction($credit);
         if ($feedback['response'] && $feedback1['response']) {
-            echo json_encode(array("message" => "Saved successfully "));
+            echo json_encode($feedback);
         } else {
             echo json_encode(array("message" => "Failed to save successfully "));
         }
@@ -62,7 +63,8 @@ function saveDoubleEntry()
 
         $screen_details = "DoubleEntry";
 
-        $reference_id = savetrack($screen_details)["refer"];
+        $transobj= savetrack($screen_details);
+        $reference_id = $transobj['refer_id'];
         $debit = new GL_Transaction($reference_id, null, $screen_details, $remarks, $transdate, $amount, null, $debitaccount, $product, null);
         $credit = new GL_Transaction($reference_id, null, $screen_details, $remarks, $transdate, $amount, $creditincome, null, $product, null);
         $feedback = savetransaction($debit);
@@ -85,7 +87,8 @@ function saveSalary()
         $transdate = $_POST['tdate'];
         $product = null;//$_POST["product"];
         $screen_details = "Salary";
-        $reference_id = savetrack($screen_details)["refer"];
+        $transobj= savetrack($screen_details);
+        $reference_id = $transobj['refer_id'];
         $debit = new GL_Transaction($reference_id, null, $screen_details, $remarks, $transdate, $amount, null, $debitaccount, $product, $staffid);
         $credit = new GL_Transaction($reference_id, null, $screen_details, $remarks, $transdate, $amount, $creditaccount, null, $product, $staffid);
         $feedback = savetransaction($debit);

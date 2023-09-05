@@ -119,15 +119,15 @@ class transactionaltracker{
 class GL_Transaction
 {
     private $id;
-    public $customer_id;
-    public $screen_details;
-    public  $remarks;
-    public  $staff_id;
-    public  $product_id;
+    public $customer_id=null;
+    public $screen_details=null;
+    public  $remarks=null;
+    public  $staff_id=null;
+    public  $product_id=null;
     public  $transDate;
-    public  float $amount = 0;
-    public $creditaccount_id;
-    public  $debitaccount_id;
+    public   $amount = 0;
+    public $creditaccount_id=null;
+    public  $debitaccount_id=null;
     public $reference_id;
 
 
@@ -135,7 +135,7 @@ class GL_Transaction
     public function __construct($reference_id, $customer_id, $screen_details, $remarks, $transDate, $amount, $creditaccount, $debitaccount_id, $product_id, $staff_id)
     {
         $this->reference_id = $reference_id;
-        $this->customer_id = $screen_details;
+        $this->screen_details = $screen_details;
         $this->customer_id = $customer_id;
         $this->remarks = $remarks;
         $this->creditaccount_id = $creditaccount;

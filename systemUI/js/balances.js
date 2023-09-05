@@ -53,15 +53,15 @@ function onPageniation(data, table) {
     var date = row.insertCell(7);
     var remarks = row.insertCell(8);
     var action = row.insertCell(9);
-    id.innerHTML = bills[i]["reference_id"];;
-    service.innerHTML = bills[i]["productname"];
-    account.innerHTML = bills[i]["accountName"];
-    customer.innerHTML = bills[i]["customername"];
-    bill.innerHTML = formatUsing(bills[i]["totalbill"]);
-    pay.innerHTML = formatUsing(bills[i]["totalpayments"]);
-    balances.innerHTML =formatUsing(bills[i]["totalbill"]- bills[i]["totalpayments"]);
-    date.innerHTML = bills[i]["transDate"];
-    remarks.innerHTML = bills[i]["remarks"];
+    id.innerHTML = data[i]["reference_id"];
+    service.innerHTML = data[i]["productname"];
+    account.innerHTML = data[i]["accountName"];
+    customer.innerHTML = data[i]["customername"];
+    bill.innerHTML = format(data[i]["totalbill"]);
+    pay.innerHTML = format(data[i]["totalpayments"]);
+    balances.innerHTML =format(data[i]["totalbill"]- data[i]["totalpayments"]);
+    date.innerHTML = data[i]["transDate"];
+    remarks.innerHTML = data[i]["remarks"];
     action.innerHTML = '<button class="w3-bar-item w3-button w3-red">Delete</button>';
   }
   onDisplayTable(index);
@@ -153,23 +153,34 @@ function onfiltervalue() {
 }
 onloadBalances();
 
-
-function formatUsing(number){
-  var comma=3;
-  var currency= "";
-  if(number.length>3){
-  for(var i=number.length-1;i >=0;i--){
-      
-      if(i===comma){
-          currency+=",";
-          comma+=3;
-          currency+=number[i];
-      }else{
-          currency+=number[i];
-      }
+function format( amt  ) {
+  var patt1 = /[0-9.]/g;
+  var value = amt.toString();
+  var total = "";
+  var numbers = value.match(patt1);
+  var count = 0;
+  for (var i = numbers.length - 1; i >= 0; i--) {
+    if (count === 3) {
+      numbers[i] = numbers[i] + ",";
+      count = 0;
+    }
+    count++;
   }
-  return currency;
-}else{
-  return number;
+  numbers.forEach(myFunction);
+
+ function myFunction(item) {
+    total += item;
+   amt= total;
+  }
+
+  return amt;
+  
 }
+function unFormat(amt){
+  var str =amt;
+  while(str.indexOf(",")>0){
+  	var str1=str.replace(",","");
+  	str=str1;
+  }
+ return str;
 }

@@ -1,3 +1,8 @@
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^(.*)$ index.php
+RewriteCond %{REQUEST_URI} ^/reports/
+RewriteRule ^(.*)$ /reports/$1 [L]
+
+# For non-existent files, route to index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ index.php [QSA,L]

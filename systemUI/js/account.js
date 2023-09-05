@@ -31,7 +31,6 @@ function onloadAccountypes() {
     if (this.readyState == 4 && this.status == 200) {
       // console.log(this.responseText);
       var data = JSON.parse(this.responseText);
-      // console.log(data.length);
       accounttypeInfor = data;
       for (accounttype of data) {
         var option = document.createElement("option");

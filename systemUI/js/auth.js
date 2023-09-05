@@ -13,6 +13,16 @@ function login(){
           console.log(xhr.status);
           console.log(this.responseText);
           onDisplay( xhr.status);
+          if (typeof(Storage) !== "undefined") {
+            // Store
+            sessionStorage.setItem("username", username);
+            sessionStorage.setItem("password", password);
+            sessionStorage.setItem("auth", true);
+            // Retrieve
+            // document.getElementById("result").innerHTML = sessionStorage.getItem("lastname");
+          } else {
+            alert( "Sorry, your browser does not support Web Storage...");
+          }
         }else{
           onDisplay(xhr.status);
         }
@@ -21,11 +31,12 @@ function login(){
     
 }
 function onDisplay(status) {
+  
     if (status==200) {
       document.getElementById("message").className = "w3-text-green w3-animate-opacity w3-large";
       document.getElementById("message").innerHTML = "Logged in Successful";
       // var local = window.location.hostname +"/views/DashBoard/dashboard.html";
-      window.location.assign("/views/DashBoard/dashboard.html");
+      window.location.assign("/views/dashboard.html");
     } else {
       document.getElementById("message").className = "w3-text-red w3-animate-opacity w3-large";
       document.getElementById("message").innerHTML = "failed to Log in";
