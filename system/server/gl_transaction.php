@@ -269,6 +269,36 @@ function getBalances()
     mysqli_close($conn);
 }
 
+function getTotalBalances()
+{
+    // Create connection
+    $conn = new mysqli(SERVERNAME, USERNAME, PASSWORD, DB_NAME);
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    $sql = 'SELECT  
+    COUNT(customer.customername) as totalamt,
+     (sum(if(debitaccount_id ="1003",gl_transaction.amount,0))) as totalbill,  
+     (sum(if(creditaccount_id ="1003",gl_transaction.amount,0)))as totalpayments
+     from gl_transaction
+     left JOIN customer on gl_transaction.customer_id= customer.id LEFT JOIN product on  gl_transaction.product_id = product.id
+     left JOIN account on gl_transaction.debitaccount_id = account.acountCode
+     where debitaccount_id is NOT null or creditaccount_id is NOT null
+     HAVING ((sum(if(debitaccount_id ="1003",gl_transaction.amount,0)))-(sum(if(creditaccount_id ="1003",gl_transaction.amount,0))))>0;';
+    $result = mysqli_query($conn, $sql);
+    $data = [];
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = $result->fetch_assoc()) {
+            array_push($data, $row);
+        }
+        return $data;
+    } else {
+        return array("Message" => "not found");
+    }
+
+    mysqli_close($conn);
+}
 function getPayments()
 {
     // Create connection
@@ -301,6 +331,35 @@ function getPayments()
     mysqli_close($conn);
 }
 
+function getTotalPayments()
+{
+    // Create connection
+    $conn = new mysqli(SERVERNAME, USERNAME, PASSWORD, DB_NAME);
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    $sql = 'SELECT  count(customer.customername) as totalnum,
+    sum(gl_transaction.amount) as totalamount
+     from gl_transaction
+     left JOIN customer on gl_transaction.customer_id= customer.id LEFT JOIN product on  gl_transaction.product_id = product.id
+     left JOIN account on gl_transaction.debitaccount_id = account.acountCode
+     WHERE gl_transaction.screen_details="recipt" and gl_transaction.creditaccount_id is  null
+     ORDER by gl_transaction.id DESC;';
+    $result = mysqli_query($conn, $sql);
+    $data = [];
+    if (mysqli_num_rows($result) > 0) {
+        // output data of each row
+        while ($row = $result->fetch_assoc()) {
+            array_push($data, $row);
+        }
+        return $data;
+    } else {
+        // echo "0 results";
+        return array("Message" => "not found");
+    }
+    mysqli_close($conn);
+}
 function gettransactions()
 {
     // Create connection
@@ -314,6 +373,36 @@ function gettransactions()
     product.productname,
     (if(debitaccount_id is null,creditaccount_id,debitaccount_id)) as acctCodes,
     account.accountName,gl_transaction.amount
+     from gl_transaction
+     left JOIN customer on gl_transaction.customer_id= customer.id LEFT JOIN product on  gl_transaction.product_id = product.id
+     left JOIN account on (if(gl_transaction.creditaccount_id is NOT null,gl_transaction.creditaccount_id,gl_transaction.debitaccount_id)) = account.acountCode
+     WHERE gl_transaction.screen_details="DoubleEntry" 
+     ORDER by gl_transaction.id DESC;';
+    $result = mysqli_query($conn, $sql);
+    $data = [];
+    if (mysqli_num_rows($result) > 0) {
+        // output data of each row
+        while ($row = $result->fetch_assoc()) {
+            array_push($data, $row);
+        }
+        return $data;
+    } else {
+        // echo "0 results";
+        return array("Message" => "not found");
+    }
+    mysqli_close($conn);
+}
+
+function getTotaltransactions()
+{
+    // Create connection
+    $conn = new mysqli(SERVERNAME, USERNAME, PASSWORD, DB_NAME);
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    $sql = 'SELECT COUNT(customer.customername) as totalnum,
+    sum(gl_transaction.amount) as totalpayments
      from gl_transaction
      left JOIN customer on gl_transaction.customer_id= customer.id LEFT JOIN product on  gl_transaction.product_id = product.id
      left JOIN account on (if(gl_transaction.creditaccount_id is NOT null,gl_transaction.creditaccount_id,gl_transaction.debitaccount_id)) = account.acountCode
@@ -396,6 +485,39 @@ function getBillings()
 
     mysqli_close($conn);
 }
+
+
+function getTotalBillings()
+{
+    // Create connection
+    $conn = new mysqli(SERVERNAME, USERNAME, PASSWORD, DB_NAME);
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    $sql = 'SELECT   count(screen_details) as totalnum,
+    sum(gl_transaction.amount) as totalamount
+     from gl_transaction
+     left JOIN customer on gl_transaction.customer_id= customer.id LEFT JOIN product on  gl_transaction.product_id = product.id
+     left JOIN account on gl_transaction.creditaccount_id = account.acountCode
+     WHERE gl_transaction.screen_details="billing" and gl_transaction.debitaccount_id is  null
+     ORDER by gl_transaction.id DESC;';
+    $result = mysqli_query($conn, $sql);
+    $data = [];
+    if (mysqli_num_rows($result) > 0) {
+        // output data of each row
+        while ($row = $result->fetch_assoc()) {
+            array_push($data, $row);
+        }
+        return $data;
+    } else {
+        // echo "0 results";
+        return array("Message" => "not found");
+    }
+
+    mysqli_close($conn);
+}
+
 ////thead
 function savetrack($screen_details)
 {

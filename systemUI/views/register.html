@@ -6,18 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JJ's KinderCare School Manager</title>
     <link rel="stylesheet" href="/css/4/w3.css">
-    <script src="/js/form_Data.js"></script>
-    <script src="/js/general.js"></script>
+    <!-- <script src="/js/general.js"></script> -->
 </head>
+
 <body class="w3-black">
 
     <div class=" w3-black w3-center">
-        <h1> Welcome To JJ's KinderCare</h1>
+        <h1> Welcome To Kanyike Studio</h1>
         <div class="w3-display-container ">
-            <img src="/images/img_lights_wide.jpg" alt="Light" style="width: 100%;height:450px">
-            <!-- <div class="w3-display-topmiddle">
-  <h1>Login form</h1>
-</div> -->
+            <img src="/images/img_ny.jpg" alt="Light" style="width: 100%;height:450px">
             <div class="w3-display-middle w3-card-4 w3-text-white  w3-mobile ">
 
                 <form id="user" class="w3-mobile w3-padding-16 w3-margin" name="user" onclick="event.preventDefault()">
@@ -26,17 +23,20 @@
                     </p>
 
                     <p> <Label class="w3-text-white w3-left ">Username:</Label>
-                        <input id= "username" name= "username"type="text" class="w3-input w3-border w3-round-large" required>
+                        <input id="username" name="username" type="text" class="w3-input w3-border w3-round-large"
+                            required>
                     </p>
                     <p><Label class="w3-text-white w3-left">Password:</Label>
-                        <input id= "password"  name= "password" type="text" class="w3-input w3-border w3-round-large" required>
+                        <input id="password" name="password" type="text" class="w3-input w3-border w3-round-large"
+                            required>
                     </p>
                     <p><Label class="w3-text-white w3-left">Email:</Label>
-                        <input id= "email" name= "email" type="email" class="w3-input w3-border w3-round-large" required>
+                        <input id="email" name="email" type="email" class="w3-input w3-border w3-round-large" required>
                     </p>
-                    <button class="w3-btn  w3-border w3-round-large w3-text-white" onclick="onSaveUser()" id="btn">save</button>
-                    <p><a onclick="openUrl('/index.html')" class="w3-small w3-left">Login</a></p>
-                    <p>  
+                    <button class="w3-btn  w3-border w3-round-large w3-text-white" onclick="onSaveUser()"
+                        id="btn">save</button>
+                    <p><a href="" onclick="openUrl('/index.html')" class="w3-small w3-left">Login</a></p>
+                    <p>
                     </p>
                     <p>
                     </p>
@@ -52,30 +52,30 @@
     </div>
 
 
-<!---modals-->
-<div id="id01" class="w3-modal">
-    <div class="w3-modal-content w3-animate-top w3-card-4">
-      <header class="w3-container "> 
-        <span onclick="document.getElementById('id01').style.display='none'" 
-        class="w3-button w3-display-topright w3-red">&times;</span>
-      </header>
-      <div class="w3-container">
-        <div class="w3-light-grey">
-                <p id="message"><span id=""></span> </p>
-          </div>
-      </div>
-      <footer class="w3-container ">
-        <p>Modal Footer</p>
-      </footer>
+    <!---modals-->
+    <div id="id01" class="w3-modal">
+        <div class="w3-modal-content w3-animate-top w3-card-4">
+            <header class="w3-container ">
+                <span onclick="document.getElementById('id01').style.display='none'"
+                    class="w3-button w3-display-topright w3-red">&times;</span>
+            </header>
+            <div class="w3-container">
+                <div class="w3-light-grey">
+                    <p id="message"><span id=""></span> </p>
+                </div>
+            </div>
+            <footer class="w3-container ">
+                <p>Modal Footer</p>
+            </footer>
+        </div>
     </div>
-  </div>
 
 
 
 
 
-<script src="/js/form_Data.js"></script>
-<script src="/js/general.js"></script>
-    </body>
+    <script src="/js/form_Data.js"></script>
+    <!-- <script src="/js/general.js"></script> -->
+</body>
 
 </html>

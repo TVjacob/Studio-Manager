@@ -142,10 +142,19 @@ switch (rewriteurl($request)) {
     case '/delete/allpayment/id':
         deleteTransactionByreferID();
         break;
-        case '/report/customer':
-            header('Location: /report/customers-report.php'); 
-            exit();
-            break;
+    case '/total/bills':
+        totalbillings();
+        break;
+    case '/total/recipts':
+        totalpayments();
+        break;
+    case '/total/balances':
+        totalbalances();
+        break;
+    case '/report/customer':
+        header('Location: /report/customers-report.php');
+        exit();
+        break;
     default:
         echo json_encode(array("message" => "file not found ... "));
 }

@@ -19,7 +19,10 @@ var acctcode = document.getElementById("code").innerText;
 var id = "";
 
 
-
+function openUrl(url) {
+  window.location.assign(url);
+ 
+ }
 function onSaveUser() {
 
   var status = "";
@@ -47,6 +50,8 @@ function onSaveUser() {
       console.log(this.responseText);
       message = JSON.parse(xhr.responseText);
       onDisplay(status, JSON.parse(xhr.responseText));
+      window.location.assign('/index.html');
+
     } else {
       status = xhr.status;
       message = JSON.parse(xhr.responseText);
@@ -66,6 +71,7 @@ function onDisplay(status, obj) {
     // clearInterval(id);
     document.getElementById("message").className = "w3-text-green w3-animate-opacity w3-large";
     document.getElementById("message").innerHTML = "Saved Successful";
+
   } else {
     // elem.style.width = width + '%';
     // clearInterval(id);

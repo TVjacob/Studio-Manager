@@ -44,3 +44,7 @@ function onDisplay(status) {
   document.getElementById('btn').innerHTML="Save";
   document.getElementById('btn').disabled=false;
 }
+function openUrl(url) {
+ window.location.assign(url);
+
+}

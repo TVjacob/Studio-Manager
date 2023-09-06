@@ -110,16 +110,33 @@ function payments()
         $payments = getPayments();
         echo json_encode($payments);
 }
-function findTransactions()
-{
-        $payments = gettransactions();
-        echo json_encode($payments);
-}
 function billings()
 {
         $bills = getBillings();
         echo json_encode($bills);
 }
+
+function totalbalances()
+{
+        $balances = getTotalBalances();
+        echo json_encode($balances);
+}
+function totalpayments()
+{
+        $payments = getTotalPayments();
+        echo json_encode($payments);
+}
+function totalbillings()
+{
+        $bills = getTotalBillings();
+        echo json_encode($bills);
+}
+function findTransactions()
+{
+        $payments = gettransactions();
+        echo json_encode($payments);
+}
+
 function salarypayments()
 {
         $salpay = getsalaryPayments();
