@@ -44,8 +44,9 @@ function customerfindByID()
 }
 function customerdeleteByID()
 {
-   if ($_GET['id'] != null) {
-      $delstu = deleteCustomerID($_GET['id']);
+   // header("Delete",true,200);
+   if ($_POST['id'] != null) {
+      $delstu = deleteCustomerID($_POST['id']);
       echo json_encode($delstu);
    } else {
       echo json_encode(array("message" => "failed to find the id "));

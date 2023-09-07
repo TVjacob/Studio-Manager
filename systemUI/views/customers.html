@@ -18,7 +18,8 @@
     h5 {
       font-family: "Raleway", sans-serif
     }
-    .back{
+
+    .back {
       background-image: url('http://127.0.0.1:5500/images/img_sailboat.jpg');
       background-repeat: no-repeat;
       background-size: cover;
@@ -26,20 +27,19 @@
       width: 100%;
       height: 100%;
     }
-    
   </style>
 </head>
-<body class="w3-display-container back" onload="onAccordion('custmenu')" >
-<!-- <body class="w3-light-grey"> -->
+
+<body class="w3-display-container back" onload="onAccordion('custmenu')">
+  <!-- <body class="w3-light-grey"> -->
   <!-- <div class="w3-display-container "> -->
-  
+
 
   <!-- Top container -->
   <div class="w3-bar w3-top w3-black w3-large " style="z-index:4">
     <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();"><i
         class="fa fa-bars"></i>  Menu</button>
-    <button class=" w3-button w3-bar-item  w3-border w3-right"
-    onclick="onLogout()">Logout</button>
+    <button class=" w3-button w3-bar-item  w3-border w3-right" onclick="onLogout()">Logout</button>
     <span class="w3-bar-item w3-right">Logo</span>
     <span class="w3-bar-item w3-center"> Welcome To Kanyike Studio</span>
   </div>
@@ -63,8 +63,8 @@
     <div class="w3-bar-block">
       <a href="#" class="w3-bar-item w3-button w3-padding-16 w3-hide-large w3-dark-grey w3-hover-black"
         onclick="w3_close()" title="close menu"><i class="fa fa-remove fa-fw"></i>  Close Menu</a>
-      <a href="/views/dashboard.html" class="w3-bar-item w3-button w3-padding "><i
-          class="fa fa-users fa-fw"></i>  Overview</a>
+      <a href="/views/dashboard.html" class="w3-bar-item w3-button w3-padding "><i class="fa fa-users fa-fw"></i> 
+        Overview</a>
       <button class="w3-bar-item w3-button w3-padding" onclick="onAccordion('custmenu')"><i
           class="fa fa-bullseye fa-fw"></i>Customers Menu</a>
         <div id="custmenu" class="w3-hide w3-animate-zoom">
@@ -234,9 +234,7 @@
         <!-- <iframe id="reporturl" class="container" width="100%"
           height="600px" title="customersReport">
         </iframe> -->
-        <iframe id="myFrame" src="https://example.com" width="100%"
-          height="600px"
-        >
+        <iframe id="myFrame" src="https://example.com" width="100%" height="600px">
 
         </iframe>
 
@@ -257,14 +255,30 @@
         <!-- <iframe id="reporturl" class="container" width="100%"
           height="600px" title="customersReport">
         </iframe> -->
-        <iframe id="myFrame" src="https://example.com" width="100%"
-          height="600px"
-        >
+        <iframe id="myFrame" src="https://example.com" width="100%" height="600px">
 
         </iframe>
 
       </div>
     </div>
+  </div>
+  <div id="deleteForm" class="w3-modal">
+    <!-- <div class="w3-modal-content w3-card-4 w3-animate-zoom"> -->
+      <div class="w3-modal-content w3-red">
+        <span onclick="document.getElementById('deleteForm').style.display='none'"
+          class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+        <div class="w3-center">
+          <span id="delmsg" class="w3-xlarge w3-text-white"></span>
+          <br>
+          <div class="w3-bar">
+            <button id="No" class="w3-bar-item w3-button w3-white w3-text-red"
+            onclick="document.getElementById('deleteForm').style.display='none'">No</button>
+            <button id="Yes" class="w3-bar-item w3-button w3-green">Yes</button>
+          </div>
+        </div>
+      <!-- </div> -->
+    </div>
+
   </div>
 
 

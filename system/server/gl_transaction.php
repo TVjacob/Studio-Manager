@@ -202,6 +202,26 @@ function deleteTransactionreference_id($reference_id)
     }
     mysqli_close($conn);
 }
+function deleteTransreferidAnddetails($reference_id,$details)
+{
+    // Create connection
+    $conn = new mysqli(SERVERNAME, USERNAME, PASSWORD, DB_NAME);
+
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    $sql = "Delete  FROM gl_transaction WHERE reference_id= '" . $reference_id . "' And screen_details='" . $details . "'";
+    // $result = mysqli_query($conn, $sql);
+
+    if (mysqli_query($conn, $sql)) {
+
+        return array("message" => "deleted successful");
+    } else {
+        return array("message" => "failed to delete");
+    }
+    mysqli_close($conn);
+}
 function updateTransaction(GL_Transaction $gl_transaction)
 {
 

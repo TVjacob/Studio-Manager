@@ -7,7 +7,7 @@ var total = 0;
 var size = new Number(3);
 var totalpages = 0;
 var pageno = new Number(1);
-size = 4;
+size = 8;
 
 var messageBox = document.getElementById("message");
 var messagepanel = document.getElementById("msgpanel");
@@ -20,6 +20,8 @@ var amt = document.getElementById("amount");
 var customer = document.getElementById("customer");
 
 var id = "";
+var deleteid="";
+
 
 
 
@@ -73,11 +75,7 @@ function onclearReciptForm() {
   onLoadCustomersBalances();
 }
 function onCreateRecipt() {
-  // var accttype = document.getElementById("account_type").value;
-  // var acctname = document.getElementById("accountName").value;
-  // var isincome = document.getElementById("isincome").value == "" ? "NULL" : document.getElementById("isincome").value;
-  // var acctcode = document.getElementById("code").innerText;
-  var btn = document.getElementById('btn');
+ var btn = document.getElementById('btn');
   btn.innerHTML = "Loading";
   btn.disabled = true;
   var product=customersBalances[customer.value]['product_id'];
@@ -152,7 +150,7 @@ function onPageniation(data, table) {
     amount.innerHTML = format(recipts[i]["amount"]);
     date.innerHTML = recipts[i]["transDate"];
     remarks.innerHTML = recipts[i]["remarks"];
-    action.innerHTML = '<button class="w3-bar-item w3-button w3-red">Delete</button>';
+    action.innerHTML = '<button class="w3-bar-item w3-button w3-red" onclick="onDeleteRecipt(this)">Delete</button>';
   }
   onDisplayTable(index);
 
@@ -286,4 +284,52 @@ function unFormat(amt){
   	str=str1;
   }
  return str;
+}
+
+async function onDeleteRecipt(row) {
+  var i = row.parentNode.parentNode.rowIndex;
+  var table = document.getElementById("table");
+  tr = table.getElementsByTagName("tr");
+  td = tr[i].getElementsByTagName("td")[0];
+  if (td) {
+      txtValue = td.textContent || td.innerText;
+      onDeleteAll(txtValue);
+  }
+}
+function onDeleteAll(txt) {
+  deleteid = customers[txt-1].id;
+  document.getElementById('deleteForm').style.display = 'block';
+  var btnyes = document.getElementById('Yes');
+  document.getElementById('delmsg').innerHTML="Are you sure you want to Delete?";
+  if (btnyes.addEventListener) {     // For all major browsers, except IE 8 and earlier
+      btnyes.addEventListener("click", deleteRecipt);
+  } else if (x.attachEvent) {   // For IE 8 and earlier versions
+      btnyes.attachEvent("onclick", deleteRecipt);
+  }
+}
+function deleteRecipt() {
+  var formdata = 'id=' + deleteid +'&detail='+'recipt';
+  console.log(formdata);
+  let xhr = new XMLHttpRequest();
+  xhr.open("POST", "http://localhost:3000/delete/reference_id/details");
+  xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xhr.onreadystatechange = function () {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+          feedback = JSON.parse(xhr.responseText);
+          document.getElementById('deleteForm').style.display = 'none';
+          messageBox.style.display = 'block';
+          messagepanel.className = "w3-panel w3-green";
+          messagetitle.innerHTML = "Success Deleted";
+          message.innerHTML = feedback.message;
+      } else {
+          document.getElementById('deleteForm').style.display = 'none';
+
+          messageBox.style.display = 'block';
+          messagepanel.className = "w3-panel w3-red";
+          messagetitle.innerHTML = "Failed To Deleted!";
+          message.innerHTML = xhr.responseText;
+      }
+  };
+  xhr.send(formdata);
+onLoadRecipts();
 }

@@ -4,13 +4,15 @@ var total = 0;
 var size = new Number(3);
 var totalpages = 0;
 var pageno = new Number(1);
-size = 4;
+size = 8;
 
 var messageBox = document.getElementById("message");
 var messagepanel = document.getElementById("msgpanel");
 var messagetitle = document.getElementById("msgtitle");
 var message = document.getElementById("msg");
 var id = "";
+var deleteid="";
+
 
 async function onloadProducts() {
     var table = document.getElementById("table");
@@ -40,12 +42,12 @@ function onPageniation(data, table) {
         var amount = row.insertCell(3);
         var units = row.insertCell(4);
         var action = row.insertCell(5);
-        id.innerHTML = i + 1;
+        id.innerHTML = products[i].id;
         name.innerHTML = products[i]["productname"];
         rate.innerHTML = products[i]["rate"].toUpperCase();
         amount.innerHTML = products[i]["amount"].toUpperCase();
         units.innerHTML = products[i]["units"];
-        action.innerHTML = '<button class="w3-bar-item w3-button  w3-black" onclick="onEditProduct(this)">Edit</button><button class="w3-bar-item w3-button w3-red">Delete</button>';
+        action.innerHTML = '<button class="w3-bar-item w3-button  w3-black" onclick="onEditProduct(this)">Edit</button><button onclick="onDeleteProduct(this)" class="w3-bar-item w3-button w3-red">Delete</button>';
     }
     onDisplayTable(index);
 
@@ -161,7 +163,7 @@ async function onEditProduct(row) {
     var i = row.parentNode.parentNode.rowIndex;
     var table = document.getElementById("table");
     tr = table.getElementsByTagName("tr");
-    td = tr[i].getElementsByTagName("td")[1];
+    td = tr[i].getElementsByTagName("td")[0];
     if (td) {
         txtValue = td.textContent || td.innerText;
         onloadData(txtValue);
@@ -200,6 +202,7 @@ async function onloadData(text) {
         }
     };
     xhttp.send(query);
+    
 }
 function onUpdateProduct() {
     console.log("clicked" + id);
@@ -257,15 +260,62 @@ function onclearForm() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 onloadProducts();
+async function onDeleteProduct(row) {
+    var i = row.parentNode.parentNode.rowIndex;
+    var table = document.getElementById("table");
+    tr = table.getElementsByTagName("tr");
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+        txtValue = td.textContent || td.innerText;
+        onDeleteAll(txtValue);
+    }
+}
+function onDeleteAll(txt) {
+    deleteid = txt;
+    document.getElementById('deleteForm').style.display = 'block';
+    var btnyes = document.getElementById('Yes');
+    document.getElementById('delmsg').innerHTML="Are you sure you want to Delete?";
+    if (btnyes.addEventListener) {     // For all major browsers, except IE 8 and earlier
+        btnyes.addEventListener("click", deleteProduct);
+    } else if (x.attachEvent) {   // For IE 8 and earlier versions
+        btnyes.attachEvent("onclick", deleteProduct);
+    }
+}
+function deleteProduct() {
+    var formdata = 'id=' + deleteid ;
+    console.log(formdata);
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "http://localhost:3000/delete/product");
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            feedback = JSON.parse(xhr.responseText);
+            document.getElementById('deleteForm').style.display = 'none';
+            messageBox.style.display = 'block';
+            messagepanel.className = "w3-panel w3-green";
+            messagetitle.innerHTML = "Success Deleted";
+            message.innerHTML = feedback.message;
+        } else {
+            document.getElementById('deleteForm').style.display = 'none';
+
+            messageBox.style.display = 'block';
+            messagepanel.className = "w3-panel w3-red";
+            messagetitle.innerHTML = "Failed To Deleted!";
+            message.innerHTML = xhr.responseText;
+        }
+    };
+    xhr.send(formdata);
+onloadProducts();
+}
+
+
+
+
+
+
+
+
+
+
+

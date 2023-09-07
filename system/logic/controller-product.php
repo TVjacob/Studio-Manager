@@ -44,8 +44,8 @@ function productfindByID()
 }
 function productdeleteByID()
 {
-   if ($_GET['id'] != null) {
-      $delstu = deleteProductID($_GET['id']);
+   if ($_POST['id'] != null) {
+      $delstu = deleteProductID($_POST['id']);
       echo json_encode($delstu);
    } else {
       echo json_encode(array("message" => "failed to find the id "));

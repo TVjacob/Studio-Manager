@@ -98,7 +98,7 @@ function deleteCustomerID($id)
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-    $sql = "Delete  FROM customer WHERE id= '$id' ";
+    $sql = "DELETE FROM customer WHERE `customer`.`id`='". $id ."' ";
     if (mysqli_query($conn, $sql)) {
         return array("message" => "deleted successful");
     } else {

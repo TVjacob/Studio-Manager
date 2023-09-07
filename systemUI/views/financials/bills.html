@@ -16,7 +16,8 @@
     h3,
     h4,
     h5 {
-      font-family: "Raleway", sans-serif
+      font-family: "Raleway", sans-serif;
+      
     }
     .back{
       background-image: url('http://127.0.0.1:5500/images/img_sailboat.jpg');
@@ -25,6 +26,7 @@
       background-attachment: fixed;
       width: 100%;
       height: 100%;
+      color: black;
     }
     
   </style>
@@ -112,21 +114,21 @@
     title="close side menu" id="myOverlay"></div>
 
   <!-- !PAGE CONTENT! -->
-  <div class="w3-main" style="margin-left:300px;margin-top:43px;">
+  <div class="w3-main " style="margin-left:300px;margin-top:43px;">
 
     <!-- Header -->
     <!-- <header class="w3-container" style="padding-top:22px">
         <h5><b><i class="fa fa-dashboard"></i> Customers</b></h5>
       </header> -->
 
-    <div class="w3-panel">
+    <div class="w3-panel ">
       <div class="w3-row-padding" style="margin:0 -16px">
         <div class="w3-third">
           <!-- <h5>Regions</h5>
             <img src="../w3images/region.jpg" style="width:100%" alt="Google Regional Map"> -->
         </div>
-        <div class="w3-twothird">
-          <h5>Customer InformatCurrencyion</h5>
+        <div class="w3-twothird w3-text-black">
+          <h5>Customer Bills</h5>
           <input class="w3-input w3-border w3-padding" type="text" placeholder="Search for names.." id="myInput"
             onkeyup="onfiltervalue()">
           <table id="table" class="w3-table w3-striped w3-white">
@@ -244,6 +246,26 @@
     </div>
   </div>
 </div>
+<div id="deleteForm" class="w3-modal">
+  <!-- <div class="w3-modal-content w3-card-4 w3-animate-zoom"> -->
+    <div class="w3-modal-content w3-red">
+      <span onclick="document.getElementById('deleteForm').style.display='none'"
+        class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+      <div class="w3-center">
+        <span id="delmsg" class="w3-xlarge w3-text-white"></span>
+        <br>
+        <div class="w3-bar">
+          <button id="No" class="w3-bar-item w3-button w3-white w3-text-red"
+          onclick="document.getElementById('deleteForm').style.display='none'">No</button>
+          <button id="Yes" class="w3-bar-item w3-button w3-green">Yes</button>
+        </div>
+      </div>
+    <!-- </div> -->
+  </div>
+
+</div>
+
+
 
 <script src="/js/bills.js"></script>
   <script src="/js/general.js"></script>

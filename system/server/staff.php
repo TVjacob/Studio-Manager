@@ -110,7 +110,7 @@ function deletestaffID($staffcode)
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-    $sql = "Delete  FROM staff WHERE staffCode= $staffcode ";
+    $sql = "Delete  FROM staff WHERE staff.staffCode= '".$staffcode. "' ";
     // $result = mysqli_query($conn, $sql);
 
     if (mysqli_query($conn, $sql)) {

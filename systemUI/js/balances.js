@@ -6,7 +6,7 @@ var total = 0;
 var size = new Number(3);
 var totalpages = 0;
 var pageno = new Number(1);
-size = 4;
+size = 8;
 
 var messageBox = document.getElementById("message");
 var messagepanel = document.getElementById("msgpanel");

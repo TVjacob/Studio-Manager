@@ -57,6 +57,9 @@ switch (rewriteurl($request)) {
     case '/productname':
         findProductsName();
         break;
+    case '/delete/product':
+        productdeleteByID();
+        break;
     case '/new/account':
         addAccount();
         break;
@@ -68,6 +71,9 @@ switch (rewriteurl($request)) {
         break;
     case '/account':
         accountfindByID();
+        break;
+    case '/delete/account':
+        accountdeleteByID();
         break;
     case '/accountcode':
         accountfindByaccountcode($_SERVER['REQUEST_URI']);
@@ -88,6 +94,9 @@ switch (rewriteurl($request)) {
     case '/staff':
         stafffindByID();
         break;
+    case '/delete/staff':
+        staffdeleteByID();
+        break;
     case '/new/customer':
         addcustomer();
         break;
@@ -103,6 +112,9 @@ switch (rewriteurl($request)) {
     case '/customer/name':
         findCustomersName();
         break;
+    case '/delete/customer/id':
+        customerdeleteByID();
+        break;
     case '/new/bill':
         saveBill();
         break;
@@ -111,6 +123,12 @@ switch (rewriteurl($request)) {
         break;
     case '/new/salary/payment':
         saveSalary();
+        break;
+    case '/delete/reference_id':
+        deleteTransactionByreferID();
+        break;
+    case '/delete/reference_id/details':
+        deleteByreferIDAndRecipt();
         break;
     case '/new/payment':
         saveDoubleEntry();

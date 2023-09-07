@@ -7,7 +7,7 @@ var total = 0;
 var size = new Number(3);
 var totalpages = 0;
 var pageno = new Number(1);
-size = 4;
+size = 8;
 
 var messageBox = document.getElementById("message");
 var messagepanel = document.getElementById("msgpanel");
@@ -22,6 +22,7 @@ var creditpos = "";
 var debitpos = "";
 
 var id = "";
+var deleteid="";
 
 
 
@@ -53,16 +54,16 @@ function onLoadAccounts() {
   xhttp.send();
 }
 
- function onLoadAccountCredit(data) {
+function onLoadAccountCredit(data) {
   var creditaccts = document.getElementById("creditaccts");
-      var cnt = 0;
-      for (account of data) {
-        var option = document.createElement("option");
-        option.value = cnt;
-        option.text = account.accountName;
-        creditaccts.appendChild(option);
-        cnt++;
-      }
+  var cnt = 0;
+  for (account of data) {
+    var option = document.createElement("option");
+    option.value = cnt;
+    option.text = account.accountName;
+    creditaccts.appendChild(option);
+    cnt++;
+  }
 }
 
 function onclearPaymentsForm() {
@@ -109,6 +110,7 @@ function onSavePayment() {
     }
   };
   xhr.send(formdata);
+  onloadPayments();
 }
 async function onloadPayments() {
   var table = document.getElementById("table");
@@ -145,7 +147,7 @@ function onPageniation(data, table) {
     credit.innerHTML = format(data[i]["creditaccount_id"] != null ? data[i]["amount"] : 0);
     date.innerHTML = data[i]["transDate"];
     remarks.innerHTML = data[i]["remarks"];
-    action.innerHTML = '<button class="w3-bar-item w3-button w3-red">Delete</button>';
+    action.innerHTML = '<button class="w3-bar-item w3-button w3-red" onclick="onDeletePayments(this)" >Delete</button>';
   }
   onDisplayTable(index);
 
@@ -238,7 +240,7 @@ function onSearchValue(input, typet) {
   console.log(result);
   if (result != null || result != "") {
     var i = parseInt(result);
-    if (!isNaN(i)&&i<accounts.length) {
+    if (!isNaN(i) && i < accounts.length) {
       if (typet === "C") {
         console.log(typet)
         input.value = accounts[i].accountName;
@@ -291,4 +293,52 @@ function unFormat(amt) {
     str = str1;
   }
   return str;
+}
+
+async function onDeletePayments(row) {
+  var i = row.parentNode.parentNode.rowIndex;
+  var table = document.getElementById("table");
+  tr = table.getElementsByTagName("tr");
+  td = tr[i].getElementsByTagName("td")[0];
+  if (td) {
+    txtValue = td.textContent || td.innerText;
+    onDeleteAll(txtValue);
+  }
+}
+function onDeleteAll(txt) {
+  deleteid = txt ;
+  document.getElementById('deleteForm').style.display = 'block';
+  var btnyes = document.getElementById('Yes');
+  document.getElementById('delmsg').innerHTML = "Are you sure you want to Delete?";
+  if (btnyes.addEventListener) {     // For all major browsers, except IE 8 and earlier
+    btnyes.addEventListener("click", deletePayment);
+  } else if (x.attachEvent) {   // For IE 8 and earlier versions
+    btnyes.attachEvent("onclick", deletePayment);
+  }
+}
+function deletePayment() {
+  var formdata = 'id=' + deleteid + '&detail=' + 'DoubleEntry';
+  console.log(formdata);
+  let xhr = new XMLHttpRequest();
+  xhr.open("POST", "http://localhost:3000/delete/reference_id/details");
+  xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState == 4 && xhr.status == 200) {
+      feedback = JSON.parse(xhr.responseText);
+      document.getElementById('deleteForm').style.display = 'none';
+      messageBox.style.display = 'block';
+      messagepanel.className = "w3-panel w3-green";
+      messagetitle.innerHTML = "Success Deleted";
+      message.innerHTML = feedback.message;
+    } else {
+      document.getElementById('deleteForm').style.display = 'none';
+
+      messageBox.style.display = 'block';
+      messagepanel.className = "w3-panel w3-red";
+      messagetitle.innerHTML = "Failed To Deleted!";
+      message.innerHTML = xhr.responseText;
+    }
+  };
+  xhr.send(formdata);
+  onloadPayments();
 }

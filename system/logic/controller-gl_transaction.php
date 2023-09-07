@@ -189,8 +189,17 @@ function deleteTransactionByID()
 }
 function deleteTransactionByreferID()
 {
-    if ($_GET['id'] != null) {
-        $delpay = deleteTransactionreference_id($_GET['id']);
+    if ($_POST['id'] != null) {
+        $delpay = deleteTransactionreference_id($_POST['id']);
+        echo json_encode($delpay);
+    } else {
+        echo json_encode(array("message" => "failed to find the id "));
+    }
+}
+function deleteByreferIDAndRecipt()
+{
+    if ($_POST['id'] != null) {
+        $delpay = deleteTransreferidAnddetails($_POST['id'],$_POST['detail']);
         echo json_encode($delpay);
     } else {
         echo json_encode(array("message" => "failed to find the id "));

@@ -9,7 +9,7 @@ var total = 0;
 var size = new Number(3);
 var totalpages = 0;
 var pageno = new Number(1);
-size = 4;
+size = 8;
 
 var messageBox = document.getElementById("message");
 var messagepanel = document.getElementById("msgpanel");
@@ -23,6 +23,7 @@ var customer = document.getElementById("customer");
 
 var id = "";
 var customerID = 0;
+var deleteid="";
 
 
 
@@ -80,11 +81,7 @@ function onclearbillForm() {
   btn.disabled = false;
 }
 async function onCreateBill() {
-  // var accttype = document.getElementById("account_type").value;
-  // var acctname = document.getElementById("accountName").value;
-  // var isincome = document.getElementById("isincome").value == "" ? "NULL" : document.getElementById("isincome").value;
-  // var acctcode = document.getElementById("code").innerText;
-  var btn = document.getElementById('btn');
+ var btn = document.getElementById('btn');
   btn.innerHTML = "Loading";
   btn.disabled = true;
 
@@ -117,6 +114,7 @@ async function onCreateBill() {
     }
   };
   xhr.send(formdata);
+  onloadBills();
 }
 async function onloadBills() {
   var table = document.getElementById("table");
@@ -157,7 +155,7 @@ function onPageniation(data, table) {
     amount.innerHTML = format(bills[i]["amount"]);
     date.innerHTML = bills[i]["transDate"];
     remarks.innerHTML = bills[i]["remarks"];
-    action.innerHTML = '<button class="w3-bar-item w3-button w3-red">Delete</button>';
+    action.innerHTML = '<button class="w3-bar-item w3-button w3-red" onclick="onDeleteBill(this)" >Delete</button>';
   }
   onDisplayTable(index);
 
@@ -254,9 +252,6 @@ function onLookupto(input) {
     }
   }
 }
-
-
-
 onloadBills();
 onLoadCustomers();
 onLoadServices();
@@ -292,4 +287,51 @@ function unFormat(amt){
   	str=str1;
   }
  return str;
+}
+async function onDeleteBill(row) {
+  var i = row.parentNode.parentNode.rowIndex;
+  var table = document.getElementById("table");
+  tr = table.getElementsByTagName("tr");
+  td = tr[i].getElementsByTagName("td")[0];
+  if (td) {
+      txtValue = td.textContent || td.innerText;
+      onDeleteAll(txtValue);
+  }
+}
+function onDeleteAll(txt) {
+  deleteid = customers[txt-1].id;
+  document.getElementById('deleteForm').style.display = 'block';
+  var btnyes = document.getElementById('Yes');
+  document.getElementById('delmsg').innerHTML="Are you sure you want to Delete?";
+  if (btnyes.addEventListener) {     // For all major browsers, except IE 8 and earlier
+      btnyes.addEventListener("click", deleteBill);
+  } else if (x.attachEvent) {   // For IE 8 and earlier versions
+      btnyes.attachEvent("onclick", deleteBill);
+  }
+}
+function deleteBill() {
+  var formdata = 'id=' + deleteid +'&detail='+'BILLING';
+  console.log(formdata);
+  let xhr = new XMLHttpRequest();
+  xhr.open("POST", "http://localhost:3000/delete/reference_id/details");
+  xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xhr.onreadystatechange = function () {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+          feedback = JSON.parse(xhr.responseText);
+          document.getElementById('deleteForm').style.display = 'none';
+          messageBox.style.display = 'block';
+          messagepanel.className = "w3-panel w3-green";
+          messagetitle.innerHTML = "Success Deleted";
+          message.innerHTML = feedback.message;
+      } else {
+          document.getElementById('deleteForm').style.display = 'none';
+
+          messageBox.style.display = 'block';
+          messagepanel.className = "w3-panel w3-red";
+          messagetitle.innerHTML = "Failed To Deleted!";
+          message.innerHTML = xhr.responseText;
+      }
+  };
+  xhr.send(formdata);
+onloadBills();
 }

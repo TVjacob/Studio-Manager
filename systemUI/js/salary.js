@@ -7,7 +7,7 @@ var total = 0;
 var size = new Number(3);
 var totalpages = 0;
 var pageno = new Number(1);
-size = 4;
+size = 8;
 
 var messageBox = document.getElementById("message");
 var messagepanel = document.getElementById("msgpanel");
@@ -21,6 +21,7 @@ var payaccount = document.getElementById("payaccount");
 
 var id = "";
 var staffpos = "";
+var deleteid="";
 
 
 
@@ -63,8 +64,6 @@ function onPaySalary() {
   var btn = document.getElementById('btn');
   btn.innerHTML = "Loading";
   btn.disabled = true;
-  // console.log(staffs[staffpos]);
-  // console.log(staffpos);
 
   var formdata = 'staff=' + staffs[staffpos]['staffCode'] + '& remarks=' + remarks.value + '&amount=' + unFormat(amount.value) + '&tdate=' + tdate.value + '&credit=' + payaccount.value + '';
   console.log(formdata);
@@ -95,6 +94,7 @@ function onPaySalary() {
     }
   };
   xhr.send(formdata);
+  onloadSalarys();
 }
 async function onloadSalarys() {
   var table = document.getElementById("table");
@@ -131,7 +131,7 @@ function onPageniation(data, table) {
     amount.innerHTML = format(salarys[i]["amount"]);
     date.innerHTML = salarys[i]["transDate"];
     remarks.innerHTML = salarys[i]["remarks"];
-    action.innerHTML = '<button class="w3-bar-item w3-button w3-red">Delete</button>';
+    action.innerHTML = '<button class="w3-bar-item w3-button w3-red"  onclick="onDeleteSalary(this)">Delete</button>';
   }
   onDisplayTable(index);
 
@@ -258,4 +258,52 @@ function unFormat(amt) {
     str = str1;
   }
   return str;
+}
+
+async function onDeleteSalary(row) {
+  var i = row.parentNode.parentNode.rowIndex;
+  var table = document.getElementById("table");
+  tr = table.getElementsByTagName("tr");
+  td = tr[i].getElementsByTagName("td")[0];
+  if (td) {
+      txtValue = td.textContent || td.innerText;
+      onDeleteAll(txtValue);
+  }
+}
+function onDeleteAll(txt) {
+  deleteid = txt;
+  document.getElementById('deleteForm').style.display = 'block';
+  var btnyes = document.getElementById('Yes');
+  document.getElementById('delmsg').innerHTML="Are you sure you want to Delete?";
+  if (btnyes.addEventListener) {     // For all major browsers, except IE 8 and earlier
+      btnyes.addEventListener("click", deleteCustomer);
+  } else if (x.attachEvent) {   // For IE 8 and earlier versions
+      btnyes.attachEvent("onclick", deleteCustomer);
+  }
+}
+function deleteCustomer() {
+  var formdata = 'id=' + deleteid ;
+  console.log(formdata);
+  let xhr = new XMLHttpRequest();
+  xhr.open("POST", "http://localhost:3000/delete/reference_id");
+  xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xhr.onreadystatechange = function () {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+          feedback = JSON.parse(xhr.responseText);
+          document.getElementById('deleteForm').style.display = 'none';
+          messageBox.style.display = 'block';
+          messagepanel.className = "w3-panel w3-green";
+          messagetitle.innerHTML = "Success Deleted";
+          message.innerHTML = feedback.message;
+      } else {
+          document.getElementById('deleteForm').style.display = 'none';
+
+          messageBox.style.display = 'block';
+          messagepanel.className = "w3-panel w3-red";
+          messagetitle.innerHTML = "Failed To Deleted!";
+          message.innerHTML = xhr.responseText;
+      }
+  };
+  xhr.send(formdata);
+onloadCustomers();
 }

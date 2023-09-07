@@ -98,7 +98,7 @@ function deleteProductID($id)
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-    $sql = "Delete  FROM product WHERE id= '$id' ";
+    $sql = "Delete  FROM product WHERE id= '".$id. "' ";
     if (mysqli_query($conn, $sql)) {
         return array("message" => "deleted successful");
     } else {

@@ -45,8 +45,8 @@ function stafffindByID()
 }
 function staffdeleteByID()
 {
-   if ($_GET['studentCode'] != null) {
-      $delstu = deletestaffID($_GET['studentCode']);
+   if ($_POST['staffCode'] != null) {
+      $delstu = deletestaffID($_POST['staffCode']);
       echo json_encode($delstu);
    } else {
       echo json_encode(array("message" => "failed to find the id "));

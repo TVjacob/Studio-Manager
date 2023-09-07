@@ -307,6 +307,30 @@
   </div>
 </div>
 
+
+<div id="deleteForm" class="w3-modal">
+  <!-- <div class="w3-modal-content w3-card-4 w3-animate-zoom"> -->
+    <div class="w3-modal-content w3-red">
+      <span onclick="document.getElementById('deleteForm').style.display='none'"
+        class="w3-button w3-xlarge w3-hover-red w3-display-topright" title="Close Modal">&times;</span>
+      <div class="w3-center">
+        <span id="delmsg" class="w3-xlarge w3-text-white"></span>
+        <br>
+        <div class="w3-bar">
+          <button id="No" class="w3-bar-item w3-button w3-white w3-text-red"
+          onclick="document.getElementById('deleteForm').style.display='none'">No</button>
+          <button id="Yes" class="w3-bar-item w3-button w3-green">Yes</button>
+        </div>
+      </div>
+    <!-- </div> -->
+  </div>
+
+</div>
+
+
+
+
+
 <script src="/js/staff.js"></script>
   <script src="/js/general.js"></script>
 </body>

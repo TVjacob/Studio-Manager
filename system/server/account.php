@@ -153,7 +153,7 @@ function deleteAccountID($accountcode)
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-    $sql = "Delete  FROM account WHERE id= $accountcode ";
+    $sql = "Delete  FROM account WHERE acountCode= '".$accountcode."' ";
     if (mysqli_query($conn, $sql)) {
         return array("message" => "deleted successful");
     } else {

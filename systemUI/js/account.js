@@ -6,7 +6,7 @@ var total = 0;
 var size = new Number(3);
 var totalpages = 0;
 var pageno = new Number(1);
-size = 4;
+size = 8;
 
 var messageBox = document.getElementById("message");
 var messagepanel = document.getElementById("msgpanel");
@@ -17,6 +17,7 @@ var acctname = document.getElementById("accountName").value;
 var isincome = document.getElementById("isincome").value;
 var acctcode = document.getElementById("code").innerText;
 var id = "";
+var deleteid="";
 
 
 
@@ -48,17 +49,10 @@ async function onloadAccountypesData(modif) {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
-      // console.log(this.responseText);
       var data = JSON.parse(this.responseText);
-      // console.log(data.length);
       accounttypeInfor = data;
       onmodifyForm(modif, data);
-      // for (accounttype of data) {
-      //   var option = document.createElement("option");
-      //   option.value = accounttype.id;
-      //   option.text = accounttype.name;
-      //   select.appendChild(option);
-      // }
+
     }
   };
   xhttp.open("GET", "http://localhost:3000/accounttypes", true);
@@ -70,8 +64,6 @@ async function onloadAccountypesData(modif) {
 function onselectAccountCode(selection) {
   var x = selection.selectedIndex;
   var y = selection.options;
-  console.log("hello its me");
-  console.log(accounttypeInfor.length);
   for (accounttype of accounttypeInfor) {
     if (accounttype.id == y[x].value) {
       document.getElementById("code").innerHTML = accounttype.accountcode;
@@ -131,6 +123,7 @@ function onCreateAccount() {
     }
   };
   xhr.send(formdata);
+  onloadAccounts();
 }
 async function onloadAccounts() {
   var table = document.getElementById("table");
@@ -167,7 +160,7 @@ function onPageniation(data, table) {
     acttname.innerHTML = accountinfor[i]["accountName"].toUpperCase();
     accttype.innerHTML = accountinfor[i]["name"].toUpperCase();
     isincome.innerHTML = accountinfor[i]["isincome"] == "NULL" ? "Not" : accountinfor[i]["isincome"];
-    action.innerHTML = '<button class="w3-bar-item w3-button  w3-black" onclick="onEditAccount(this)">Edit</button><button class="w3-bar-item w3-button w3-red">Delete</button>';
+    action.innerHTML = '<button class="w3-bar-item w3-button  w3-black" onclick="onEditAccount(this)">Edit</button><button class="w3-bar-item w3-button w3-red" onclick="onDeleteAccount(this)">Delete</button>';
   }
   onDisplayTable(index);
 
@@ -197,7 +190,6 @@ function onclearTable(table) {
   console.log(table.rows.length + " " + tr.length);
   while (table.rows.length != 1) {
     for (var i = 1; i < table.rows.length; i++) {
-      console.log("the ids" + i);
       table.deleteRow(i);
     }
   }
@@ -241,9 +233,7 @@ function onfiltervalue() {
   }
 }
 async function onEditAccount(row) {
-  // getting what to onEditAccount;
-  console.log("Editing ....")
-  var i = row.parentNode.parentNode.rowIndex;
+  // getting what to onEditAccount;  var i = row.parentNode.parentNode.rowIndex;
   console.log(i);
   var table = document.getElementById("table");
   tr = table.getElementsByTagName("tr");
@@ -287,7 +277,6 @@ async function onloadDataonForm(text) {
   xhttp.send(query);
 }
 function onUpdateAccount() {
-  console.log("clicked" + id);
   var btn = document.getElementById('btn2');
 
   var accttype = document.getElementById("account_type").value;
@@ -391,4 +380,51 @@ function onmodifyForm(modif, data) {
 
   onselectAccountCode(select);
 
+}
+async function onDeleteAccount(row) {
+  var i = row.parentNode.parentNode.rowIndex;
+  var table = document.getElementById("table");
+  tr = table.getElementsByTagName("tr");
+  td = tr[i].getElementsByTagName("td")[1];
+  if (td) {
+      txtValue = td.textContent || td.innerText;
+      onDeleteAll(txtValue);
+  }
+}
+function onDeleteAll(txt) {
+  deleteid = txt;
+  document.getElementById('deleteForm').style.display = 'block';
+  var btnyes = document.getElementById('Yes');
+  document.getElementById('delmsg').innerHTML="Are you sure you want to Delete?";
+  if (btnyes.addEventListener) {     // For all major browsers, except IE 8 and earlier
+      btnyes.addEventListener("click", deleteAccount);
+  } else if (x.attachEvent) {   // For IE 8 and earlier versions
+      btnyes.attachEvent("onclick", deleteAccount);
+  }
+}
+function deleteAccount() {
+  var formdata = 'acountCode=' + deleteid ;
+  console.log(formdata);
+  let xhr = new XMLHttpRequest();
+  xhr.open("POST", "http://localhost:3000/delete/account");
+  xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  xhr.onreadystatechange = function () {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+          feedback = JSON.parse(xhr.responseText);
+          document.getElementById('deleteForm').style.display = 'none';
+          messageBox.style.display = 'block';
+          messagepanel.className = "w3-panel w3-green";
+          messagetitle.innerHTML = "Success Deleted";
+          message.innerHTML = feedback.message;
+      } else {
+          document.getElementById('deleteForm').style.display = 'none';
+
+          messageBox.style.display = 'block';
+          messagepanel.className = "w3-panel w3-red";
+          messagetitle.innerHTML = "Failed To Deleted!";
+          message.innerHTML = xhr.responseText;
+      }
+  };
+  xhr.send(formdata);
+onloadAccounts();
 }
