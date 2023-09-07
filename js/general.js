@@ -86,7 +86,7 @@ function onLogout() {
   sessionStorage.removeItem("password");
   sessionStorage.setItem("auth", false);
   sessionStorage.clear();
-  openUrl("/index.html");
+  openUrl("/kaynikeStudio/index.html");
 }
 
 function onAccordion(id) {

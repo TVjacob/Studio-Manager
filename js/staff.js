@@ -273,7 +273,7 @@ function onclearForm() {
 
     var btn = document.getElementById('btn');
     btn.style.display="block";
-    btn.innerHTML = " Save Student ";
+    btn.innerHTML = " Save Staff ";
     btn.disabled = false;
 }
 function format(amt) {

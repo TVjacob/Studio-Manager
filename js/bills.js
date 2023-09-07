@@ -244,8 +244,9 @@ function onLookupto(input) {
   var result = input.value;
   if (result != null || result != "") {
     var i = parseInt(result);
-    if (!isNaN(i)&&i<accounts.length) {
+    if (!isNaN(i)&&i<customers.length) {
       customerID = i;
+      console.log(customers[i].customername)
       input.value = customers[i].customername;
     } else {
       input.value = "";

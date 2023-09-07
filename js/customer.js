@@ -175,7 +175,7 @@ async function onloadData(text) {
 
     edit.style.display = 'block';
 
-    var query = '?id=' + text + '';
+    var query = '?id=' + customers[text-1].id + '';
     var xhttp = new XMLHttpRequest();
     xhttp.open("GET", "http://localhost/kaynikeStudio/system/customer" + query);
     xhttp.onreadystatechange = function () {
