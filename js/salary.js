@@ -1,5 +1,5 @@
-var recipts = [];
-var customersBalances = [];
+var salarys = [];
+var staffs = [];
 
 
 var index = new Number(0);
@@ -13,95 +13,79 @@ var messageBox = document.getElementById("message");
 var messagepanel = document.getElementById("msgpanel");
 var messagetitle = document.getElementById("msgtitle");
 var message = document.getElementById("msg");
-var payaccount = document.getElementById("payaccount");
+var staff = document.getElementById("staff");
 var tdate = document.getElementById("tdate");
 var remrks = document.getElementById("remarks");
 var amt = document.getElementById("amount");
-var customer = document.getElementById("customer");
+var payaccount = document.getElementById("payaccount");
 
 var id = "";
+var staffpos = "";
 var deleteid="";
 
 
 
-
 ////////////////////////////
-////////Bills file.
+////////Salarys file.
 ///////
 // //////////////////////////////
-function onLoadCustomersBalances() {
-  var datalist = document.getElementById("customer");
-  if (datalist.length > 1) {
-    while (datalist.length > 1) {
-      for (var i = 1; i < datalist.length; i++) {
-        datalist.remove(i);
-      }
-    }
-  }
+function onLoadStaffs() {
+  var datalist = document.getElementById("samples");
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       var data = JSON.parse(this.responseText);
-      customersBalances = data;
-      var cnt =0;
-      for (balance of data) {
+      staffs = data;
+      var cnt = 0;
+      for (staff of data) {
         var option = document.createElement("option");
         option.value = cnt;
-        var balanceamt = balance.totalbill-balance.totalpayments;
-        option.text = balance.customername +" "+format(balanceamt) ;
+        option.text = staff.name;
         datalist.appendChild(option);
         cnt++;
       }
     }
   };
-  xhttp.open("GET", "http://localhost:3000/find/balances", true);
+  xhttp.open("GET", "http://localhost/kaynikeStudio/system/staffs", true);
   xhttp.send();
 }
-function onclearReciptForm() {
-  document.getElementById("customer").value = "";
+function onclearSalaryForm() {
+  document.getElementById("staff").value = "";
   document.getElementById("tdate").value = "";
   document.getElementById("payaccount").value = "";
   document.getElementById("amount").innerText = 0;
-  document.getElementById("totalbill").innerText = 0;
-  document.getElementById("balance").innerText = 0;
-  document.getElementById("totalpayment").innerText = 0;
-  document.getElementById("service").innerHTML="Service :";
-
   document.getElementById("remarks").innerText = "";
-  var btn = document.getElementById('btn');
-  btn.innerHTML = "New Recipt";
-  btn.disabled = false;
 
-  onLoadCustomersBalances();
+  var btn = document.getElementById('btn');
+  btn.innerHTML = "Pay Salary";
+  btn.disabled = false;
 }
-function onCreateRecipt() {
- var btn = document.getElementById('btn');
+function onPaySalary() {
+  var btn = document.getElementById('btn');
   btn.innerHTML = "Loading";
   btn.disabled = true;
-  var product=customersBalances[customer.value]['product_id'];
-  var customer_id = customersBalances[customer.value]['customer_id']
-  var referID = customersBalances[customer.value]['reference_id']
-  var formdata = 'customer=' + customer_id + '& remarks=' + remarks.value + '&amount=' + unFormat(amount.value) + '&tdate=' + tdate.value +  '&reference_id=' + referID +'&debit=' + payaccount.value +'&product='+product;
+
+  var formdata = 'staff=' + staffs[staffpos]['staffCode'] + '& remarks=' + remarks.value + '&amount=' + unFormat(amount.value) + '&tdate=' + tdate.value + '&credit=' + payaccount.value + '';
   console.log(formdata);
 
   let xhr = new XMLHttpRequest();
-  xhr.open("POST", "http://localhost:3000/bill/payment");
+  xhr.open("POST", "http://localhost/kaynikeStudio/system/new/salary/payment");
 
 
   xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   xhr.onreadystatechange = function () {
     if (xhr.readyState == 4 && xhr.status == 200) {
       feedback = JSON.parse(xhr.responseText);
-      btn.innerHTML = "New Recipt";
+      btn.innerHTML = "Pay Salary";
       btn.disabled = false;
-      document.getElementById('reciptsform').style.display = 'none';
+      document.getElementById('salaryform').style.display = 'none';
       messageBox.style.display = 'block';
       messagepanel.className = "w3-panel w3-green";
       messagetitle.innerHTML = "Success";
       message.innerHTML = feedback.message;
 
     } else {
-      btn.innerHTML = "New Recipt";
+      btn.innerHTML = "Pay Salary";
       btn.disabled = false;
       messageBox.style.display = 'block';
       messagepanel.className = "w3-panel w3-red";
@@ -110,20 +94,19 @@ function onCreateRecipt() {
     }
   };
   xhr.send(formdata);
-  onLoadCustomersBalances();
-  
+  onloadSalarys();
 }
-async function onLoadRecipts() {
+async function onloadSalarys() {
   var table = document.getElementById("table");
   onclearTable(table);
   var xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost:3000/find/recipts", true);
+  xhttp.open("GET", "http://localhost/kaynikeStudio/system/find/salary/payments", true);
   xhttp.send();
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       var data = JSON.parse(this.responseText);
-      recipts = data;
-      onPageniation(recipts, table);
+      salarys = data;
+      onPageniation(salarys, table);
     }
   };
 }
@@ -136,21 +119,19 @@ function onPageniation(data, table) {
   for (var i = 0; i < data.length; i++) {
     var row = table.insertRow(table.length);
     var id = row.insertCell(0)
-    var service = row.insertCell(1);
+    var staffname = row.insertCell(1);
     var account = row.insertCell(2);
-    var customer = row.insertCell(3);
-    var amount = row.insertCell(4);
-    var date = row.insertCell(5);
-    var remarks = row.insertCell(6);
-    var action = row.insertCell(7);
-    id.innerHTML = recipts[i]["reference_id"];;
-    service.innerHTML = recipts[i]["productname"];
-    account.innerHTML = recipts[i]["accountName"];
-    customer.innerHTML = recipts[i]["customername"];
-    amount.innerHTML = format(recipts[i]["amount"]);
-    date.innerHTML = recipts[i]["transDate"];
-    remarks.innerHTML = recipts[i]["remarks"];
-    action.innerHTML = '<button class="w3-bar-item w3-button w3-red" onclick="onDeleteRecipt(this)">Delete</button>';
+    var amount = row.insertCell(3);
+    var date = row.insertCell(4);
+    var remarks = row.insertCell(5);
+    var action = row.insertCell(6);
+    id.innerHTML = salarys[i]["reference_id"];;
+    account.innerHTML = salarys[i]["accountName"];
+    staffname.innerHTML = salarys[i]["name"];
+    amount.innerHTML = format(salarys[i]["amount"]);
+    date.innerHTML = salarys[i]["transDate"];
+    remarks.innerHTML = salarys[i]["remarks"];
+    action.innerHTML = '<button class="w3-bar-item w3-button w3-red"  onclick="onDeleteSalary(this)">Delete</button>';
   }
   onDisplayTable(index);
 
@@ -175,15 +156,11 @@ async function onDisplayTable(index) {
 }
 function onclearTable(table) {
   tr = table.getElementsByTagName("tr");
-  console.log("here with the clicked ")
-  console.log(table.rows.length + " " + tr.length);
-  console.log(table.rows.length + " " + tr.length);
   while (table.rows.length != 1) {
     for (var i = 1; i < table.rows.length; i++) {
       table.deleteRow(i);
     }
   }
-  console.log(table.rows.length + " " + tr.length);
   // }
 }
 async function onNextPage() {
@@ -216,22 +193,19 @@ function onfiltervalue() {
     td3 = tr[i].getElementsByTagName("td")[3];
     td4 = tr[i].getElementsByTagName("td")[4];
     td5 = tr[i].getElementsByTagName("td")[5];
-    td6 = tr[i].getElementsByTagName("td")[6];
-    if (td1 || td2 || td3 || td4 || td5 || td6) {
+    if (td1 || td2 || td3 || td4 || td5) {
       txtValue1 = td1.textContent || td1.innerText;
       txtValue2 = td2.textContent || td2.innerText;
       txtValue3 = td3.textContent || td3.innerText;
       txtValue4 = td4.textContent || td4.innerText;
       txtValue5 = td5.textContent || td5.innerText;
-      txtValue6 = td6.textContent || td6.innerText;
 
 
       if (txtValue1.toUpperCase().indexOf(filter) > -1 ||
         txtValue2.toUpperCase().indexOf(filter) > -1 ||
         txtValue3.toUpperCase().indexOf(filter) > -1 ||
         txtValue4.toUpperCase().indexOf(filter) > -1 ||
-        txtValue5.toUpperCase().indexOf(filter) > -1 ||
-        txtValue6.toUpperCase().indexOf(filter) > -1 ) {
+        txtValue5.toUpperCase().indexOf(filter) > -1) {
         tr[i].style.display = "";
       } else {
         tr[i].style.display = "none";
@@ -239,22 +213,22 @@ function onfiltervalue() {
     }
   }
 }
-async function  ondisplayFormData(person){
- var index =person.value;
- if(index!=null||index!=""){
-  var totalbalance = customersBalances[index]['totalbill']-customersBalances[index]['totalpayments'];
-  document.getElementById("totalbill").value=format(customersBalances[index]['totalbill']);
-  document.getElementById("balance").value=format(totalbalance);
-  document.getElementById("totalpayment").value=format(customersBalances[index]['totalpayments']);
- } 
+function onSearchValue(input) {
+  var result = input.value;
+  if (result != null || result != "") {
+    var i = parseInt(result);
+    if (!isNaN(i) && i < staffs.length) {
+      input.value = staffs[i].name;
+      staffpos = i;
+    } else {
+      input.value = "";
+    }
+  }
+
 }
-
-onLoadRecipts();
-onLoadCustomersBalances();
-
-
-
-function format( amt  ) {
+onloadSalarys();
+onLoadStaffs();
+function format(amt) {
   var patt1 = /[0-9.]/g;
   var value = amt.toString();
   var total = "";
@@ -269,24 +243,24 @@ function format( amt  ) {
   }
   numbers.forEach(myFunction);
 
- function myFunction(item) {
+  function myFunction(item) {
     total += item;
-   amt= total;
+    amt = total;
   }
 
   return amt;
-  
+
 }
-function unFormat(amt){
-  var str =amt;
-  while(str.indexOf(",")>0){
-  	var str1=str.replace(",","");
-  	str=str1;
+function unFormat(amt) {
+  var str = amt;
+  while (str.indexOf(",") > 0) {
+    var str1 = str.replace(",", "");
+    str = str1;
   }
- return str;
+  return str;
 }
 
-async function onDeleteRecipt(row) {
+async function onDeleteSalary(row) {
   var i = row.parentNode.parentNode.rowIndex;
   var table = document.getElementById("table");
   tr = table.getElementsByTagName("tr");
@@ -297,21 +271,21 @@ async function onDeleteRecipt(row) {
   }
 }
 function onDeleteAll(txt) {
-  deleteid = customers[txt-1].id;
+  deleteid = txt;
   document.getElementById('deleteForm').style.display = 'block';
   var btnyes = document.getElementById('Yes');
   document.getElementById('delmsg').innerHTML="Are you sure you want to Delete?";
   if (btnyes.addEventListener) {     // For all major browsers, except IE 8 and earlier
-      btnyes.addEventListener("click", deleteRecipt);
+      btnyes.addEventListener("click", deleteCustomer);
   } else if (x.attachEvent) {   // For IE 8 and earlier versions
-      btnyes.attachEvent("onclick", deleteRecipt);
+      btnyes.attachEvent("onclick", deleteCustomer);
   }
 }
-function deleteRecipt() {
-  var formdata = 'id=' + deleteid +'&detail='+'recipt';
+function deleteCustomer() {
+  var formdata = 'id=' + deleteid ;
   console.log(formdata);
   let xhr = new XMLHttpRequest();
-  xhr.open("POST", "http://localhost:3000/delete/reference_id/details");
+  xhr.open("POST", "http://localhost/kaynikeStudio/system/delete/reference_id");
   xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   xhr.onreadystatechange = function () {
       if (xhr.readyState == 4 && xhr.status == 200) {
@@ -331,5 +305,5 @@ function deleteRecipt() {
       }
   };
   xhr.send(formdata);
-onLoadRecipts();
+onloadCustomers();
 }

@@ -1,30 +1,28 @@
-var products = [];
+var students = [];
 var index = new Number(0);
 var total = 0;
 var size = new Number(3);
 var totalpages = 0;
 var pageno = new Number(1);
-size = 8;
+size = 4;
 
 var messageBox = document.getElementById("message");
 var messagepanel = document.getElementById("msgpanel");
 var messagetitle = document.getElementById("msgtitle");
 var message = document.getElementById("msg");
 var id = "";
-var deleteid="";
 
-
-async function onloadProducts() {
+async function onloadStudents() {
     var table = document.getElementById("table");
     onclearTable(table);
     var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://localhost:3000/products", true);
+    xhttp.open("GET", "http://localhost/kaynikeStudio/system/students", true);
     xhttp.send();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             var data = JSON.parse(this.responseText);
-            products = data;
-            onPageniation(products, table);
+            students = data;
+            onPageniation(students, table);
         }
     };
 }
@@ -37,17 +35,17 @@ function onPageniation(data, table) {
     for (var i = 0; i < data.length; i++) {
         var row = table.insertRow(table.length);
         var id = row.insertCell(0)
-        var name = row.insertCell(1);
-        var rate = row.insertCell(2);
-        var amount = row.insertCell(3);
-        var units = row.insertCell(4);
+        var stucode = row.insertCell(1);
+        var stuname = row.insertCell(2);
+        var stuclass = row.insertCell(3);
+        var stuDob = row.insertCell(4);
         var action = row.insertCell(5);
-        id.innerHTML = products[i].id;
-        name.innerHTML = products[i]["productname"];
-        rate.innerHTML = products[i]["rate"].toUpperCase();
-        amount.innerHTML = products[i]["amount"].toUpperCase();
-        units.innerHTML = products[i]["units"];
-        action.innerHTML = '<button class="w3-bar-item w3-button  w3-black" onclick="onEditProduct(this)">Edit</button><button onclick="onDeleteProduct(this)" class="w3-bar-item w3-button w3-red">Delete</button>';
+        id.innerHTML = i + 1;
+        stucode.innerHTML = students[i]["studentCode"];
+        stuname.innerHTML = students[i]["name"].toUpperCase();
+        stuDob.innerHTML = students[i]["dob"].toUpperCase();
+        stuclass.innerHTML = students[i]["sclass"];
+        action.innerHTML = '<button class="w3-bar-item w3-button  w3-black" onclick="onEditStudent(this)">Edit</button><button class="w3-bar-item w3-button w3-red">Delete</button>';
     }
     onDisplayTable(index);
 
@@ -80,7 +78,7 @@ function onclearTable(table) {
 }
 async function onNextPage() {
     var table = document.getElementById("table");
-    total = products.length;
+    total = students.length;
     totalpages = Math.ceil(total / size);
     pageno = pageno < totalpages ? pageno + 1 : pageno;
     var index = new Number(0);
@@ -89,7 +87,7 @@ async function onNextPage() {
 }
 async function onPreviousPage() {
     var table = document.getElementById("table");
-    total = products.length;
+    total = students.length;
     totalpages = Math.ceil(total / size);
     pageno = (pageno - 1) < 1 ? pageno : pageno - 1;
     var index = new Number(0);
@@ -116,30 +114,33 @@ function onfiltervalue() {
         }
     }
 }
-////////onsave Product///////
-function onSaveProduct() {
-    console.log("saving ....");
-    var rate = document.getElementById("rate").value;
-    var amount = document.getElementById("amount").value;
-    var name = document.getElementById("name").value;
-    var units = document.getElementById("units").value;
+////////onsave Student///////
+function onSaveStudent() {
+    console.log("saving ....")
+    var address = document.getElementById("address").value;
+    var parents = document.getElementById("parents").value;
+    var phoneno = document.getElementById("phoneno").value;
+    var dob = document.getElementById("dob").value;
+    var name = document.getElementById("stuname").value;
+    var sclass = document.getElementById("sclass").value;
+    var studentCode = document.getElementById("studentCode").innerText;
     var btn = document.getElementById('btn');
     btn.innerHTML = "Loading";
     btn.disabled = true;
-    var formdata = 'productname=' + name + '& units=' + units + '&amount=' + amount + '&rate=' + rate + '';
+    var formdata = 'name=' + name + '& studentCode=' + studentCode + '&sclass=' + sclass + '&dob=' + dob + '&phoneno=' + phoneno + '&parents=' + parents + '&address=' + address + '';
     console.log(formdata);
 
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost:3000/new/product");
+    xhr.open("POST", "http://localhost/kaynikeStudio/system/new/student");
 
 
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
             feedback = JSON.parse(xhr.responseText);
-            btn.innerHTML = "New Product";
+            btn.innerHTML = "Save Student";
             btn.disabled = false;
-            document.getElementById('productform').style.display = 'none';
+            document.getElementById('studentform').style.display = 'none';
             messageBox.style.display = 'block';
             messagepanel.className = "w3-panel w3-green";
             messagetitle.innerHTML = "Success";
@@ -147,7 +148,7 @@ function onSaveProduct() {
 
 
         } else {
-            btn.innerHTML = "New Product";
+            btn.innerHTML = "Save Student";
             btn.disabled = false;
             messageBox.style.display = 'block';
             messagepanel.className = "w3-panel w3-red";
@@ -156,21 +157,28 @@ function onSaveProduct() {
         }
     };
     xhr.send(formdata);
-    onloadProducts();
+    onloadStudents();
+}
+//ongenerate student number
+function ongeneratestudentCode() {
+    var table = document.getElementById("table");
+    var number = table.rows.length;
+    document.getElementById("studentCode").innerHTML = "jjs" + number;
+
 }
 //////onDit button clicked
-async function onEditProduct(row) {
+async function onEditStudent(row) {
     var i = row.parentNode.parentNode.rowIndex;
     var table = document.getElementById("table");
     tr = table.getElementsByTagName("tr");
-    td = tr[i].getElementsByTagName("td")[0];
+    td = tr[i].getElementsByTagName("td")[1];
     if (td) {
         txtValue = td.textContent || td.innerText;
         onloadData(txtValue);
     }
 }
 async function onloadData(text) {
-    document.getElementById('productform').style.display = 'block';
+    document.getElementById('studentform').style.display = 'block';
     console.warn(text);
     var btn = document.getElementById('btn');
     var edit = document.getElementById('btn2');
@@ -178,45 +186,49 @@ async function onloadData(text) {
 
     edit.style.display = 'block';
 
-    var query = '?id=' + text + '';
+    var query = '?studentCode=' + text + '';
     var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://localhost:3000/product" + query);
+    xhttp.open("GET", "http://localhost/kaynikeStudio/system/student" + query);
     xhttp.onreadystatechange = function () {
 
         if (this.readyState == 4 && this.status == 200) {
             console.log(this.responseText);
             var data = JSON.parse(this.responseText);
             var obj = data[0];
-            id = obj.id;
-            document.getElementById("units").value = obj.units;
-            document.getElementById("amount").value = obj.amount;
-            document.getElementById("name").value = obj.name;
-            document.getElementById("rate").value = obj.rate;
+            id = obj.studentCode;
+            document.getElementById("address").value = obj.address;
+            document.getElementById("parents").value = obj.parents;
+            document.getElementById("phoneno").value = obj.phoneno;
+            document.getElementById("dob").value = obj.dob;
+            document.getElementById("stuname").value = obj.name;
+            document.getElementById("sclass").value = obj.sclass;
+            document.getElementById("studentCode").innerText = text;
             if (edit.addEventListener) {     // For all major browsers, except IE 8 and earlier
-                edit.addEventListener("click", onUpdateProduct);
+                edit.addEventListener("click", onUpdateStudent);
             } else if (x.attachEvent) {   // For IE 8 and earlier versions
-                edit.attachEvent("onclick", onUpdateProduct);
+                edit.attachEvent("onclick", onUpdateStudent);
             }
-            // edit.onclick= onUpdateProduct();
+            // edit.onclick= onUpdateStudent();
 
         }
     };
     xhttp.send(query);
-    
 }
-function onUpdateProduct() {
+function onUpdateStudent() {
     console.log("clicked" + id);
     var btn = document.getElementById('btn2');
 
-    var rate = document.getElementById("rate").value;
-    var amount = document.getElementById("amount").value;
-    var name = document.getElementById("name").value;
-    var units = document.getElementById("units").value;
-    var formdata = 'name=' + name + '& rate=' + rate + '&amount=' + amount 
-    + '&units=' + units + '&id=' + id  + '';
+    var address = document.getElementById("address").value;
+    var parents = document.getElementById("parents").value;
+    var phoneno = document.getElementById("phoneno").value;
+    var dob = document.getElementById("dob").value;
+    var name = document.getElementById("stuname").value;
+    var sclass = document.getElementById("sclass").value;
+    var studentCode = document.getElementById("studentCode").innerText;
+    var formdata = 'name=' + name + '& studentCode=' + studentCode + '&sclass=' + sclass + '&dob=' + dob + '&phoneno=' + phoneno + '&parents=' + parents + '&address=' + address + '';
     console.log(formdata);
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost:3000/edit/product");
+    xhr.open("POST", "http://localhost/kaynikeStudio/system/edit/student");
     btn.innerHTML = "Loading";
     btn.disabled = true;
 
@@ -224,7 +236,7 @@ function onUpdateProduct() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
             feedback = JSON.parse(xhr.responseText);
-            document.getElementById('productform').style.display = 'none';
+            document.getElementById('studentform').style.display = 'none';
 
             messageBox.style.display = 'block';
             messagepanel.className = "w3-panel w3-green";
@@ -241,73 +253,28 @@ function onUpdateProduct() {
         }
     };
     xhr.send(formdata);
-    onloadProducts();
+    onloadStudents();
 }
 
 function onclearForm() {
-    document.getElementById("units").value = "hourly";
-    document.getElementById("amount").value = 0;
-    document.getElementById("rate").value = 0;
-    document.getElementById("name").value = "";
+    document.getElementById("address").value = "";
+    document.getElementById("parents").value = "";
+    document.getElementById("phoneno").value = "";
+    document.getElementById("dob").value = "";
+    document.getElementById("stuname").value = "";
+    document.getElementById("sclass").value = "";
+    document.getElementById("studentCode").innerText = "";;
     document.getElementById('btn2').style.display="none";
 
     var btn = document.getElementById('btn');
     btn.style.display="block";
-    btn.innerHTML = " New Product ";
+    btn.innerHTML = " Save Student ";
     btn.disabled = false;
 }
 
 
 
 
-onloadProducts();
-async function onDeleteProduct(row) {
-    var i = row.parentNode.parentNode.rowIndex;
-    var table = document.getElementById("table");
-    tr = table.getElementsByTagName("tr");
-    td = tr[i].getElementsByTagName("td")[0];
-    if (td) {
-        txtValue = td.textContent || td.innerText;
-        onDeleteAll(txtValue);
-    }
-}
-function onDeleteAll(txt) {
-    deleteid = txt;
-    document.getElementById('deleteForm').style.display = 'block';
-    var btnyes = document.getElementById('Yes');
-    document.getElementById('delmsg').innerHTML="Are you sure you want to Delete?";
-    if (btnyes.addEventListener) {     // For all major browsers, except IE 8 and earlier
-        btnyes.addEventListener("click", deleteProduct);
-    } else if (x.attachEvent) {   // For IE 8 and earlier versions
-        btnyes.attachEvent("onclick", deleteProduct);
-    }
-}
-function deleteProduct() {
-    var formdata = 'id=' + deleteid ;
-    console.log(formdata);
-    let xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost:3000/delete/product");
-    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            feedback = JSON.parse(xhr.responseText);
-            document.getElementById('deleteForm').style.display = 'none';
-            messageBox.style.display = 'block';
-            messagepanel.className = "w3-panel w3-green";
-            messagetitle.innerHTML = "Success Deleted";
-            message.innerHTML = feedback.message;
-        } else {
-            document.getElementById('deleteForm').style.display = 'none';
-
-            messageBox.style.display = 'block';
-            messagepanel.className = "w3-panel w3-red";
-            messagetitle.innerHTML = "Failed To Deleted!";
-            message.innerHTML = xhr.responseText;
-        }
-    };
-    xhr.send(formdata);
-onloadProducts();
-}
 
 
 
@@ -319,3 +286,4 @@ onloadProducts();
 
 
 
+onloadStudents();

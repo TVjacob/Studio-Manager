@@ -41,7 +41,7 @@ function onloadAccountypes() {
       }
     }
   };
-  xhttp.open("GET", "http://localhost:3000/accounttypes", true);
+  xhttp.open("GET", "http://localhost/kaynikeStudio/system/accounttypes", true);
   xhttp.send();
   // console.log(accounttypeInfor.length);
 }
@@ -55,7 +55,7 @@ async function onloadAccountypesData(modif) {
 
     }
   };
-  xhttp.open("GET", "http://localhost:3000/accounttypes", true);
+  xhttp.open("GET", "http://localhost/kaynikeStudio/system/accounttypes", true);
   xhttp.send();
   // var data = JSON.parse(xhttp.responseText);
   // accounttypeInfor = data;
@@ -93,7 +93,7 @@ function onCreateAccount() {
   console.log(formdata);
 
   let xhr = new XMLHttpRequest();
-  xhr.open("POST", "http://localhost:3000/new/account");
+  xhr.open("POST", "http://localhost/kaynikeStudio/system/new/account");
 
 
   xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -129,7 +129,7 @@ async function onloadAccounts() {
   var table = document.getElementById("table");
   onclearTable(table);
   var xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost:3000/accounts", true);
+  xhttp.open("GET", "http://localhost/kaynikeStudio/system/accounts", true);
   xhttp.send();
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
@@ -254,7 +254,7 @@ async function onloadDataonForm(text) {
 
   var query = 'accountCode=' + text + '';
   var xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost:3000/accountcode?" + query);
+  xhttp.open("GET", "http://localhost/kaynikeStudio/system/accountcode?" + query);
   xhttp.onreadystatechange = function () {
 
     if (this.readyState == 4 && this.status == 200) {
@@ -287,7 +287,7 @@ function onUpdateAccount() {
   var formdata = 'acountCode=' + acctcode + '& id=' + id + '& isincome=' + isincome + '&accountName=' + acctname + '&account_type=' + accttype + '';
   console.log(formdata);
   let xhr = new XMLHttpRequest();
-  xhr.open("POST", "http://localhost:3000/edit/account");
+  xhr.open("POST", "http://localhost/kaynikeStudio/system/edit/account");
   btn.innerHTML = "Loading";
   btn.disabled = true;
 
@@ -406,7 +406,7 @@ function deleteAccount() {
   var formdata = 'acountCode=' + deleteid ;
   console.log(formdata);
   let xhr = new XMLHttpRequest();
-  xhr.open("POST", "http://localhost:3000/delete/account");
+  xhr.open("POST", "http://localhost/kaynikeStudio/system/delete/account");
   xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   xhr.onreadystatechange = function () {
       if (xhr.readyState == 4 && xhr.status == 200) {

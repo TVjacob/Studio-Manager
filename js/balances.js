@@ -25,7 +25,7 @@ async function onloadBalances() {
   var table = document.getElementById("table");
   onclearTable(table);
   var xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost:3000/find/balances", true);
+  xhttp.open("GET", "http://localhost/kaynikeStudio/system/find/balances", true);
   xhttp.send();
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {

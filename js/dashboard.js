@@ -15,7 +15,7 @@ onloadservices();
 async function onloadCustomers() {
 
     var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://localhost:3000/customers", true);
+    xhttp.open("GET", "http://localhost/kaynikeStudio/system/customers", true);
     xhttp.send();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
@@ -29,7 +29,7 @@ async function onloadCustomers() {
 
 async function onloadStaffs() {
     var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://localhost:3000/staffs", true);
+    xhttp.open("GET", "http://localhost/kaynikeStudio/system/staffs", true);
     xhttp.send();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
@@ -43,7 +43,7 @@ async function onloadStaffs() {
 }
 async function onloadusers() {
     var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://localhost:3000/users", true);
+    xhttp.open("GET", "http://localhost/kaynikeStudio/system/users", true);
     xhttp.send();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
@@ -57,7 +57,7 @@ async function onloadusers() {
 }
 async function onloadservices() {
     var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://localhost:3000/products", true);
+    xhttp.open("GET", "http://localhost/kaynikeStudio/system/products", true);
     xhttp.send();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
@@ -71,7 +71,7 @@ async function onloadservices() {
 
 async function onloadpayments() {
     var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://localhost:3000/total/recipts", true);
+    xhttp.open("GET", "http://localhost/kaynikeStudio/system/total/recipts", true);
     xhttp.send();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
@@ -85,7 +85,7 @@ async function onloadpayments() {
 }
 async function onloadbills(customerinfor) {
     var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://localhost:3000/total/bills", true);
+    xhttp.open("GET", "http://localhost/kaynikeStudio/system/total/bills", true);
     xhttp.send();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
@@ -100,7 +100,7 @@ async function onloadbills(customerinfor) {
 }
 async function onloadbalances(bill, customerinfor) {
     var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://localhost:3000/total/balances", true);
+    xhttp.open("GET", "http://localhost/kaynikeStudio/system/total/balances", true);
     xhttp.send();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {

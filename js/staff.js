@@ -1,28 +1,30 @@
-var students = [];
+var staffs = [];
 var index = new Number(0);
 var total = 0;
 var size = new Number(3);
 var totalpages = 0;
 var pageno = new Number(1);
-size = 4;
+size = 8;
 
 var messageBox = document.getElementById("message");
 var messagepanel = document.getElementById("msgpanel");
 var messagetitle = document.getElementById("msgtitle");
 var message = document.getElementById("msg");
 var id = "";
+var deleteid="";
 
-async function onloadStudents() {
+
+async function onloadStaffs() {
     var table = document.getElementById("table");
     onclearTable(table);
     var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://localhost:3000/students", true);
+    xhttp.open("GET", "http://localhost/kaynikeStudio/system/staffs", true);
     xhttp.send();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             var data = JSON.parse(this.responseText);
-            students = data;
-            onPageniation(students, table);
+            staffs = data;
+            onPageniation(staffs, table);
         }
     };
 }
@@ -37,15 +39,15 @@ function onPageniation(data, table) {
         var id = row.insertCell(0)
         var stucode = row.insertCell(1);
         var stuname = row.insertCell(2);
-        var stuclass = row.insertCell(3);
+        var role = row.insertCell(3);
         var stuDob = row.insertCell(4);
         var action = row.insertCell(5);
         id.innerHTML = i + 1;
-        stucode.innerHTML = students[i]["studentCode"];
-        stuname.innerHTML = students[i]["name"].toUpperCase();
-        stuDob.innerHTML = students[i]["dob"].toUpperCase();
-        stuclass.innerHTML = students[i]["sclass"];
-        action.innerHTML = '<button class="w3-bar-item w3-button  w3-black" onclick="onEditStudent(this)">Edit</button><button class="w3-bar-item w3-button w3-red">Delete</button>';
+        stucode.innerHTML = staffs[i]["staffCode"];
+        stuname.innerHTML = staffs[i]["name"].toUpperCase();
+        stuDob.innerHTML = staffs[i]["dob"].toUpperCase();
+        role.innerHTML = staffs[i]["role"];
+        action.innerHTML = '<button class="w3-bar-item w3-button  w3-black" onclick="onEditStudent(this)">Edit</button><button onclick="onDeleteStaff(this)" class="w3-bar-item w3-button w3-red">Delete</button>';
     }
     onDisplayTable(index);
 
@@ -56,7 +58,6 @@ async function onDisplayTable(index) {
     totalpages = Math.ceil(total / size);
     count = 1;
     tr = table.getElementsByTagName("tr");
-
     for (var i = 1; i < tr.length; i++) {
         tr[i].style.display = "none"
         if (i == index + 1) {
@@ -78,7 +79,7 @@ function onclearTable(table) {
 }
 async function onNextPage() {
     var table = document.getElementById("table");
-    total = students.length;
+    total = staffs.length;
     totalpages = Math.ceil(total / size);
     pageno = pageno < totalpages ? pageno + 1 : pageno;
     var index = new Number(0);
@@ -87,7 +88,7 @@ async function onNextPage() {
 }
 async function onPreviousPage() {
     var table = document.getElementById("table");
-    total = students.length;
+    total = staffs.length;
     totalpages = Math.ceil(total / size);
     pageno = (pageno - 1) < 1 ? pageno : pageno - 1;
     var index = new Number(0);
@@ -114,33 +115,34 @@ function onfiltervalue() {
         }
     }
 }
-////////onsave Student///////
-function onSaveStudent() {
+onloadStaffs();
+///////on Add Staff///////
+function onSaveStaff() {
     console.log("saving ....")
     var address = document.getElementById("address").value;
-    var parents = document.getElementById("parents").value;
-    var phoneno = document.getElementById("phoneno").value;
+    var salary = document.getElementById("salary").value;
+    var role = document.getElementById("role").value;
     var dob = document.getElementById("dob").value;
-    var name = document.getElementById("stuname").value;
-    var sclass = document.getElementById("sclass").value;
-    var studentCode = document.getElementById("studentCode").innerText;
+    var name = document.getElementById("staffname").value;
+    var phoneno = document.getElementById("phoneno").value;
+    var staffCode = document.getElementById("staffCode").innerText;
     var btn = document.getElementById('btn');
     btn.innerHTML = "Loading";
     btn.disabled = true;
-    var formdata = 'name=' + name + '& studentCode=' + studentCode + '&sclass=' + sclass + '&dob=' + dob + '&phoneno=' + phoneno + '&parents=' + parents + '&address=' + address + '';
+    var formdata = 'name=' + name + '& staffCode=' + staffCode + '&role=' + role + '&dob=' + dob + '&phoneno=' + phoneno + '&salary=' + unFormat(salary) + '&address=' + address + '';
     console.log(formdata);
 
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost:3000/new/student");
+    xhr.open("POST", "http://localhost/kaynikeStudio/system/new/staff");
 
 
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
             feedback = JSON.parse(xhr.responseText);
-            btn.innerHTML = "Save Student";
+            btn.innerHTML = "Save Staff";
             btn.disabled = false;
-            document.getElementById('studentform').style.display = 'none';
+            document.getElementById('staffform').style.display = 'none';
             messageBox.style.display = 'block';
             messagepanel.className = "w3-panel w3-green";
             messagetitle.innerHTML = "Success";
@@ -148,7 +150,7 @@ function onSaveStudent() {
 
 
         } else {
-            btn.innerHTML = "Save Student";
+            btn.innerHTML = "Save Staff";
             btn.disabled = false;
             messageBox.style.display = 'block';
             messagepanel.className = "w3-panel w3-red";
@@ -157,16 +159,15 @@ function onSaveStudent() {
         }
     };
     xhr.send(formdata);
-    onloadStudents();
+    onloadStaffs();
 }
 //ongenerate student number
 function ongeneratestudentCode() {
     var table = document.getElementById("table");
     var number = table.rows.length;
-    document.getElementById("studentCode").innerHTML = "jjs" + number;
-
+    document.getElementById("staffCode").innerHTML = "staff" + number;
 }
-//////onDit button clicked
+
 async function onEditStudent(row) {
     var i = row.parentNode.parentNode.rowIndex;
     var table = document.getElementById("table");
@@ -178,7 +179,7 @@ async function onEditStudent(row) {
     }
 }
 async function onloadData(text) {
-    document.getElementById('studentform').style.display = 'block';
+    document.getElementById('staffform').style.display = 'block';
     console.warn(text);
     var btn = document.getElementById('btn');
     var edit = document.getElementById('btn2');
@@ -186,23 +187,23 @@ async function onloadData(text) {
 
     edit.style.display = 'block';
 
-    var query = '?studentCode=' + text + '';
+    var query = '?staffCode=' + text + '';
     var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://localhost:3000/student" + query);
+    xhttp.open("GET", "http://localhost/kaynikeStudio/system/staff" + query);
     xhttp.onreadystatechange = function () {
 
         if (this.readyState == 4 && this.status == 200) {
             console.log(this.responseText);
             var data = JSON.parse(this.responseText);
             var obj = data[0];
-            id = obj.studentCode;
+            id = obj.staffCode;
             document.getElementById("address").value = obj.address;
-            document.getElementById("parents").value = obj.parents;
+            document.getElementById("salary").value = obj.salary;
             document.getElementById("phoneno").value = obj.phoneno;
             document.getElementById("dob").value = obj.dob;
-            document.getElementById("stuname").value = obj.name;
-            document.getElementById("sclass").value = obj.sclass;
-            document.getElementById("studentCode").innerText = text;
+            document.getElementById("staffname").value = obj.name;
+            document.getElementById("role").value = obj.role;
+            document.getElementById("staffCode").innerText = text;
             if (edit.addEventListener) {     // For all major browsers, except IE 8 and earlier
                 edit.addEventListener("click", onUpdateStudent);
             } else if (x.attachEvent) {   // For IE 8 and earlier versions
@@ -219,16 +220,20 @@ function onUpdateStudent() {
     var btn = document.getElementById('btn2');
 
     var address = document.getElementById("address").value;
-    var parents = document.getElementById("parents").value;
-    var phoneno = document.getElementById("phoneno").value;
+    var salary = document.getElementById("salary").value;
+    var role = document.getElementById("role").value;
     var dob = document.getElementById("dob").value;
-    var name = document.getElementById("stuname").value;
-    var sclass = document.getElementById("sclass").value;
-    var studentCode = document.getElementById("studentCode").innerText;
-    var formdata = 'name=' + name + '& studentCode=' + studentCode + '&sclass=' + sclass + '&dob=' + dob + '&phoneno=' + phoneno + '&parents=' + parents + '&address=' + address + '';
+    var name = document.getElementById("staffname").value;
+    var phoneno = document.getElementById("phoneno").value;
+    var staffCode = document.getElementById("staffCode").innerText;
+    btn.innerHTML = "Loading";
+    btn.disabled = true;
+    var formdata = 'name=' + name + '& staffCode=' + staffCode + '&role=' + role + '&dob=' + dob + '&phoneno=' + phoneno + '&salary=' + salary + '&address=' + address + '';
     console.log(formdata);
+
+
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost:3000/edit/student");
+    xhr.open("POST", "http://localhost/kaynikeStudio/system/edit/staff");
     btn.innerHTML = "Loading";
     btn.disabled = true;
 
@@ -236,7 +241,7 @@ function onUpdateStudent() {
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {
             feedback = JSON.parse(xhr.responseText);
-            document.getElementById('studentform').style.display = 'none';
+            document.getElementById('staffform').style.display = 'none';
 
             messageBox.style.display = 'block';
             messagepanel.className = "w3-panel w3-green";
@@ -253,17 +258,17 @@ function onUpdateStudent() {
         }
     };
     xhr.send(formdata);
-    onloadStudents();
+    onloadStaffs();
 }
 
 function onclearForm() {
     document.getElementById("address").value = "";
-    document.getElementById("parents").value = "";
+    document.getElementById("salary").value = "";
     document.getElementById("phoneno").value = "";
     document.getElementById("dob").value = "";
-    document.getElementById("stuname").value = "";
-    document.getElementById("sclass").value = "";
-    document.getElementById("studentCode").innerText = "";;
+    document.getElementById("staffname").value = "";
+    document.getElementById("role").value = "";
+    document.getElementById("staffCode").innerText = "";;
     document.getElementById('btn2').style.display="none";
 
     var btn = document.getElementById('btn');
@@ -271,19 +276,81 @@ function onclearForm() {
     btn.innerHTML = " Save Student ";
     btn.disabled = false;
 }
+function format(amt) {
+    var patt1 = /[0-9.]/g;
+    var value = amt.toString();
+    var total = "";
+    var numbers = value.match(patt1);
+    var count = 0;
+    for (var i = numbers.length - 1; i >= 0; i--) {
+      if (count === 3) {
+        numbers[i] = numbers[i] + ",";
+        count = 0;
+      }
+      count++;
+    }
+    numbers.forEach(myFunction);
+  
+    function myFunction(item) {
+      total += item;
+      amt = total;
+    }
+  
+    return amt;
+  
+  }
+  function unFormat(amt) {
+    var str = amt;
+    while (str.indexOf(",") > 0) {
+      var str1 = str.replace(",", "");
+      str = str1;
+    }
+    return str;
+  }
+  async function onDeleteStaff(row) {
+    var i = row.parentNode.parentNode.rowIndex;
+    var table = document.getElementById("table");
+    tr = table.getElementsByTagName("tr");
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+        txtValue = td.textContent || td.innerText;
+        onDeleteAll(txtValue);
+    }
+}
+function onDeleteAll(txt) {
+    deleteid = staffs[txt-1].staffCode;
+    document.getElementById('deleteForm').style.display = 'block';
+    var btnyes = document.getElementById('Yes');
+    document.getElementById('delmsg').innerHTML="Are you sure you want to Delete?";
+    if (btnyes.addEventListener) {     // For all major browsers, except IE 8 and earlier
+        btnyes.addEventListener("click", deleteStaff);
+    } else if (x.attachEvent) {   // For IE 8 and earlier versions
+        btnyes.attachEvent("onclick", deleteStaff);
+    }
+}
+function deleteStaff() {
+    var formdata = 'staffCode=' + deleteid ;
+    console.log(formdata);
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "http://localhost/kaynikeStudio/system/delete/staff");
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            feedback = JSON.parse(xhr.responseText);
+            document.getElementById('deleteForm').style.display = 'none';
+            messageBox.style.display = 'block';
+            messagepanel.className = "w3-panel w3-green";
+            messagetitle.innerHTML = "Success Deleted";
+            message.innerHTML = feedback.message;
+        } else {
+            document.getElementById('deleteForm').style.display = 'none';
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-onloadStudents();
+            messageBox.style.display = 'block';
+            messagepanel.className = "w3-panel w3-red";
+            messagetitle.innerHTML = "Failed To Deleted!";
+            message.innerHTML = xhr.responseText;
+        }
+    };
+    xhr.send(formdata);
+    onloadStaffs();
+}
