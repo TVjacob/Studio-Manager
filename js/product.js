@@ -18,7 +18,7 @@ async function onloadProducts() {
     var table = document.getElementById("table");
     onclearTable(table);
     var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://localhost/kaynikeStudio/system/products", true);
+    xhttp.open("GET", "http://localhost/KanyikeStudio/system/products", true);
     xhttp.send();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
@@ -130,7 +130,7 @@ function onSaveProduct() {
     console.log(formdata);
 
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost/kaynikeStudio/system/new/product");
+    xhr.open("POST", "http://localhost/KanyikeStudio/system/new/product");
 
 
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -180,7 +180,7 @@ async function onloadData(text) {
 
     var query = '?id=' + text + '';
     var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://localhost/kaynikeStudio/system/product" + query);
+    xhttp.open("GET", "http://localhost/KanyikeStudio/system/product" + query);
     xhttp.onreadystatechange = function () {
 
         if (this.readyState == 4 && this.status == 200) {
@@ -216,7 +216,7 @@ function onUpdateProduct() {
     + '&units=' + units + '&id=' + id  + '';
     console.log(formdata);
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost/kaynikeStudio/system/edit/product");
+    xhr.open("POST", "http://localhost/KanyikeStudio/system/edit/product");
     btn.innerHTML = "Loading";
     btn.disabled = true;
 
@@ -286,7 +286,7 @@ function deleteProduct() {
     var formdata = 'id=' + deleteid ;
     console.log(formdata);
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost/kaynikeStudio/system/delete/product");
+    xhr.open("POST", "http://localhost/KanyikeStudio/system/delete/product");
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {

@@ -18,7 +18,7 @@ async function onloadStaffs() {
     var table = document.getElementById("table");
     onclearTable(table);
     var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://localhost/kaynikeStudio/system/staffs", true);
+    xhttp.open("GET", "http://localhost/KanyikeStudio/system/staffs", true);
     xhttp.send();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
@@ -133,7 +133,7 @@ function onSaveStaff() {
     console.log(formdata);
 
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost/kaynikeStudio/system/new/staff");
+    xhr.open("POST", "http://localhost/KanyikeStudio/system/new/staff");
 
 
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -189,7 +189,7 @@ async function onloadData(text) {
 
     var query = '?staffCode=' + text + '';
     var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://localhost/kaynikeStudio/system/staff" + query);
+    xhttp.open("GET", "http://localhost/KanyikeStudio/system/staff" + query);
     xhttp.onreadystatechange = function () {
 
         if (this.readyState == 4 && this.status == 200) {
@@ -233,7 +233,7 @@ function onUpdateStudent() {
 
 
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost/kaynikeStudio/system/edit/staff");
+    xhr.open("POST", "http://localhost/KanyikeStudio/system/edit/staff");
     btn.innerHTML = "Loading";
     btn.disabled = true;
 
@@ -332,7 +332,7 @@ function deleteStaff() {
     var formdata = 'staffCode=' + deleteid ;
     console.log(formdata);
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost/kaynikeStudio/system/delete/staff");
+    xhr.open("POST", "http://localhost/KanyikeStudio/system/delete/staff");
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {

@@ -54,7 +54,7 @@ function onLoadCustomersBalances() {
       }
     }
   };
-  xhttp.open("GET", "http://localhost/kaynikeStudio/system/find/balances", true);
+  xhttp.open("GET", "http://localhost/KanyikeStudio/system/find/balances", true);
   xhttp.send();
 }
 function onclearReciptForm() {
@@ -85,7 +85,7 @@ function onCreateRecipt() {
   console.log(formdata);
 
   let xhr = new XMLHttpRequest();
-  xhr.open("POST", "http://localhost/kaynikeStudio/system/bill/payment");
+  xhr.open("POST", "http://localhost/KanyikeStudio/system/bill/payment");
 
 
   xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -117,7 +117,7 @@ async function onLoadRecipts() {
   var table = document.getElementById("table");
   onclearTable(table);
   var xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost/kaynikeStudio/system/find/recipts", true);
+  xhttp.open("GET", "http://localhost/KanyikeStudio/system/find/recipts", true);
   xhttp.send();
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
@@ -311,7 +311,7 @@ function deleteRecipt() {
   var formdata = 'id=' + deleteid +'&detail='+'recipt';
   console.log(formdata);
   let xhr = new XMLHttpRequest();
-  xhr.open("POST", "http://localhost/kaynikeStudio/system/delete/reference_id/details");
+  xhr.open("POST", "http://localhost/KanyikeStudio/system/delete/reference_id/details");
   xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   xhr.onreadystatechange = function () {
       if (xhr.readyState == 4 && xhr.status == 200) {

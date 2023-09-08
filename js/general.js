@@ -9,12 +9,12 @@ function openUrl(url) {
 function openReport(url) {
   //  host = window.location.hostname;
   //  newURl=host+url;
-  url = "http://localhost/kaynikeStudio/system" + url;
+  url = "http://localhost/KanyikeStudio/system" + url;
 
   document.getElementById('reportform').style.display = 'block'
   // document.getElementById("reporturl").scr="http://localhost:5500/index.php";
 
-  // url="http://localhost/kaynikeStudio/system/reports/customers.php";
+  // url="http://localhost/KanyikeStudio/system/reports/customers.php";
   // window.open(url, "_blank", " status=no, toolbar=no, menubar=no, location=no, addressbar=no,resizable=yes,top=500,left=200,width=900,height=600");
   var iframe = document.getElementById("myFrame");
   iframe.src = url;//"https://new-website.com";
@@ -86,7 +86,7 @@ function onLogout() {
   sessionStorage.removeItem("password");
   sessionStorage.setItem("auth", false);
   sessionStorage.clear();
-  openUrl("/kaynikeStudio/index.html");
+  openUrl("/KanyikeStudio/index.html");
 }
 
 function onAccordion(id) {

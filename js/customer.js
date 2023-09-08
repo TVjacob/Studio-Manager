@@ -17,7 +17,7 @@ async function onloadCustomers() {
     var table = document.getElementById("table");
     onclearTable(table);
     var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://localhost/kaynikeStudio/system/customers", true);
+    xhttp.open("GET", "http://localhost/KanyikeStudio/system/customers", true);
     xhttp.send();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
@@ -129,7 +129,7 @@ function onSaveCustomer() {
     console.log(formdata);
 
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost/kaynikeStudio/system/new/customer");
+    xhr.open("POST", "http://localhost/KanyikeStudio/system/new/customer");
 
 
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -177,7 +177,7 @@ async function onloadData(text) {
 
     var query = '?id=' + customers[text-1].id + '';
     var xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://localhost/kaynikeStudio/system/customer" + query);
+    xhttp.open("GET", "http://localhost/KanyikeStudio/system/customer" + query);
     xhttp.onreadystatechange = function () {
 
         if (this.readyState == 4 && this.status == 200) {
@@ -210,7 +210,7 @@ function onUpdateCustomer() {
         + '&phoneno=' + phoneno + '&id=' + id + '';
     console.log(formdata);
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost/kaynikeStudio/system/edit/customer");
+    xhr.open("POST", "http://localhost/KanyikeStudio/system/edit/customer");
     btn.innerHTML = "Loading";
     btn.disabled = true;
 
@@ -277,7 +277,7 @@ function deleteCustomer() {
     var formdata = 'id=' + deleteid ;
     console.log(formdata);
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost/kaynikeStudio/system/delete/customer/id");
+    xhr.open("POST", "http://localhost/KanyikeStudio/system/delete/customer/id");
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhr.onreadystatechange = function () {
         if (xhr.readyState == 4 && xhr.status == 200) {

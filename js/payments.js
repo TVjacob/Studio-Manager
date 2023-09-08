@@ -50,7 +50,7 @@ function onLoadAccounts() {
       }
     }
   };
-  xhttp.open("GET", "http://localhost/kaynikeStudio/system/accounts", true);
+  xhttp.open("GET", "http://localhost/KanyikeStudio/system/accounts", true);
   xhttp.send();
 }
 
@@ -85,7 +85,7 @@ function onSavePayment() {
   console.log(formdata);
 
   let xhr = new XMLHttpRequest();
-  xhr.open("POST", "http://localhost/kaynikeStudio/system/new/payment");
+  xhr.open("POST", "http://localhost/KanyikeStudio/system/new/payment");
 
 
   xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -116,7 +116,7 @@ async function onloadPayments() {
   var table = document.getElementById("table");
   onclearTable(table);
   var xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost/kaynikeStudio/system/find/transactions", true);
+  xhttp.open("GET", "http://localhost/KanyikeStudio/system/find/transactions", true);
   xhttp.send();
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
@@ -320,7 +320,7 @@ function deletePayment() {
   var formdata = 'id=' + deleteid + '&detail=' + 'DoubleEntry';
   console.log(formdata);
   let xhr = new XMLHttpRequest();
-  xhr.open("POST", "http://localhost/kaynikeStudio/system/delete/reference_id/details");
+  xhr.open("POST", "http://localhost/KanyikeStudio/system/delete/reference_id/details");
   xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   xhr.onreadystatechange = function () {
     if (xhr.readyState == 4 && xhr.status == 200) {

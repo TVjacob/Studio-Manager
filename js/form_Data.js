@@ -36,7 +36,7 @@ function onSaveUser() {
 
 
   let xhr = new XMLHttpRequest();
-  xhr.open("POST", "http://localhost/kaynikeStudio/system/saveuser");
+  xhr.open("POST", "http://localhost/KanyikeStudio/system/saveuser");
   document.getElementById('btn').innerHTML = "Loading";
 
   document.getElementById('btn').disabled = true;
@@ -107,7 +107,7 @@ function onDisplay(status, obj) {
 //       }
 //     }
 //   };
-//   xhttp.open("GET", "http://localhost/kaynikeStudio/system/accounttypes", true);
+//   xhttp.open("GET", "http://localhost/KanyikeStudio/system/accounttypes", true);
 //   xhttp.send();
 //   // console.log(accounttypeInfor.length);
 // }
@@ -145,7 +145,7 @@ function onDisplay(status, obj) {
 //   console.log(formdata);
 
 //   let xhr = new XMLHttpRequest();
-//   xhr.open("POST", "http://localhost/kaynikeStudio/system/new/account");
+//   xhr.open("POST", "http://localhost/KanyikeStudio/system/new/account");
 
 
 //   xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -180,7 +180,7 @@ function onDisplay(status, obj) {
 //   var table = document.getElementById("table");
 //   onclearTable(table);
 //   var xhttp = new XMLHttpRequest();
-//   xhttp.open("GET", "http://localhost/kaynikeStudio/system/accounts", true);
+//   xhttp.open("GET", "http://localhost/KanyikeStudio/system/accounts", true);
 //   xhttp.send();
 //   xhttp.onreadystatechange = function () {
 //     if (this.readyState == 4 && this.status == 200) {
@@ -308,7 +308,7 @@ function onDisplay(status, obj) {
 
 //   var query = 'accountCode=' + text + '';
 //   var xhttp = new XMLHttpRequest();
-//   xhttp.open("GET", "http://localhost/kaynikeStudio/system/accountcode?" + query);
+//   xhttp.open("GET", "http://localhost/KanyikeStudio/system/accountcode?" + query);
 //   xhttp.onreadystatechange = function () {
 
 //     if (this.readyState == 4 && this.status == 200) {
@@ -342,7 +342,7 @@ function onDisplay(status, obj) {
 //   var formdata = 'acountCode=' + acctcode + '& id=' + id + '& isincome=' + isincome + '&accountName=' + acctname + '&account_type=' + accttype + '';
 //   console.log(formdata);
 //   let xhr = new XMLHttpRequest();
-//   xhr.open("POST", "http://localhost/kaynikeStudio/system/edit/account");
+//   xhr.open("POST", "http://localhost/KanyikeStudio/system/edit/account");
 //   btn.innerHTML = "Loading";
 //   btn.disabled = true;
 

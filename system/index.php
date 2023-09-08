@@ -180,7 +180,7 @@ switch (rewriteurl($request)) {
 
 function rewriteurl($str)
 {
-    $str = str_replace("/kaynikeStudio/system", "", $str);
+    $str = str_replace("/KanyikeStudio/system", "", $str);
     if (strpos($str, "?")) {
         $var = strpos($str, "?");
         $len = strlen($str); //length

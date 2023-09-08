@@ -3,7 +3,7 @@ function login(){
     var password = document.getElementById("password").value;
     var formdata  = 'username='+username + '& password='+password;
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost/kaynikeStudio/system/login");
+    xhr.open("POST", "http://localhost/KanyikeStudio/system/login");
     document.getElementById('btn').innerHTML="Loading";
     document.getElementById('btn').disabled=true;
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -36,7 +36,7 @@ function onDisplay(status) {
       document.getElementById("message").className = "w3-text-green w3-animate-opacity w3-large";
       document.getElementById("message").innerHTML = "Logged in Successful";
       // var local = window.location.hostname +"/views/DashBoard/dashboard.html";
-      window.location.assign("/kaynikeStudio/views/dashboard.html");
+      window.location.assign("/KanyikeStudio/views/dashboard.html");
     } else {
       document.getElementById("message").className = "w3-text-red w3-animate-opacity w3-large";
       document.getElementById("message").innerHTML = "failed to Log in";

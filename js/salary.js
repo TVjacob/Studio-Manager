@@ -46,7 +46,7 @@ function onLoadStaffs() {
       }
     }
   };
-  xhttp.open("GET", "http://localhost/kaynikeStudio/system/staffs", true);
+  xhttp.open("GET", "http://localhost/KanyikeStudio/system/staffs", true);
   xhttp.send();
 }
 function onclearSalaryForm() {
@@ -69,7 +69,7 @@ function onPaySalary() {
   console.log(formdata);
 
   let xhr = new XMLHttpRequest();
-  xhr.open("POST", "http://localhost/kaynikeStudio/system/new/salary/payment");
+  xhr.open("POST", "http://localhost/KanyikeStudio/system/new/salary/payment");
 
 
   xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -100,7 +100,7 @@ async function onloadSalarys() {
   var table = document.getElementById("table");
   onclearTable(table);
   var xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost/kaynikeStudio/system/find/salary/payments", true);
+  xhttp.open("GET", "http://localhost/KanyikeStudio/system/find/salary/payments", true);
   xhttp.send();
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
@@ -285,7 +285,7 @@ function deleteCustomer() {
   var formdata = 'id=' + deleteid ;
   console.log(formdata);
   let xhr = new XMLHttpRequest();
-  xhr.open("POST", "http://localhost/kaynikeStudio/system/delete/reference_id");
+  xhr.open("POST", "http://localhost/KanyikeStudio/system/delete/reference_id");
   xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   xhr.onreadystatechange = function () {
       if (xhr.readyState == 4 && xhr.status == 200) {

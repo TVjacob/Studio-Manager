@@ -48,7 +48,7 @@ function onLoadCustomers() {
       }
     }
   };
-  xhttp.open("GET", "http://localhost/kaynikeStudio/system/customers", true);
+  xhttp.open("GET", "http://localhost/KanyikeStudio/system/customers", true);
   xhttp.send();
 }
 function onLoadServices() {
@@ -66,7 +66,7 @@ function onLoadServices() {
       }
     }
   };
-  xhttp.open("GET", "http://localhost/kaynikeStudio/system/products", true);
+  xhttp.open("GET", "http://localhost/KanyikeStudio/system/products", true);
   xhttp.send();
 }
 function onclearbillForm() {
@@ -89,7 +89,7 @@ async function onCreateBill() {
   console.log(formdata);
 
   let xhr = new XMLHttpRequest();
-  xhr.open("POST", "http://localhost/kaynikeStudio/system/new/bill");
+  xhr.open("POST", "http://localhost/KanyikeStudio/system/new/bill");
 
 
   xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -120,7 +120,7 @@ async function onloadBills() {
   var table = document.getElementById("table");
   onclearTable(table);
   var xhttp = new XMLHttpRequest();
-  xhttp.open("GET", "http://localhost/kaynikeStudio/system/find/bills", true);
+  xhttp.open("GET", "http://localhost/KanyikeStudio/system/find/bills", true);
   xhttp.send();
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
@@ -314,7 +314,7 @@ function deleteBill() {
   var formdata = 'id=' + deleteid +'&detail='+'BILLING';
   console.log(formdata);
   let xhr = new XMLHttpRequest();
-  xhr.open("POST", "http://localhost/kaynikeStudio/system/delete/reference_id/details");
+  xhr.open("POST", "http://localhost/KanyikeStudio/system/delete/reference_id/details");
   xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   xhr.onreadystatechange = function () {
       if (xhr.readyState == 4 && xhr.status == 200) {
